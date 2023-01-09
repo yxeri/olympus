@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import PersonList from '../components/PersonList/PersonList';
 import Filter from '../components/Filter/Filter';
+import Nav from '../components/Nav/Nav';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Nav />
         <Filter />
         <PersonList />
       </main>

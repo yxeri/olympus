@@ -24,12 +24,15 @@ const PersonList = () => {
   const persons = discipli
     .filter(({ name, family }) => searchString === '' || `${name} ${family}}`.toLowerCase().includes(searchString.toLowerCase()))
     .sort((a, b) => {
-      if (!sortBy || sortBy === 'alphabetical') {
-        if (a.rank === b.rank) {
+      if (sortBy === 'alphabetical') {
+        const aName = `${a.name} ${a.family}`;
+        const bName = `${b.name} ${b.family}`;
+
+        if (aName === bName) {
           return 0;
         }
 
-        return a.rank > b.rank ? 1 : -1;
+        return aName > bName ? 1 : -1;
       }
 
       if (a[sortBy] === b[sortBy]) {

@@ -18,9 +18,9 @@ export const searchStringAtom = atom<string>({
   default: '',
 });
 
-export const sortByAtom = atom<PersonSortables | null>({
+export const sortByAtom = atom<PersonSortables>({
   key: 'sortBy',
-  default: null,
+  default: 'rank',
 });
 
 export const listVariantAtom = atom<PersonListVariants | undefined>({
