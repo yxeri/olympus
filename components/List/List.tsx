@@ -7,7 +7,7 @@ const variants = (variant?: ListVariants) => {
   if (variant === 'grid') {
     return css`
       grid-template-columns: repeat(auto-fill, ${sizes.gridWidth});
-      width: fit-content;
+      width: 100%;
       max-width: ${sizes.max};
     `;
   }

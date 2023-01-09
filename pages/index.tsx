@@ -14,8 +14,10 @@ export default function Home() {
       </Head>
       <main>
         <Nav />
-        <Filter />
-        <PersonList />
+        <div className="main-container">
+          <Filter />
+          <PersonList />
+        </div>
       </main>
     </>
   );
