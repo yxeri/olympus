@@ -1,19 +1,36 @@
 import Image from 'next/image';
-import { Root, Trigger, Value, Icon, Portal, Content, ScrollDownButton, ScrollUpButton, Item, Group, Label, Separator, Viewport, ItemIndicator, ItemText, SelectItemProps } from '@radix-ui/react-select';
+import {
+  Root,
+  Trigger,
+  Value,
+  Icon,
+  Portal,
+  Content,
+  ScrollDownButton,
+  ScrollUpButton,
+  Item,
+  Group,
+  Label,
+  Separator,
+  Viewport,
+  ItemIndicator,
+  ItemText,
+  SelectItemProps,
+} from '@radix-ui/react-select';
 import React from 'react';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { PersonSortables, sortByAtom } from '../Filter/atoms';
 
-export type SelectItem = {
+export type SelectItemType = {
   label: string,
   value: string
-}
+};
 
 type SelectProps = {
   placeholder: string,
-  items?: SelectItem[],
-  groups?: Array<{ label: string, items: Array<SelectItem> }>,
+  items?: SelectItemType[],
+  groups?: Array<{ label: string, items: Array<SelectItemType> }>,
   defaultValue?: string,
 };
 
@@ -33,7 +50,10 @@ const SelectIcon = styled(Icon)`
   display: flex;
 `;
 
-const SelectItem = React.forwardRef<HTMLDivElement | null, SelectItemProps>(({ children, ...props }, ref) => (
+const SelectItem = React.forwardRef<HTMLDivElement | null, SelectItemProps>(({
+  children,
+  ...props
+}, ref) => (
   <Item {...props} ref={ref}>
     <ItemText>{children}</ItemText>
     <ItemIndicator>
@@ -41,7 +61,7 @@ const SelectItem = React.forwardRef<HTMLDivElement | null, SelectItemProps>(({ c
     </ItemIndicator>
   </Item>
 ));
-SelectItem.displayName = "SelectItem";
+SelectItem.displayName = 'SelectItem';
 
 const StyledSelectItem = styled(SelectItem)`
   display: grid;
@@ -70,11 +90,16 @@ const Select: React.FC<SelectProps> = ({
   defaultValue,
 }) => {
   const setSortBy = useSetRecoilState(sortByAtom);
-  const itemComponents = items?.map(({ value, label }, index) => <StyledSelectItem key={index} value={value}>{label}</StyledSelectItem>);
-  const groupComponents = groups?.map(({ label, items }, index) => (
+  const itemComponents = items?.map(({ value, label }, index) => (
+    // eslint-disable-next-line react/no-array-index-key
+    <StyledSelectItem key={index} value={value}>{label}</StyledSelectItem>));
+  const groupComponents = groups?.map(({ label, items: groupItems }, index) => (
+    // eslint-disable-next-line react/no-array-index-key
     <Group key={index}>
       <Label>{label}</Label>
-      {items.map(({ value, label }, index) => <StyledSelectItem key={index} value={value}>{label}</StyledSelectItem>)}
+      {groupItems.map(({ value, label: itemLabel }, itemIndex) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <StyledSelectItem key={itemIndex} value={value}>{itemLabel}</StyledSelectItem>))}
     </Group>
   ));
 

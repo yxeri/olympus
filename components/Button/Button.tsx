@@ -8,7 +8,8 @@ export type ButtonProps = {
 const StyledButton = styled.button`
 `;
 
-const Button: React.FC<ButtonProps> = ({ ...props }) => {
+const Button: React.FC<ButtonProps> = ({ isSelected, ...props }) => {
+  console.log(isSelected);
   return <StyledButton {...props} />;
 };
 

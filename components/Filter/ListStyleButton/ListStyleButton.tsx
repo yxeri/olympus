@@ -1,14 +1,14 @@
-import Button, { ButtonProps } from '../../Button/Button';
 import { useRecoilState } from 'recoil';
-import { listVariantAtom, PersonListVariants } from '../atoms';
 import React from 'react';
+import Button, { ButtonProps } from '../../Button/Button';
+import { listVariantAtom, PersonListVariants } from '../atoms';
 
-type ListStyleButton = {
+type ListStyleButtonProps = {
   listStyle: PersonListVariants,
 } & ButtonProps;
 
-const ListStyleButton: React.FC<ListStyleButton> = ({ listStyle, ...props }) => {
-  const [listStyleState, setListStyle] = useRecoilState(listVariantAtom);
+const ListStyleButton: React.FC<ListStyleButtonProps> = ({ listStyle, ...props }) => {
+  const [, setListStyle] = useRecoilState(listVariantAtom);
 
   return <Button {...props} onClick={() => setListStyle(listStyle)} />;
 };

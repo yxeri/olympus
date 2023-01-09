@@ -1,7 +1,6 @@
-import Head from 'next/head'
+import Head from 'next/head';
 import PersonList from '../components/PersonList/PersonList';
 import Filter from '../components/Filter/Filter';
-import Calendar from '../components/Calendar/Calendar';
 
 export default function Home() {
   return (
@@ -17,5 +16,5 @@ export default function Home() {
         <PersonList />
       </main>
     </>
-  )
+  );
 }

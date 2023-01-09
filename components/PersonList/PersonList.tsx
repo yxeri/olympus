@@ -1,9 +1,9 @@
 import React from 'react';
+import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
 import { discipli } from '../../data';
 import PersonListItem from './Item/PersonListItem';
-import styled from 'styled-components';
 import List from '../List/List';
-import { useRecoilValue } from 'recoil';
 import { listVariantAtom, sortByAtom } from '../Filter/atoms';
 
 const StyledList = styled(List)`
@@ -14,7 +14,7 @@ const StyledList = styled(List)`
 
 const PersonList = () => {
   const sortBy = useRecoilValue(sortByAtom);
-  const listVariant = useRecoilValue(listVariantAtom)
+  const listVariant = useRecoilValue(listVariantAtom);
   const persons = discipli.sort((a, b) => {
     if (!sortBy || sortBy === 'alphabetical') {
       if (a.rank === b.rank) {
