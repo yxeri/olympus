@@ -13,6 +13,11 @@ export const filterAtom = atom<{ [key in PersonFilterables]: string[] }>({
   },
 });
 
+export const searchStringAtom = atom<string>({
+  key: 'searchString',
+  default: '',
+});
+
 export const sortByAtom = atom<PersonSortables | null>({
   key: 'sortBy',
   default: null,

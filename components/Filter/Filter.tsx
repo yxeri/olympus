@@ -5,6 +5,7 @@ import Select from '../Select/Select';
 import { PersonSortables } from './atoms';
 import ListStyleButton from './ListStyleButton/ListStyleButton';
 import { sizes } from '../../styles/global';
+import Search from '../Search/Search';
 
 const sortBy: Array<{ label: string, value: PersonSortables }> = [
   { label: 'Namn', value: 'alphabetical' },
@@ -26,7 +27,7 @@ const Filter = () => (
   <StyledDiv>
     <Popover.Root>
       <Popover.Trigger style={{ display: 'none' }}>
-        <Image src="/filter.svg" alt="Filter" width={sizes.iconLarge} height={sizes.iconLarge} />
+        <Image src="/filter.svg" alt="Filter" width={sizes.largeIcon} height={sizes.largeIcon} />
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content>
@@ -34,8 +35,8 @@ const Filter = () => (
             <Image
               src="/x.svg"
               alt="Close"
-              width={sizes.iconLarge}
-              height={sizes.iconLarge}
+              width={sizes.largeIcon}
+              height={sizes.largeIcon}
             />
           </Popover.Close>
         </Popover.Content>
@@ -47,15 +48,16 @@ const Filter = () => (
         listVariant="list"
         style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
       >
-        <Image src="/list.svg" alt="List" width={sizes.iconLarge} height={sizes.iconLarge} />
+        <Image src="/list.svg" alt="List" width={sizes.largeIcon} height={sizes.largeIcon} />
       </ListStyleButton>
       <ListStyleButton
         listVariant="grid"
         style={{ borderLeft: 0, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
       >
-        <Image src="/grid.svg" alt="Grid" width={sizes.iconLarge} height={sizes.iconLarge} />
+        <Image src="/grid.svg" alt="Grid" width={sizes.largeIcon} height={sizes.largeIcon} />
       </ListStyleButton>
     </div>
+    <Search />
   </StyledDiv>
 );
 

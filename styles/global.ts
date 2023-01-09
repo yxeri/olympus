@@ -17,7 +17,7 @@ export const sizes = {
   max: '800px',
   gridWidth: '170px',
   smallImageHeight: '50px',
-  iconLarge: 20,
+  largeIcon: 20,
   largeGap: '1rem',
   corner: '4px',
 };

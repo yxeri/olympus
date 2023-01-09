@@ -4,7 +4,11 @@ import { useRecoilValue } from 'recoil';
 import { discipli } from '../../data';
 import PersonListItem from './Item/PersonListItem';
 import List from '../List/List';
-import { listVariantAtom, sortByAtom } from '../Filter/atoms';
+import {
+  listVariantAtom,
+  searchStringAtom,
+  sortByAtom,
+} from '../Filter/atoms';
 import { sizes } from '../../styles/global';
 
 const StyledList = styled(List)`
@@ -16,21 +20,25 @@ const StyledList = styled(List)`
 const PersonList = () => {
   const sortBy = useRecoilValue(sortByAtom);
   const listVariant = useRecoilValue(listVariantAtom);
-  const persons = discipli.sort((a, b) => {
-    if (!sortBy || sortBy === 'alphabetical') {
-      if (a.rank === b.rank) {
+  const searchString = useRecoilValue(searchStringAtom);
+  const persons = discipli
+    .filter(({ name, family }) => searchString === '' || `${name} ${family}}`.toLowerCase().includes(searchString.toLowerCase()))
+    .sort((a, b) => {
+      if (!sortBy || sortBy === 'alphabetical') {
+        if (a.rank === b.rank) {
+          return 0;
+        }
+
+        return a.rank > b.rank ? 1 : -1;
+      }
+
+      if (a[sortBy] === b[sortBy]) {
         return 0;
       }
 
-      return a.rank > b.rank ? 1 : -1;
-    }
-
-    if (a[sortBy] === b[sortBy]) {
-      return 0;
-    }
-
-    return a[sortBy] > b[sortBy] ? 1 : -1;
-  }).map((person) => <PersonListItem key={person.id} person={person} listVariant={listVariant} />);
+      return a[sortBy] > b[sortBy] ? 1 : -1;
+    })
+    .map((person) => <PersonListItem key={person.id} person={person} listVariant={listVariant} />);
 
   return (
     <StyledList variant={listVariant}>

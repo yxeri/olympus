@@ -115,13 +115,13 @@ const Select: React.FC<SelectProps> = ({
       <SelectTrigger>
         <Value placeholder={placeholder} />
         <SelectIcon>
-          <Image src="/chevron-down.svg" alt="Chevron down" width={sizes.iconLarge} height={sizes.iconLarge} />
+          <Image src="/chevron-down.svg" alt="Chevron down" width={sizes.largeIcon} height={sizes.largeIcon} />
         </SelectIcon>
       </SelectTrigger>
       <SelectPortal>
         <Content>
           <ScrollUpButton>
-            <Image src="/chevron-up.svg" alt="Chevron up" width={sizes.iconLarge} height={sizes.iconLarge} />
+            <Image src="/chevron-up.svg" alt="Chevron up" width={sizes.largeIcon} height={sizes.largeIcon} />
           </ScrollUpButton>
           <SelectViewport>
             <>
@@ -135,7 +135,7 @@ const Select: React.FC<SelectProps> = ({
             </>
           </SelectViewport>
           <ScrollDownButton>
-            <Image src="/chevron-down.svg" alt="Chevron down" width={sizes.iconLarge} height={sizes.iconLarge} />
+            <Image src="/chevron-down.svg" alt="Chevron down" width={sizes.largeIcon} height={sizes.largeIcon} />
           </ScrollDownButton>
         </Content>
       </SelectPortal>
