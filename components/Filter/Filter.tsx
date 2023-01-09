@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Select from '../Select/Select';
 import { PersonSortables } from './atoms';
 import ListStyleButton from './ListStyleButton/ListStyleButton';
+import { sizes } from '../../styles/global';
 
 const sortBy: Array<{ label: string, value: PersonSortables }> = [
   { label: 'Namn', value: 'alphabetical' },
@@ -18,23 +19,43 @@ const StyledDiv = styled.div`
   grid-auto-flow: column;
   width: fit-content;
   padding-bottom: .5rem;
+  grid-gap: ${sizes.largeGap};
 `;
 
 const Filter = () => (
   <StyledDiv>
     <Popover.Root>
       <Popover.Trigger style={{ display: 'none' }}>
-        <Image src="/filter.svg" alt="Filter" width={20} height={20} />
+        <Image src="/filter.svg" alt="Filter" width={sizes.iconLarge} height={sizes.iconLarge} />
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content>
-          <Popover.Close><Image src="/x.svg" alt="Close" width={20} height={20} /></Popover.Close>
+          <Popover.Close>
+            <Image
+              src="/x.svg"
+              alt="Close"
+              width={sizes.iconLarge}
+              height={sizes.iconLarge}
+            />
+          </Popover.Close>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
     <Select placeholder="Sortera efter..." items={sortBy} defaultValue="rank" />
-    <ListStyleButton listStyle="list"><Image src="/list.svg" alt="List" width={20} height={20} /></ListStyleButton>
-    <ListStyleButton listStyle="grid"><Image src="/grid.svg" alt="Grid" width={20} height={20} /></ListStyleButton>
+    <div style={{ display: 'flex' }}>
+      <ListStyleButton
+        listVariant="list"
+        style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+      >
+        <Image src="/list.svg" alt="List" width={sizes.iconLarge} height={sizes.iconLarge} />
+      </ListStyleButton>
+      <ListStyleButton
+        listVariant="grid"
+        style={{ borderLeft: 0, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+      >
+        <Image src="/grid.svg" alt="Grid" width={sizes.iconLarge} height={sizes.iconLarge} />
+      </ListStyleButton>
+    </div>
   </StyledDiv>
 );
 

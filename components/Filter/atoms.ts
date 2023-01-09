@@ -20,5 +20,5 @@ export const sortByAtom = atom<PersonSortables | null>({
 
 export const listVariantAtom = atom<PersonListVariants | undefined>({
   key: 'listVariant',
-  default: undefined,
+  default: 'list',
 });

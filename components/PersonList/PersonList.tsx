@@ -5,9 +5,10 @@ import { discipli } from '../../data';
 import PersonListItem from './Item/PersonListItem';
 import List from '../List/List';
 import { listVariantAtom, sortByAtom } from '../Filter/atoms';
+import { sizes } from '../../styles/global';
 
 const StyledList = styled(List)`
-  grid-column-gap: 1rem;
+  grid-column-gap: ${sizes.largeGap};
   grid-gap: .5rem;
   grid-auto-flow: row;
 `;

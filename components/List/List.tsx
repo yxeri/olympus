@@ -1,19 +1,20 @@
 import styled, { css } from 'styled-components';
+import { sizes } from '../../styles/global';
 
 export type ListVariants = 'list' | 'grid';
 
 const variants = (variant?: ListVariants) => {
   if (variant === 'grid') {
     return css`
-      grid-template-columns: repeat(auto-fill, 170px);
+      grid-template-columns: repeat(auto-fill, ${sizes.gridWidth});
       width: fit-content;
-      max-width: 800px;
+      max-width: ${sizes.max};
     `;
   }
 
   return css`
-    max-width: 500px;
-    @media (max-width: 500px) {
+    max-width: ${sizes.mediumMax};
+    @media (max-width: ${sizes.mediumMax}) {
       width: 100%;
       max-width: 100%;
     }

@@ -4,13 +4,19 @@ import Button, { ButtonProps } from '../../Button/Button';
 import { listVariantAtom, PersonListVariants } from '../atoms';
 
 type ListStyleButtonProps = {
-  listStyle: PersonListVariants,
+  listVariant: PersonListVariants,
 } & ButtonProps;
 
-const ListStyleButton: React.FC<ListStyleButtonProps> = ({ listStyle, ...props }) => {
-  const [, setListStyle] = useRecoilState(listVariantAtom);
+const ListStyleButton: React.FC<ListStyleButtonProps> = ({ listVariant, ...props }) => {
+  const [selectedListVariant, setListVariant] = useRecoilState(listVariantAtom);
 
-  return <Button {...props} onClick={() => setListStyle(listStyle)} />;
+  return (
+    <Button
+      {...props}
+      isSelected={listVariant === selectedListVariant}
+      onClick={() => setListVariant(listVariant)}
+    />
+  );
 };
 
 export default ListStyleButton;

@@ -8,6 +8,11 @@ import {
 } from '../../../data';
 import { ListVariants } from '../../List/List';
 import { PersonListVariants } from '../../Filter/atoms';
+import Modal from '../../Modal/Modal';
+import {
+  colors,
+  sizes,
+} from '../../../styles/global';
 
 type PersonListItemProps = {
   person: Person,
@@ -21,15 +26,6 @@ const romanNumbers: { [key in Year]: string } = {
   3: 'III',
   4: 'IV',
   99: 'Q',
-};
-
-const borderColors: { [key in Status]: string } = {
-  a: '#eabb00',
-  b: '#858484',
-  g: 'transparent',
-  d: 'transparent',
-  e: 'transparent',
-  '?': 'transparent',
 };
 
 const StyledDiv = styled.div`
@@ -47,7 +43,7 @@ const photoVariants = (variant?: ListVariants) => {
 
   return css`
     margin: -.2rem 0;
-    height: 50px;
+    height: ${sizes.smallImageHeight};
   `;
 };
 
@@ -79,20 +75,20 @@ const listVariants = (variant?: PersonListVariants) => {
     "rank year name photo score"
     "rank status name photo score"
     "rank status society photo score";
-    grid-template-columns: 1.1rem 1.2rem 1fr 50px 1.6rem;
+    grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight} 1.6rem;
   `;
 };
 
 const StyledListItem = styled(ListItem)`
   display: grid;
-  border: 2px solid ${({ status }: { status: Status }) => borderColors[status]};
-  box-shadow: 0 0 3px 1px ${({ status }: { status: Status }) => borderColors[status]};
-  background-color: #ccc7b5;
+  border: 2px solid ${({ status }: { status: Status }) => colors[status]};
+  box-shadow: 0 0 3px 1px ${({ status }: { status: Status }) => colors[status]};
+  background-color: ${colors.componentBackground};
   ${({ variant }) => listVariants(variant)}
 `;
 
 const StatusDiv = styled(StyledDiv)`
-  text-shadow: 0 0 2px ${({ status }: { status: Status }) => borderColors[status]};  
+  text-shadow: 0 0 2px ${({ status }: { status: Status }) => colors[status]};  
 `;
 
 const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) => {
@@ -101,8 +97,8 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
   } = person;
 
   if (listVariant === 'grid') {
-    return (
-      <StyledListItem status={status} variant={listVariant}>
+    const listItem = (
+      <StyledListItem status={status} variant={listVariant} style={{ cursor: 'pointer' }}>
         <StyledPhoto variant={listVariant}>
           <Image
             fill
@@ -145,10 +141,19 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
         </StyledDiv>
       </StyledListItem>
     );
+
+    return (
+      <Modal
+        trigger={listItem}
+        title={`${person.name} ${person.family.toUpperCase()}`}
+        description="Description"
+        content={<div>Content</div>}
+      />
+    );
   }
 
-  return (
-    <StyledListItem status={status} variant={listVariant}>
+  const listItem = (
+    <div style={{ display: 'contents', cursor: 'pointer' }}>
       <StyledDiv style={{ gridArea: 'rank' }}>
         {rank}
       </StyledDiv>
@@ -175,10 +180,27 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
           alt="Person"
         />
       </StyledPhoto>
-      <StyledDiv style={{ gridArea: 'score' }}>
-        <Image src="/award.svg" alt="Score" width={14} height={14} />
-        {score}
-      </StyledDiv>
+    </div>
+  );
+
+  return (
+    <StyledListItem status={status} variant={listVariant}>
+      <Modal
+        trigger={listItem}
+        title={`${person.name} ${person.family.toUpperCase()}`}
+        description="Description"
+        content={<div>Content</div>}
+      />
+      <Modal
+        trigger={(
+          <StyledDiv style={{ gridArea: 'score', cursor: 'pointer' }}>
+            <Image src="/award.svg" alt="Score" width={14} height={14} />
+            {score}
+          </StyledDiv>
+        )}
+        title="Title"
+        content="content"
+      />
     </StyledListItem>
   );
 };

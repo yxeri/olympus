@@ -21,6 +21,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { PersonSortables, sortByAtom } from '../Filter/atoms';
+import {
+  borders,
+  colors,
+  sizes,
+} from '../../styles/global';
 
 export type SelectItemType = {
   label: string,
@@ -36,13 +41,14 @@ type SelectProps = {
 
 const SelectTrigger = styled(Trigger)`
   all: unset;
+  box-sizing: border-box;
   display: grid;
   align-items: center;
   grid-auto-flow: column;
   background-color: #f6f2dc;
   padding: .3rem;
-  border: 1px solid;
-  border-radius: 4px;
+  border: ${borders.standard};
+  border-radius: ${sizes.corner};
   box-shadow: 0 2px 5px rgba(22, 23, 24, 0.5);
 `;
 
@@ -70,15 +76,16 @@ const StyledSelectItem = styled(SelectItem)`
 `;
 
 const SelectPortal = styled(Portal)`
-  top: 0;
-  left: -20px;
-  background-color: #f6f2dc;
-  border-radius: 4px;
+  margin-left: -.1rem;
+  margin-top: -.1rem;
+  background-color: ${colors.clickableBackground};
+  border-radius: ${sizes.corner};
   box-shadow: 0 10px 38px -10px rgba(22, 23, 24, 0.5), 0px 10px 20px -15px rgba(22, 23, 24, 0.5);
 `;
 
 const SelectViewport = styled(Viewport)`
   display: grid;
+  box-sizing: border-box;
   grid-row-gap: .4rem;
   padding: .4rem;
 `;
@@ -108,13 +115,13 @@ const Select: React.FC<SelectProps> = ({
       <SelectTrigger>
         <Value placeholder={placeholder} />
         <SelectIcon>
-          <Image src="/chevron-down.svg" alt="Chevron down" width={20} height={20} />
+          <Image src="/chevron-down.svg" alt="Chevron down" width={sizes.iconLarge} height={sizes.iconLarge} />
         </SelectIcon>
       </SelectTrigger>
       <SelectPortal>
         <Content>
           <ScrollUpButton>
-            <Image src="/chevron-up.svg" alt="Chevron up" width={20} height={20} />
+            <Image src="/chevron-up.svg" alt="Chevron up" width={sizes.iconLarge} height={sizes.iconLarge} />
           </ScrollUpButton>
           <SelectViewport>
             <>
@@ -128,7 +135,7 @@ const Select: React.FC<SelectProps> = ({
             </>
           </SelectViewport>
           <ScrollDownButton>
-            <Image src="/chevron-down.svg" alt="Chevron down" width={20} height={20} />
+            <Image src="/chevron-down.svg" alt="Chevron down" width={sizes.iconLarge} height={sizes.iconLarge} />
           </ScrollDownButton>
         </Content>
       </SelectPortal>
