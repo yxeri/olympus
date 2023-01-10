@@ -6,7 +6,7 @@ export type ListVariants = 'list' | 'grid';
 const variants = (variant?: ListVariants) => {
   if (variant === 'grid') {
     return css`
-      grid-template-columns: repeat(auto-fill, ${sizes.gridWidth});
+      grid-template-columns: repeat(auto-fill, ${sizes.gridWidth[0]});
       width: 100%;
       max-width: ${sizes.max};
     `;

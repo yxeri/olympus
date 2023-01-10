@@ -13,6 +13,7 @@ import {
   colors,
   sizes,
 } from '../../../styles/global';
+import ProfilePlaceholder from '../../../public/profile.png';
 
 type PersonListItemProps = {
   person: Person,
@@ -43,7 +44,7 @@ const photoVariants = (variant?: ListVariants) => {
 
   return css`
     margin: -.2rem 0;
-    height: ${sizes.smallImageHeight};
+    height: ${sizes.smallImageHeight[0]};
   `;
 };
 
@@ -51,6 +52,7 @@ const StyledPhoto = styled(StyledDiv)<{ variant?: ListVariants }>`
   grid-area: photo;
   overflow: hidden;
   position: relative;
+  justify-content: center;
   ${({ variant }) => photoVariants(variant)}
 `;
 
@@ -75,7 +77,7 @@ const listVariants = (variant?: PersonListVariants) => {
     "rank year name photo score"
     "rank status name photo score"
     "rank status society photo score";
-    grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight} 1.6rem;
+    grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight[0]} 1.6rem;
   `;
 };
 
@@ -101,9 +103,12 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
       <StyledListItem status={status} variant={listVariant} style={{ cursor: 'pointer' }}>
         <StyledPhoto variant={listVariant}>
           <Image
-            fill
-            style={{ objectFit: 'cover' }}
-            src="/profile.png"
+            placeholder="blur"
+            quality={75}
+            height={150}
+            width={sizes.gridWidth[1]}
+            style={{ objectFit: 'cover', alignSelf: 'center' }}
+            src={ProfilePlaceholder}
             alt="Person"
           />
         </StyledPhoto>
@@ -174,9 +179,12 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
       </StyledDiv>
       <StyledPhoto variant={listVariant}>
         <Image
-          fill
+          placeholder="blur"
+          quality={25}
+          height={sizes.smallImageHeight[1]}
+          width={sizes.smallImageHeight[1]}
           style={{ objectFit: 'cover' }}
-          src="/profile.png"
+          src={ProfilePlaceholder}
           alt="Person"
         />
       </StyledPhoto>

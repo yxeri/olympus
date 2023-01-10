@@ -5,39 +5,39 @@ import {
   sizes,
 } from '../../styles/global';
 import Link from '../Link/Link';
+import LogoImage from '../../public/olympus.jpg.webp';
 
 const StyledDiv = styled.div`
   display: grid;
-  height: 60px;
-  align-items: center;
   position: sticky;
   top: 0;
   z-index: 2;
+  margin-bottom: 1.6rem;
 `;
 
 const Line = styled.div`
   position: absolute;
   top: 0;
+  height: 2.6rem;
   width: 100%;
-  height: calc(55% + (${sizes.hugeIcon}px / 2));
   background-color: ${colors.primaryTransBackground};
   border-bottom-left-radius: 50%;
   border-bottom-right-radius: 50%;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
+  z-index: 1;
 `;
 
 const ContainerDiv = styled.div`
   display: grid;
-  align-items: center;
-  grid-column-gap: 60px;
+  grid-column-gap: calc(60px + .8rem);
   grid-template-columns: 1fr 1fr;
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  padding: .6rem;
+  z-index: 2;
 `;
 
 const JustifiedDiv = styled.div<{ justify: 'flex-start' | 'flex-end' }>`
+  top: 0;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
@@ -45,9 +45,7 @@ const JustifiedDiv = styled.div<{ justify: 'flex-start' | 'flex-end' }>`
   color: ${colors.navColor};
   justify-content: ${({ justify }) => justify};
   width: fit-content;
-  margin-top: -.9rem;
   ${({ justify }) => justify === 'flex-end' && 'margin-left: auto'};
-  ${({ justify }) => (justify === 'flex-end' ? 'margin-right: 1rem' : 'margin-left: 1rem')}
 `;
 
 const LinkDiv = styled.div`
@@ -64,6 +62,7 @@ const Logo = styled(Link)`
   display: grid;
   width: fit-content;
   height: fit-content;
+  z-index: 2;
   
   img {
     box-sizing: border-box;
@@ -102,7 +101,8 @@ const Navigation = () => (
     </ContainerDiv>
     <Logo href="/">
       <Image
-        src="/olympus.jpg.webp"
+        placeholder="blur"
+        src={LogoImage}
         alt="Olympus"
         width={60}
         height={60}

@@ -81,6 +81,7 @@ const SelectPortal = styled(Portal)`
   background-color: ${colors.clickableBackground};
   border-radius: ${sizes.corner};
   box-shadow: 0 10px 38px -10px rgba(22, 23, 24, 0.5), 0px 10px 20px -15px rgba(22, 23, 24, 0.5);
+  z-index: 10;
 `;
 
 const SelectViewport = styled(Viewport)`
