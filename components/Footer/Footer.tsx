@@ -8,7 +8,7 @@ const StyledDiv = styled.div`
   position: sticky;
   bottom: 0;
   color: ${colors.navColor};
-  padding: .2rem;
+  padding: .4rem;
   margin-top: 1rem;
   text-align: center;
   display: grid;
@@ -21,9 +21,12 @@ const LineDiv = styled.div`
   box-sizing: border-box;
   position: absolute;
   bottom: 0;
+  padding-bottom: .1rem;
   height: 50%;
   width: 100%;
-  background-color: ${colors.primaryBackground};
+  background-color: ${colors.primaryTransBackground};
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 `;
 
 const TextDiv = styled.div`

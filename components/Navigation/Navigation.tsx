@@ -20,7 +20,11 @@ const Line = styled.div`
   top: 0;
   width: 100%;
   height: calc(55% + (${sizes.hugeIcon}px / 2));
-  background-color: ${colors.primaryBackground};
+  background-color: ${colors.primaryTransBackground};
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 `;
 
 const ContainerDiv = styled.div`
@@ -47,7 +51,6 @@ const JustifiedDiv = styled.div<{ justify: 'flex-start' | 'flex-end' }>`
 `;
 
 const LinkDiv = styled.div`
-  background-color: ${colors.primaryBackground};
   padding: 0 .2rem;
 `;
 
@@ -85,6 +88,11 @@ const Navigation = () => (
         </LinkDiv>
       </JustifiedDiv>
       <JustifiedDiv justify="flex-start">
+        <LinkDiv>
+          <Link href="/people">
+            <Image src="/calendar-nav.svg" alt="Education" width={sizes.hugeIcon} height={sizes.hugeIcon} />
+          </Link>
+        </LinkDiv>
         <LinkDiv>
           <Link href="/people">
             <Image src="/calendar-nav.svg" alt="Education" width={sizes.hugeIcon} height={sizes.hugeIcon} />
