@@ -5,7 +5,10 @@ import {
   sizes,
 } from '../../styles/global';
 import Link from '../Link/Link';
-import LogoImage from '../../public/olympus.jpg.webp';
+import LogoImage from '../../assets/olympus.jpg.webp';
+import CalendarIcon from '../../assets/calendar-nav.svg';
+import SettingsIcon from '../../assets/settings.svg';
+import PersonIcon from '../../assets/person-nav.svg';
 
 const StyledDiv = styled.div`
   display: grid;
@@ -77,24 +80,24 @@ const Navigation = () => (
       <JustifiedDiv justify="flex-end">
         <LinkDiv>
           <Link href="/people">
-            <Image src="/person-nav.svg" alt="People" width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            <PersonIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
         <LinkDiv>
           <Link href="/people">
-            <Image src="/calendar-nav.svg" alt="Calendar" width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
       </JustifiedDiv>
       <JustifiedDiv justify="flex-start">
         <LinkDiv>
           <Link href="/people">
-            <Image src="/calendar-nav.svg" alt="Education" width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
         <LinkDiv>
-          <Link href="/people">
-            <Image src="/calendar-nav.svg" alt="Education" width={sizes.hugeIcon} height={sizes.hugeIcon} />
+          <Link href="/settings">
+            <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
       </JustifiedDiv>

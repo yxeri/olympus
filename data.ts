@@ -25,7 +25,6 @@ export const statusCollection: { [key in Status]: string } = {
   '?': '?',
 };
 
-const years: Year[] = [1, 2, 3, 4];
 const societies: Society[] = [
   'Bacchus',
   'Bellona',
@@ -137,12 +136,12 @@ export const discipli: Person[] = [
 
   return {
     family,
-    score: 100 - index * 2,
+    score: 100,
     type: 'Discipli',
-    id: index.toString(),
-    year: years[Math.floor(Math.random() * 4)],
+    id: fullName,
+    year: 1,
     current: true,
-    society: societies[Math.floor(Math.random() * 3)],
+    society: societies[0],
     rank: index + 1,
     name: nameSplit.slice(0, -1).join(' '),
     status: familyStatus[family] ?? 'b',

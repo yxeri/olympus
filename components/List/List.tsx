@@ -8,12 +8,10 @@ const variants = (variant?: ListVariants) => {
     return css`
       grid-template-columns: repeat(auto-fill, ${sizes.gridWidth[0]});
       width: 100%;
-      max-width: ${sizes.max};
     `;
   }
 
   return css`
-    max-width: ${sizes.mediumMax};
     @media (max-width: ${sizes.mediumMax}) {
       width: 100%;
       max-width: 100%;

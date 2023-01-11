@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import {
-  colors,
-} from '../../styles/global';
-import LogoImage from '../../public/olympus.jpg.webp';
-import SoteiraLogo from '../../public/soteira-small-logo.png';
+import { colors } from '../../styles/global';
+import LogoImage from '../../assets/olympus.jpg.webp';
+import SoteiraLogo from '../../assets/soteira-small-logo.png';
 
 const StyledDiv = styled.div`
   position: sticky;
@@ -61,7 +59,6 @@ const Footer = () => (
       <LineDiv />
       <TextDiv>Förtjäna er stolthet</TextDiv>
       <Image
-        placeholder="blur"
         quality={25}
         src={LogoImage}
         alt="Olympus"
@@ -74,7 +71,6 @@ const Footer = () => (
     <BottomMessage>
       <div>Drivs av</div>
       <Image
-        placeholder="blur"
         src={SoteiraLogo}
         alt="Soteira"
         style={{ height: '25px', width: '50px', objectFit: 'contain' }}

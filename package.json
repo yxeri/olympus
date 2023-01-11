@@ -23,11 +23,13 @@
     "next": "13.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-papaparse": "^4.1.0",
     "recoil": "^0.7.6",
     "styled-components": "^5.3.6",
     "typescript": "4.9.4"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.5.1",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint-config-airbnb": "19.0.4",

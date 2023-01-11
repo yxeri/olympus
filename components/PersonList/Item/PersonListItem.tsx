@@ -3,7 +3,9 @@ import styled, { css } from 'styled-components';
 import Image from 'next/image';
 import ListItem from '../../List/ListItem';
 import {
-  Person, Status, statusCollection,
+  Person,
+  Status,
+  statusCollection,
   Year,
 } from '../../../data';
 import { ListVariants } from '../../List/List';
@@ -13,7 +15,8 @@ import {
   colors,
   sizes,
 } from '../../../styles/global';
-import ProfilePlaceholder from '../../../public/profile.png';
+import ProfilePlaceholder from '../../../assets/profile.png';
+import Award from '../../../assets/award.svg';
 
 type PersonListItemProps = {
   person: Person,
@@ -35,25 +38,11 @@ const StyledDiv = styled.div`
   align-items: center;
 `;
 
-const photoVariants = (variant?: ListVariants) => {
-  if (variant === 'grid') {
-    return css`
-      height: 150px;
-    `;
-  }
-
-  return css`
-    margin: -.2rem 0;
-    height: ${sizes.smallImageHeight[0]};
-  `;
-};
-
-const StyledPhoto = styled(StyledDiv)<{ variant?: ListVariants }>`
+const StyledPhoto = styled(StyledDiv)`
   grid-area: photo;
   overflow: hidden;
   position: relative;
   justify-content: center;
-  ${({ variant }) => photoVariants(variant)}
 `;
 
 const listVariants = (variant?: PersonListVariants) => {
@@ -71,6 +60,7 @@ const listVariants = (variant?: PersonListVariants) => {
   }
 
   return css`
+    max-width: ${sizes.mediumMax};
     padding: .3rem;
     grid-column-gap: .7rem;
     grid-template-areas:
@@ -101,9 +91,8 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
   if (listVariant === 'grid') {
     const listItem = (
       <StyledListItem status={status} variant={listVariant} style={{ cursor: 'pointer' }}>
-        <StyledPhoto variant={listVariant}>
+        <StyledPhoto>
           <Image
-            placeholder="blur"
             quality={75}
             height={150}
             width={sizes.gridWidth[1]}
@@ -177,13 +166,12 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
       <StyledDiv style={{ gridArea: 'society' }}>
         {society}
       </StyledDiv>
-      <StyledPhoto variant={listVariant}>
+      <StyledPhoto>
         <Image
-          placeholder="blur"
           quality={25}
           height={sizes.smallImageHeight[1]}
           width={sizes.smallImageHeight[1]}
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: 'cover', margin: '-.2rem 0' }}
           src={ProfilePlaceholder}
           alt="Person"
         />
@@ -202,7 +190,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
       <Modal
         trigger={(
           <StyledDiv style={{ gridArea: 'score', cursor: 'pointer' }}>
-            <Image src="/award.svg" alt="Score" width={14} height={14} />
+            <Award width="14" height="14" />
             {score}
           </StyledDiv>
         )}

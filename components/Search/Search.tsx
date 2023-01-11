@@ -1,8 +1,5 @@
-import {
-  useRecoilState,
-} from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import Image from 'next/image';
 import { useState } from 'react';
 import { searchStringAtom } from '../Filter/atoms';
 import {
@@ -10,6 +7,8 @@ import {
   colors,
   sizes,
 } from '../../styles/global';
+import SearchIcon from '../../assets/search.svg';
+import XIcon from '../../assets/x.svg';
 
 const StyledInput = styled.input`
   background-color: ${colors.clickableBackground};
@@ -26,13 +25,13 @@ const StyledDiv = styled.div`
   align-items: center;
 `;
 
-const SearchImage = styled(Image)<{ isHidden: boolean }>`
+const SearchImage = styled(SearchIcon)<{ isHidden: boolean }>`
   position: absolute;
   left: .3rem;
   ${({ isHidden }) => isHidden && 'display: none;'}
 `;
 
-const ClearImage = styled(Image)<{ isHidden: boolean }>`
+const ClearImage = styled(XIcon)<{ isHidden: boolean }>`
   position: absolute;
   right: .3rem;
   ${({ isHidden }) => isHidden && 'display: none;'}
@@ -46,7 +45,6 @@ const Search = () => {
     <StyledDiv>
       <SearchImage
         isHidden={hasContent}
-        src="/search.svg"
         alt="Search"
         width={sizes.largeIcon}
         height={sizes.largeIcon}

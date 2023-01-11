@@ -1,11 +1,14 @@
 import * as Popover from '@radix-ui/react-popover';
-import Image from 'next/image';
 import styled from 'styled-components';
 import Select from '../Select/Select';
 import { PersonSortables } from './atoms';
-import ListStyleButton from './ListStyleButton/ListStyleButton';
+import ListVariantButton from './ListVariantButton/ListVariantButton';
 import { sizes } from '../../styles/global';
 import Search from '../Search/Search';
+import FilterIcon from '../../assets/filter.svg';
+import XIcon from '../../assets/x.svg';
+import ListIcon from '../../assets/list.svg';
+import GridIcon from '../../assets/grid.svg';
 
 const sortBy: Array<{ label: string, value: PersonSortables }> = [
   { label: 'Namn', value: 'alphabetical' },
@@ -27,13 +30,12 @@ const Filter = () => (
   <StyledDiv>
     <Popover.Root>
       <Popover.Trigger style={{ display: 'none' }}>
-        <Image src="/filter.svg" alt="Filter" width={sizes.largeIcon} height={sizes.largeIcon} />
+        <FilterIcon alt="Filter" width={sizes.largeIcon} height={sizes.largeIcon} />
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content>
           <Popover.Close>
-            <Image
-              src="/x.svg"
+            <XIcon
               alt="Close"
               width={sizes.largeIcon}
               height={sizes.largeIcon}
@@ -44,18 +46,18 @@ const Filter = () => (
     </Popover.Root>
     <Select placeholder="Sortera efter..." items={sortBy} defaultValue="rank" />
     <div style={{ display: 'flex' }}>
-      <ListStyleButton
+      <ListVariantButton
         listVariant="list"
         style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
       >
-        <Image src="/list.svg" alt="List" width={sizes.largeIcon} height={sizes.largeIcon} />
-      </ListStyleButton>
-      <ListStyleButton
+        <ListIcon alt="List" width={sizes.largeIcon} height={sizes.largeIcon} />
+      </ListVariantButton>
+      <ListVariantButton
         listVariant="grid"
         style={{ borderLeft: 0, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
       >
-        <Image src="/grid.svg" alt="Grid" width={sizes.largeIcon} height={sizes.largeIcon} />
-      </ListStyleButton>
+        <GridIcon alt="Grid" width={sizes.largeIcon} height={sizes.largeIcon} />
+      </ListVariantButton>
     </div>
     <Search />
   </StyledDiv>

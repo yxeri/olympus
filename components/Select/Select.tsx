@@ -1,31 +1,36 @@
-import Image from 'next/image';
 import {
-  Root,
-  Trigger,
-  Value,
-  Icon,
-  Portal,
   Content,
-  ScrollDownButton,
-  ScrollUpButton,
-  Item,
   Group,
-  Label,
-  Separator,
-  Viewport,
+  Icon,
+  Item,
   ItemIndicator,
   ItemText,
+  Label,
+  Portal,
+  Root,
+  ScrollDownButton,
+  ScrollUpButton,
   SelectItemProps,
+  Separator,
+  Trigger,
+  Value,
+  Viewport,
 } from '@radix-ui/react-select';
 import React from 'react';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
-import { PersonSortables, sortByAtom } from '../Filter/atoms';
+import {
+  PersonSortables,
+  sortByAtom,
+} from '../Filter/atoms';
 import {
   borders,
   colors,
   sizes,
 } from '../../styles/global';
+import CheckIcon from '../../assets/check.svg';
+import ChevronUpIcon from '../../assets/chevron-up.svg';
+import ChevronDownIcon from '../../assets/chevron-down.svg';
 
 export type SelectItemType = {
   label: string,
@@ -63,7 +68,7 @@ const SelectItem = React.forwardRef<HTMLDivElement | null, SelectItemProps>(({
   <Item {...props} ref={ref}>
     <ItemText>{children}</ItemText>
     <ItemIndicator>
-      <Image src="/check.svg" alt="Selected" width={18} height={18} />
+      <CheckIcon alt="Selected" width={18} height={18} />
     </ItemIndicator>
   </Item>
 ));
@@ -116,13 +121,13 @@ const Select: React.FC<SelectProps> = ({
       <SelectTrigger>
         <Value placeholder={placeholder} />
         <SelectIcon>
-          <Image src="/chevron-down.svg" alt="Chevron down" width={sizes.largeIcon} height={sizes.largeIcon} />
+          <ChevronDownIcon alt="Chevron down" width={sizes.largeIcon} height={sizes.largeIcon} />
         </SelectIcon>
       </SelectTrigger>
       <SelectPortal>
         <Content>
           <ScrollUpButton>
-            <Image src="/chevron-up.svg" alt="Chevron up" width={sizes.largeIcon} height={sizes.largeIcon} />
+            <ChevronUpIcon alt="Chevron up" width={sizes.largeIcon} height={sizes.largeIcon} />
           </ScrollUpButton>
           <SelectViewport>
             <>
@@ -136,7 +141,7 @@ const Select: React.FC<SelectProps> = ({
             </>
           </SelectViewport>
           <ScrollDownButton>
-            <Image src="/chevron-down.svg" alt="Chevron down" width={sizes.largeIcon} height={sizes.largeIcon} />
+            <ChevronDownIcon alt="Chevron down" width={sizes.largeIcon} height={sizes.largeIcon} />
           </ScrollDownButton>
         </Content>
       </SelectPortal>
