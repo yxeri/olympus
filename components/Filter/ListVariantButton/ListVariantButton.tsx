@@ -1,24 +1,23 @@
-import { useRecoilState } from 'recoil';
 import React from 'react';
+import { useRouter } from 'next/router';
+import Link from '../../Link/Link';
 import Button, { ButtonProps } from '../../Button/Button';
-import {
-  listVariantAtom,
-  PersonListVariants,
-} from '../atoms';
 
 type ListVariantButtonProps = {
-  listVariant: PersonListVariants,
+  path: string,
 } & ButtonProps;
 
-const ListVariantButton: React.FC<ListVariantButtonProps> = ({ listVariant, ...props }) => {
-  const [selectedListVariant, setListVariant] = useRecoilState(listVariantAtom);
+const ListVariantButton: React.FC<ListVariantButtonProps> = ({ path, ...props }) => {
+  const { pathname } = useRouter();
+  const fullPath = `/people${path}`;
 
   return (
-    <Button
-      {...props}
-      isSelected={listVariant === selectedListVariant}
-      onClick={() => setListVariant(listVariant)}
-    />
+    <Link href={fullPath}>
+      <Button
+        isSelected={fullPath === pathname}
+        {...props}
+      />
+    </Link>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Image from 'next/image';
 import ListItem from '../../List/ListItem';
 import {
@@ -8,8 +8,6 @@ import {
   statusCollection,
   Year,
 } from '../../../data';
-import { ListVariants } from '../../List/List';
-import { PersonListVariants } from '../../Filter/atoms';
 import Modal from '../../Modal/Modal';
 import {
   colors,
@@ -18,12 +16,11 @@ import {
 import ProfilePlaceholder from '../../../assets/profile.png';
 import Award from '../../../assets/award.svg';
 
-type PersonListItemProps = {
+export type PersonListItemProps = {
   person: Person,
-  listVariant?: ListVariants,
 };
 
-const romanNumbers: { [key in Year]: string } = {
+export const romanNumbers: { [key in Year]: string } = {
   0: '0',
   1: 'I',
   2: 'II',
@@ -32,119 +29,43 @@ const romanNumbers: { [key in Year]: string } = {
   99: 'Q',
 };
 
-const StyledDiv = styled.div`
+export const StyledDiv = styled.div`
   display: grid;
   justify-items: center;
   align-items: center;
 `;
 
-const StyledPhoto = styled(StyledDiv)`
+export const StyledPhoto = styled(StyledDiv)`
   grid-area: photo;
   overflow: hidden;
   position: relative;
   justify-content: center;
 `;
 
-const listVariants = (variant?: PersonListVariants) => {
-  if (variant === 'grid') {
-    return css`
-      grid-template-areas:
-        "photo photo photo"
-        "name year status"
-        "family society society";
-      position: relative;
-      padding: .2rem;
-      grid-template-columns: 1fr max-content max-content;
-      grid-row-gap: .2rem;
-    `;
-  }
-
-  return css`
-    max-width: ${sizes.mediumMax};
-    padding: .3rem;
-    grid-column-gap: .7rem;
-    grid-template-areas:
-    "rank year name photo score"
-    "rank status name photo score"
-    "rank status society photo score";
-    grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight[0]} 1.6rem;
-  `;
-};
-
 const StyledListItem = styled(ListItem)`
   display: grid;
   border: 2px solid ${({ status }: { status: Status }) => colors[status]};
   box-shadow: 0 0 3px 1px ${({ status }: { status: Status }) => colors[status]};
   background-color: ${colors.componentBackground};
-  ${({ variant }) => listVariants(variant)}
+
+  max-width: ${sizes.mediumMax};
+  padding: .3rem;
+  grid-column-gap: .7rem;
+  grid-template-areas:
+    "rank year name photo score"
+    "rank status name photo score"
+    "rank status society photo score";
+  grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight[0]} 1.6rem;
 `;
 
-const StatusDiv = styled(StyledDiv)`
+export const StatusDiv = styled(StyledDiv)`
   text-shadow: 0 0 2px ${({ status }: { status: Status }) => colors[status]};  
 `;
 
-const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) => {
+const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
   const {
     year, family, name, status, society, rank, score,
   } = person;
-
-  if (listVariant === 'grid') {
-    const listItem = (
-      <StyledListItem status={status} variant={listVariant} style={{ cursor: 'pointer' }}>
-        <StyledPhoto>
-          <Image
-            quality={75}
-            height={150}
-            width={sizes.gridWidth[1]}
-            style={{ objectFit: 'cover', alignSelf: 'center' }}
-            src={ProfilePlaceholder}
-            alt="Person"
-          />
-        </StyledPhoto>
-        <StyledDiv style={{
-          gridArea: 'name', justifySelf: 'flex-start',
-        }}
-        >
-          {name}
-        </StyledDiv>
-        <StyledDiv style={{
-          gridArea: 'family', justifySelf: 'flex-start',
-        }}
-        >
-          {family.toUpperCase()}
-        </StyledDiv>
-        <StyledDiv style={{
-          gridArea: 'year', justifySelf: 'flex-end',
-        }}
-        >
-          {romanNumbers[year]}
-        </StyledDiv>
-        <StatusDiv
-          status={status}
-          style={{
-            gridArea: 'status', justifySelf: 'flex-end',
-          }}
-        >
-          {statusCollection[status]}
-        </StatusDiv>
-        <StyledDiv style={{
-          gridArea: 'society', justifySelf: 'flex-end',
-        }}
-        >
-          {society}
-        </StyledDiv>
-      </StyledListItem>
-    );
-
-    return (
-      <Modal
-        trigger={listItem}
-        title={`${person.name} ${person.family.toUpperCase()}`}
-        description="Description"
-        content={<div>Content</div>}
-      />
-    );
-  }
 
   const listItem = (
     <div style={{ display: 'contents', cursor: 'pointer' }}>
@@ -168,6 +89,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
       </StyledDiv>
       <StyledPhoto>
         <Image
+          placeholder="blur"
           quality={25}
           height={sizes.smallImageHeight[1]}
           width={sizes.smallImageHeight[1]}
@@ -180,7 +102,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person, listVariant }) 
   );
 
   return (
-    <StyledListItem status={status} variant={listVariant}>
+    <StyledListItem status={status} variant="list">
       <Modal
         trigger={listItem}
         title={`${person.name} ${person.family.toUpperCase()}`}

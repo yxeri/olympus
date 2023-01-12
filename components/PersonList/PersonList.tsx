@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import {
@@ -8,11 +8,16 @@ import {
 import PersonListItem from './Item/PersonListItem';
 import List from '../List/List';
 import {
-  listVariantAtom,
+  PersonListVariants,
   searchStringAtom,
   sortByAtom,
 } from '../Filter/atoms';
 import { sizes } from '../../styles/global';
+import PersonListGridItem from './Item/PersonListGridItem';
+
+type PersonListProps = {
+  listVariant: PersonListVariants,
+};
 
 const StyledList = styled(List)`
   grid-column-gap: ${sizes.largeGap};
@@ -29,30 +34,33 @@ const getFilteredList = ({ list, searchString }: { list: Person[], searchString?
     : list
 );
 
-const PersonList = () => {
+const PersonList: React.FC<PersonListProps> = ({ listVariant }) => {
   const sortBy = useRecoilValue(sortByAtom);
-  const listVariant = useRecoilValue(listVariantAtom);
   const searchString = useRecoilValue(searchStringAtom);
-  const persons = getFilteredList({ searchString, list: discipli })
-    .sort((a, b) => {
-      if (sortBy === 'alphabetical') {
-        const aName = `${a.name} ${a.family}`;
-        const bName = `${b.name} ${b.family}`;
+  const sortedPersons = useMemo(() => discipli.sort((a, b) => {
+    if (sortBy === 'alphabetical') {
+      const aName = `${a.name} ${a.family}`;
+      const bName = `${b.name} ${b.family}`;
 
-        if (aName === bName) {
-          return 0;
-        }
-
-        return aName > bName ? 1 : -1;
-      }
-
-      if (a[sortBy] === b[sortBy]) {
+      if (aName === bName) {
         return 0;
       }
 
-      return a[sortBy] > b[sortBy] ? 1 : -1;
-    })
-    .map((person) => <PersonListItem key={`${person.name}${person.family}`} person={person} listVariant={listVariant} />);
+      return aName > bName ? 1 : -1;
+    }
+
+    if (a[sortBy] === b[sortBy]) {
+      return 0;
+    }
+
+    return a[sortBy] > b[sortBy] ? 1 : -1;
+  }), [sortBy]);
+  const persons = getFilteredList({ searchString, list: sortedPersons })
+    .map((person) => (
+      listVariant === 'grid'
+        ? <PersonListGridItem key={`${person.name}${person.family}`} person={person} />
+        : <PersonListItem key={`${person.name}${person.family}`} person={person} />
+    ));
 
   return (
     <StyledList variant={listVariant}>

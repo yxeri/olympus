@@ -39,7 +39,7 @@ const ClearImage = styled(XIcon)<{ isHidden: boolean }>`
 
 const Search = () => {
   const [searchString, setSearchString] = useRecoilState(searchStringAtom);
-  const [hasContent, setHasContent] = useState(false);
+  const [hasContent, setHasContent] = useState(!!searchString);
 
   return (
     <StyledDiv>
@@ -53,11 +53,11 @@ const Search = () => {
         value={searchString}
         onChange={({ currentTarget }) => setSearchString(currentTarget.value)}
         onFocus={() => setHasContent(true)}
-        onBlur={() => setHasContent(searchString !== '')}
+        onBlur={() => setHasContent(!!searchString)}
       />
       <ClearImage
         onClick={() => setSearchString('')}
-        isHidden={searchString === ''}
+        isHidden={!searchString}
         src="/x.svg"
         alt="Clear"
         width={sizes.largeIcon}

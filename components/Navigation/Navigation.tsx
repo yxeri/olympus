@@ -104,7 +104,6 @@ const Navigation = () => (
     </ContainerDiv>
     <Logo href="/">
       <Image
-        placeholder="blur"
         src={LogoImage}
         alt="Olympus"
         width={60}

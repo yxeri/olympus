@@ -18,11 +18,6 @@ import {
 } from '@radix-ui/react-select';
 import React from 'react';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
-import {
-  PersonSortables,
-  sortByAtom,
-} from '../Filter/atoms';
 import {
   borders,
   colors,
@@ -32,16 +27,17 @@ import CheckIcon from '../../assets/check.svg';
 import ChevronUpIcon from '../../assets/chevron-up.svg';
 import ChevronDownIcon from '../../assets/chevron-down.svg';
 
-export type SelectItemType = {
+export type SelectItemType<T> = {
   label: string,
-  value: string
+  value: T
 };
 
-type SelectProps = {
+type SelectProps<T> = {
   placeholder: string,
-  items?: SelectItemType[],
-  groups?: Array<{ label: string, items: Array<SelectItemType> }>,
+  items?: SelectItemType<T>[],
+  groups?: Array<{ label: string, items: Array<SelectItemType<T>> }>,
   defaultValue?: string,
+  onValueChange: (value: T) => void,
 };
 
 const SelectTrigger = styled(Trigger)`
@@ -96,13 +92,13 @@ const SelectViewport = styled(Viewport)`
   padding: .4rem;
 `;
 
-const Select: React.FC<SelectProps> = ({
+const Select = <T,>({
   placeholder,
   items,
   groups,
   defaultValue,
-}) => {
-  const setSortBy = useSetRecoilState(sortByAtom);
+  onValueChange,
+}: SelectProps<string & keyof T>) => {
   const itemComponents = items?.map(({ value, label }, index) => (
     // eslint-disable-next-line react/no-array-index-key
     <StyledSelectItem key={index} value={value}>{label}</StyledSelectItem>));
@@ -117,7 +113,7 @@ const Select: React.FC<SelectProps> = ({
   ));
 
   return (
-    <Root defaultValue={defaultValue} onValueChange={(value: PersonSortables) => setSortBy(value)}>
+    <Root defaultValue={defaultValue} onValueChange={onValueChange}>
       <SelectTrigger>
         <Value placeholder={placeholder} />
         <SelectIcon>
