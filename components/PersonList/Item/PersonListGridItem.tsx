@@ -28,7 +28,7 @@ const StyledListItem = styled(ListItem)`
   grid-template-areas:
     "photo photo photo"
     "name year status"
-    "family society society"; 
+    "family society society";
   position: relative;
   padding: .2rem;
   grid-template-columns: 1fr max-content max-content;
@@ -45,7 +45,6 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
       <StyledPhoto>
         <Image
           placeholder="blur"
-          quality={75}
           height={150}
           width={sizes.gridWidth[1]}
           style={{ objectFit: 'cover', alignSelf: 'center' }}

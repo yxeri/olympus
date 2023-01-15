@@ -17,6 +17,7 @@ const StyledButton = styled.button<{ isSelected?: boolean }>`
   padding: .3rem;
   border-radius: ${sizes.corner};
   border: ${borders.standard};
+  align-content: center;
 `;
 
 const Button: React.FC<ButtonProps> = ({ isSelected, ...props }) => (

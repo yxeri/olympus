@@ -1,22 +1,19 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import {
-  discipli,
-  Person,
-} from '../../data';
+import { Person, } from '../../data';
 import PersonListItem from './Item/PersonListItem';
 import List from '../List/List';
 import {
-  PersonListVariants,
+  listVariantAtom,
   searchStringAtom,
   sortByAtom,
-} from '../Filter/atoms';
+} from '../../atoms/filter';
 import { sizes } from '../../styles/global';
 import PersonListGridItem from './Item/PersonListGridItem';
+import { peopleAtom } from '../../atoms/person';
 
 type PersonListProps = {
-  listVariant: PersonListVariants,
 };
 
 const StyledList = styled(List)`
@@ -34,10 +31,13 @@ const getFilteredList = ({ list, searchString }: { list: Person[], searchString?
     : list
 );
 
-const PersonList: React.FC<PersonListProps> = ({ listVariant }) => {
+const PersonList: React.FC<PersonListProps> = () => {
+  const listVariant = useRecoilValue(listVariantAtom);
   const sortBy = useRecoilValue(sortByAtom);
   const searchString = useRecoilValue(searchStringAtom);
-  const sortedPersons = useMemo(() => discipli.sort((a, b) => {
+  const people = useRecoilValue(peopleAtom);
+
+  const sortedPersons = useMemo(() => [...people].sort((a, b) => {
     if (sortBy === 'alphabetical') {
       const aName = `${a.name} ${a.family}`;
       const bName = `${b.name} ${b.family}`;
@@ -54,7 +54,7 @@ const PersonList: React.FC<PersonListProps> = ({ listVariant }) => {
     }
 
     return a[sortBy] > b[sortBy] ? 1 : -1;
-  }), [sortBy]);
+  }), [sortBy, people]);
   const persons = getFilteredList({ searchString, list: sortedPersons })
     .map((person) => (
       listVariant === 'grid'

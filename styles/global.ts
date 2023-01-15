@@ -5,7 +5,7 @@ export const colors = {
   selectedBackground: '#b0ad9d',
   clickableBackground: '#f6f2dc',
   componentBackground: '#ccc7b5',
-  navColor: '#f1fdee',
+  brightColor: '#f1fdee',
   a: '#eabb00',
   b: '#858484',
   g: 'transparent',

@@ -1,7 +1,26 @@
-export type Society = 'Bacchus' | 'Bellona' | 'Pheme';
-export type Status = 'a' | 'b' | 'g' | 'd' | 'e' | '?';
-export type Year = 0 | 1 | 2 | 3 | 4 | 99;
-export type PersonType = 'Discipli' | 'Questi';
+export const SocietyObject = { Bacchus: '', Bellona: '', Pheme: '' };
+export type Society = keyof typeof SocietyObject;
+export const StatusObject = {
+  a: '', b: '', g: '', d: '', e: '', '?': ''
+};
+export type Status = keyof typeof StatusObject;
+export const YearObject = {
+  0: '', 1: '', 2: '', 3: '', 4: '', 99: ''
+};
+export type Year = keyof typeof YearObject;
+export const PersonTypeObject = { Discipli: '', Questi: '' };
+export type PersonType = keyof typeof PersonTypeObject;
+
+export const PersonObject: Omit<Person, 'id'> = {
+  rank: 1,
+  family: '',
+  name: '',
+  society: 'Bacchus',
+  status: 'a',
+  year: 0,
+  type: 'Discipli',
+  score: 0,
+};
 
 export type Person = {
   id: string,
@@ -10,7 +29,6 @@ export type Person = {
   name: string,
   society: Society,
   status: Status,
-  current: boolean,
   year: Year,
   type: PersonType,
   score: number,
@@ -24,126 +42,3 @@ export const statusCollection: { [key in Status]: string } = {
   e: 'ε',
   '?': '?',
 };
-
-const societies: Society[] = [
-  'Bacchus',
-  'Bellona',
-  'Pheme',
-];
-const familyStatus: { [key: string]: 'a' | 'b' | undefined } = {
-  Adrasteia: 'b',
-  Aesculapius: 'a',
-  Ambrosia: 'b',
-  Aphrodite: 'a',
-  Apollon: 'a',
-  Arachne: 'b',
-  Ares: 'a',
-  Artemis: 'a',
-  Athena: 'a',
-  Atlas: 'a',
-  Calypso: 'a',
-  Calliope: 'b',
-  Dekton: 'b',
-  Demeter: 'a',
-  Dido: 'b',
-  Dirke: 'b',
-  'Dius Fidus': 'a',
-  Europa: 'b',
-  Fortuna: 'a',
-  Hefaistos: 'a',
-  Helios: 'a',
-  Hestia: 'a',
-  Hera: 'a',
-  Janus: 'a',
-  Juno: 'a',
-  Jupiter: 'a',
-  Juventa: 'a',
-  Landon: 'b',
-  Luna: 'a',
-  Lynx: 'b',
-  Manticora: 'b',
-  'Medusa ': 'b',
-  Mercuri: 'a',
-  Minerva: 'a',
-  Mithras: 'a',
-  Mota: 'b',
-  Nerio: 'a',
-  Nike: 'a',
-  Nyx: 'a',
-  Oceanus: 'a',
-  Orion: 'b',
-  Pan: 'a',
-  Pandora: 'b',
-  Persefone: 'a',
-  Poseidon: 'a',
-  Prometheus: 'b',
-  Proteus: 'a',
-  Sfinx: 'b',
-  Silvanus: 'a',
-  Satyr: 'b',
-  Soteira: 'a',
-  Talos: 'b',
-  Thanatos: 'a',
-  Vesta: 'a',
-  Vulcanus: 'a',
-};
-
-export const discipli: Person[] = [
-  'Cleopensia Nyx',
-  'Themisine Janus',
-  'Hercules M. Deimos',
-  'Nezzie Landon',
-  'Tyr\'ahnee Phonoi',
-  'Alexerine Vesta',
-  'Cosiam Talos',
-  'Valyria Pan',
-  'Mistra Silvanus',
-  'Mollyward Calypso',
-  'Diokandron Hefaistos',
-  'Levenis Oceanus',
-  'Circiope Soteira',
-  'Octavia Manticora',
-  'Azriel Minerva',
-  'Lysander Europa',
-  'Mareau Loké',
-  'Peneldite Karya',
-  'Xsander Nike',
-  'Cleostasia Medusa',
-  'Minerva Proteus',
-  'Silvana Venus',
-  'Ciodora Athena',
-  'Victros Artemis',
-  'Willius Atlas',
-  'Chester Ares',
-  'Margina Metis',
-  'Arithena Ceres',
-  'Cleoria Minerva',
-  'Odanes Satyr',
-  'Pandora Demeter',
-  'Ikandra Ambrosia',
-  'Aurelius Poseidon',
-  'Julius Evander',
-  'Kartin Landon',
-  'Kahina Soteira',
-  'Phoenix Venti',
-  'Nisio Nerio',
-  'Tiberia Silvanus',
-  'Dion Fortuna',
-  'Irenicia Soteira',
-].map((fullName, index) => {
-  const nameSplit = fullName.split(' ');
-  const family = nameSplit[nameSplit.length - 1];
-
-  return {
-    family,
-    score: 100,
-    type: 'Discipli',
-    id: fullName,
-    year: 1,
-    current: true,
-    society: societies[0],
-    rank: index + 1,
-    name: nameSplit.slice(0, -1).join(' '),
-    status: familyStatus[family] ?? 'b',
-  };
-});

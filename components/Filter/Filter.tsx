@@ -15,6 +15,7 @@ const StyledDiv = styled.div`
   width: fit-content;
   padding-bottom: .5rem;
   grid-gap: ${sizes.largeGap};
+  align-items: center;
 `;
 
 const Filter = () => (
@@ -37,13 +38,13 @@ const Filter = () => (
     </Popover.Root>
     <div style={{ display: 'flex' }}>
       <ListVariantButton
-        path=""
+        listVariant="list"
         style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
       >
         <ListIcon alt="List" width={sizes.largeIcon} height={sizes.largeIcon} />
       </ListVariantButton>
       <ListVariantButton
-        path="/grid"
+        listVariant="grid"
         style={{ borderLeft: 0, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
       >
         <GridIcon alt="Grid" width={sizes.largeIcon} height={sizes.largeIcon} />

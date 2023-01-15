@@ -1,7 +1,8 @@
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { useState } from 'react';
-import { searchStringAtom } from '../Filter/atoms';
+import { debounce } from 'throttle-debounce';
+import { searchStringAtom } from '../../atoms/filter';
 import {
   borders,
   colors,
@@ -41,6 +42,12 @@ const Search = () => {
   const [searchString, setSearchString] = useRecoilState(searchStringAtom);
   const [hasContent, setHasContent] = useState(!!searchString);
 
+  const updateSearchString = debounce(
+    300,
+    (newString: string) => setSearchString(newString),
+    { atBegin: false }
+  );
+
   return (
     <StyledDiv>
       <SearchImage
@@ -50,8 +57,8 @@ const Search = () => {
         height={sizes.largeIcon}
       />
       <StyledInput
-        value={searchString}
-        onChange={({ currentTarget }) => setSearchString(currentTarget.value)}
+        defaultValue={searchString}
+        onChange={({ currentTarget }) => updateSearchString(currentTarget.value)}
         onFocus={() => setHasContent(true)}
         onBlur={() => setHasContent(!!searchString)}
       />

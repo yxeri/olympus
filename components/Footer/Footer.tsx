@@ -7,7 +7,7 @@ import SoteiraLogo from '../../assets/soteira-small-logo.png';
 const StyledDiv = styled.div`
   position: sticky;
   bottom: 0;
-  color: ${colors.navColor};
+  color: ${colors.brightColor};
   padding: .4rem;
   margin-top: 1rem;
   text-align: center;
@@ -37,7 +37,7 @@ const TextDiv = styled.div`
 
 const BottomMessage = styled.div`
   box-sizing: border-box;
-  color: ${colors.navColor};
+  color: ${colors.brightColor};
   padding-top: .4rem;
   padding-bottom: 1rem;
   text-align: center;

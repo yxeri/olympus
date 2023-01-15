@@ -45,7 +45,7 @@ const JustifiedDiv = styled.div<{ justify: 'flex-start' | 'flex-end' }>`
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   grid-gap: ${sizes.largeGap};
-  color: ${colors.navColor};
+  color: ${colors.brightColor};
   justify-content: ${({ justify }) => justify};
   width: fit-content;
   ${({ justify }) => justify === 'flex-end' && 'margin-left: auto'};

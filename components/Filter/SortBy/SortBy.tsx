@@ -1,11 +1,11 @@
 import { useRecoilState } from 'recoil';
 import {
-  PersonSortables,
+  PersonSortable,
   sortByAtom,
-} from '../atoms';
+} from '../../../atoms/filter';
 import Select from '../../Select/Select';
 
-const sortBy: Array<{ label: string, value: PersonSortables }> = [
+const sortBy: Array<{ label: string, value: PersonSortable }> = [
   { label: 'Namn', value: 'alphabetical' },
   { label: 'Familj', value: 'family' },
   { label: 'Status', value: 'status' },
