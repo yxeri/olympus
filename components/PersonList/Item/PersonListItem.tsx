@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
+import { CloudinaryImage } from '@cloudinary/url-gen';
+import { AdvancedImage } from '@cloudinary/react';
 import ListItem from '../../List/ListItem';
 import {
   Person,
@@ -13,7 +14,6 @@ import {
   colors,
   sizes,
 } from '../../../styles/global';
-import ProfilePlaceholder from '../../../assets/profile.png';
 import Award from '../../../assets/award.svg';
 
 export type PersonListItemProps = {
@@ -35,11 +35,13 @@ export const StyledDiv = styled.div`
   align-items: center;
 `;
 
-export const StyledPhoto = styled(StyledDiv)`
+export const StyledPhoto = styled.div`
   grid-area: photo;
-  overflow: hidden;
-  position: relative;
-  justify-content: center;
+  display: grid;
+  
+  img {
+    max-width: 100%;
+  }
 `;
 
 const StyledListItem = styled(ListItem)`
@@ -49,7 +51,7 @@ const StyledListItem = styled(ListItem)`
   background-color: ${colors.componentBackground};
 
   max-width: ${sizes.mediumMax};
-  padding: .3rem;
+  padding: .2rem;
   grid-column-gap: .7rem;
   grid-template-areas:
     "rank year name photo score"
@@ -66,6 +68,10 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
   const {
     year, family, name, status, society, rank, score,
   } = person;
+
+  const image = new CloudinaryImage(`olympus/people/${name}-${family}`, {
+    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  }).addTransformation('t_thumb-person');
 
   const listItem = (
     <div style={{ display: 'contents', cursor: 'pointer' }}>
@@ -88,15 +94,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
         {society}
       </StyledDiv>
       <StyledPhoto>
-        <Image
-          placeholder="blur"
-          quality={25}
-          height={sizes.smallImageHeight[1]}
-          width={sizes.smallImageHeight[1]}
-          style={{ objectFit: 'cover', margin: '-.2rem 0' }}
-          src={ProfilePlaceholder}
-          alt="Person"
-        />
+        <AdvancedImage cldImg={image} />
       </StyledPhoto>
     </div>
   );

@@ -1,11 +1,8 @@
-import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
-import {
-  colors,
-  sizes,
-} from '../../../styles/global';
-import ProfilePlaceholder from '../../../assets/profile.png';
+import { AdvancedImage } from '@cloudinary/react';
+import { CloudinaryImage } from '@cloudinary/url-gen';
+import { colors, } from '../../../styles/global';
 import {
   Status,
   statusCollection,
@@ -31,8 +28,8 @@ const StyledListItem = styled(ListItem)`
     "family society society";
   position: relative;
   padding: .2rem;
-  grid-template-columns: 1fr max-content max-content;
-  grid-row-gap: .2rem;
+  grid-template-columns: 1fr auto auto;
+  grid-gap: .2rem;
 `;
 
 const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
@@ -40,17 +37,14 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
     year, family, name, status, society,
   } = person;
 
+  const image = new CloudinaryImage(`olympus/people/${name}-${family}`, {
+    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  }).addTransformation('t_preview-person');
+
   const listItem = (
     <StyledListItem status={status} variant="grid" style={{ cursor: 'pointer' }}>
       <StyledPhoto>
-        <Image
-          placeholder="blur"
-          height={150}
-          width={sizes.gridWidth[1]}
-          style={{ objectFit: 'cover', alignSelf: 'center' }}
-          src={ProfilePlaceholder}
-          alt="Person"
-        />
+        <AdvancedImage cldImg={image} />
       </StyledPhoto>
       <StyledDiv style={{
         gridArea: 'name', justifySelf: 'flex-start',
@@ -65,7 +59,7 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
         {family.toUpperCase()}
       </StyledDiv>
       <StyledDiv style={{
-        gridArea: 'year', justifySelf: 'flex-end',
+        gridArea: 'year', justifySelf: 'center',
       }}
       >
         {romanNumbers[year]}
@@ -73,14 +67,18 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
       <StatusDiv
         status={status}
         style={{
-          gridArea: 'status', justifySelf: 'flex-end',
+          gridArea: 'status', justifySelf: 'center',
         }}
       >
         {statusCollection[status]}
       </StatusDiv>
-      <StyledDiv style={{
-        gridArea: 'society', justifySelf: 'flex-end',
-      }}
+      <StyledDiv
+        style={{
+          width: '100%',
+          gridArea: 'society',
+          justifySelf: 'flex-end',
+          overflow: 'hidden',
+        }}
       >
         {society}
       </StyledDiv>

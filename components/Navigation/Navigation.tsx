@@ -84,14 +84,14 @@ const Navigation = () => (
           </Link>
         </LinkDiv>
         <LinkDiv>
-          <Link href="/people">
+          <Link href="/calendar">
             <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
       </JustifiedDiv>
       <JustifiedDiv justify="flex-start">
         <LinkDiv>
-          <Link href="/people">
+          <Link href="/calendar">
             <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>

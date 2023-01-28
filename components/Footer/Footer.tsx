@@ -15,6 +15,7 @@ const StyledDiv = styled.div`
   justify-content: center;
   grid-auto-flow: column;
   align-items: flex-end;
+  z-index: 2;
 `;
 
 const LineDiv = styled.div`
