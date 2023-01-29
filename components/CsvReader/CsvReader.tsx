@@ -46,10 +46,8 @@ const FileView: React.FC<any> = ({
 );
 
 const CsvReader = () => {
-  const [persons, setPersons] = useRecoilState(peopleAtom);
+  const [, setPersons] = useRecoilState(peopleAtom);
   const { CSVReader } = useCSVReader();
-
-  console.log(persons);
 
   return (
     <CSVReader

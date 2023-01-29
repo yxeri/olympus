@@ -41,17 +41,12 @@ export default function Settings() {
             },
           },
           clientAllowedFormats: ['image'],
-          croppingAspectRatio: 1,
-          validateMaxWidthHeight: true,
-          cropping: true,
-          minImageWidth: 200,
-          minImageHeight: 200,
-          maxImageWidth: 1000,
-          maxImageHeight: 1000,
-          sources: ['local', 'url', 'camera']
+          singleUploadAutoClose: false,
+          sources: ['local', 'url', 'camera'],
         }}
+        signatureEndpoint="/api/cloudinarySignature"
         uploadPreset="olympus-people"
-        onUpload={() => console.log('upload')}
+        onUpload={() => {}}
       >
         {({ open }: { open: () => void }) => {
           const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
