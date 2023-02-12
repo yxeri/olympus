@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { AdvancedImage } from '@cloudinary/react';
+import {
+  AdvancedImage,
+  lazyload,
+  placeholder
+} from '@cloudinary/react';
 import { CloudinaryImage } from '@cloudinary/url-gen';
 import { colors, } from '../../../styles/global';
 import {
@@ -13,7 +17,6 @@ import {
   romanNumbers,
   StatusDiv,
   StyledDiv,
-  StyledPhoto,
 } from './PersonListItem';
 import ListItem from '../../List/ListItem';
 
@@ -32,6 +35,16 @@ const StyledListItem = styled(ListItem)`
   grid-gap: .2rem;
 `;
 
+const StyledPhoto = styled.div`
+  grid-area: photo;
+  display: grid;
+  min-height: 140px;
+  
+  img {
+    max-width: 100%;
+  }
+`;
+
 const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
   const {
     year, family, name, status, society,
@@ -44,7 +57,7 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
   const listItem = (
     <StyledListItem status={status} variant="grid" style={{ cursor: 'pointer' }}>
       <StyledPhoto>
-        <AdvancedImage cldImg={image} />
+        <AdvancedImage cldImg={image} plugins={[lazyload(), placeholder()]} alt={`${name} ${family}`} />
       </StyledPhoto>
       <StyledDiv style={{
         gridArea: 'name', justifySelf: 'flex-start',

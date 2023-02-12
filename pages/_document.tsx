@@ -31,7 +31,9 @@ class MainDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <title>Olympus</title>
+        </Head>
         <body>
           <Main />
           <NextScript />

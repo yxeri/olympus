@@ -1,12 +1,12 @@
 import {
-  Root,
-  Trigger,
-  Portal,
-  Overlay,
-  Content,
-  Title,
-  Description,
   Close,
+  Content,
+  Description,
+  Overlay,
+  Portal,
+  Root,
+  Title,
+  Trigger,
 } from '@radix-ui/react-dialog';
 import Image from 'next/image';
 import styled, { keyframes } from 'styled-components';
@@ -62,21 +62,19 @@ const Modal: React.FC<ModalProps> = ({
   trigger, interaction, title, description, content,
 }) => (
   <Root>
-    <>
-      <Trigger asChild>{trigger}</Trigger>
-      <Portal>
-        <DialogOverlay />
-        <DialogContent>
-          <Title>{title}</Title>
-          {description && <Description>{description}</Description>}
-          {content}
-          {interaction && <div>{interaction}</div>}
-          <DialogClose>
-            <Image src="/x.svg" alt="Close" width={24} height={24} />
-          </DialogClose>
-        </DialogContent>
-      </Portal>
-    </>
+    <Trigger asChild>{trigger}</Trigger>
+    <Portal>
+      <DialogOverlay />
+      <DialogContent>
+        <Title>{title}</Title>
+        {description && <Description>{description}</Description>}
+        {content}
+        {interaction && <div>{interaction}</div>}
+        <DialogClose>
+          <Image src="/x.svg" alt="Close" width={24} height={24} />
+        </DialogClose>
+      </DialogContent>
+    </Portal>
   </Root>
 );
 

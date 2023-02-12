@@ -16,6 +16,7 @@ const ListVariantButton: React.FC<ListVariantButtonProps> = ({ listVariant, ...p
   return (
     <Button
       {...props}
+      aria-label={`List variant: ${listVariant}`}
       isSelected={selectedListVariant === listVariant}
       onClick={() => setListVariant(listVariant)}
     />

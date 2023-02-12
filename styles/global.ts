@@ -19,7 +19,7 @@ export const colors = {
 };
 
 export const sizes = {
-  mediumMax: '500px',
+  mediumMax: '600px',
   max: '800px',
   gridWidth: ['150px', 150] as [string, number],
   smallImageHeight: ['50px', 50] as [string, number],

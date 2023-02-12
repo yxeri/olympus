@@ -79,24 +79,24 @@ const Navigation = () => (
     <ContainerDiv>
       <JustifiedDiv justify="flex-end">
         <LinkDiv>
-          <Link href="/people">
+          <Link href="/people" aria-label="People">
             <PersonIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
         <LinkDiv>
-          <Link href="/calendar">
+          <Link href="/calendar" aria-label="Calendar">
             <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
       </JustifiedDiv>
       <JustifiedDiv justify="flex-start">
         <LinkDiv>
-          <Link href="/calendar">
+          <Link href="/calendar" aria-label="Calendar">
             <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
         <LinkDiv>
-          <Link href="/settings">
+          <Link href="/settings" aria-label="Settings">
             <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
@@ -104,6 +104,7 @@ const Navigation = () => (
     </ContainerDiv>
     <Logo href="/">
       <Image
+        style={{ objectFit: 'contain' }}
         src={LogoImage}
         alt="Olympus"
         width={60}

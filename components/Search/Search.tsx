@@ -57,6 +57,7 @@ const Search = () => {
         height={sizes.largeIcon}
       />
       <StyledInput
+        aria-label="Search"
         defaultValue={searchString}
         onChange={({ currentTarget }) => updateSearchString(currentTarget.value)}
         onFocus={() => setHasContent(true)}

@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CloudinaryImage } from '@cloudinary/url-gen';
-import { AdvancedImage } from '@cloudinary/react';
+import {
+  AdvancedImage,
+  lazyload
+} from '@cloudinary/react';
 import ListItem from '../../List/ListItem';
 import {
   Person,
@@ -35,9 +38,10 @@ export const StyledDiv = styled.div`
   align-items: center;
 `;
 
-export const StyledPhoto = styled.div`
+const StyledPhoto = styled.div`
   grid-area: photo;
   display: grid;
+  min-height: 50px;
   
   img {
     max-width: 100%;
@@ -49,7 +53,6 @@ const StyledListItem = styled(ListItem)`
   border: 2px solid ${({ status }: { status: Status }) => colors[status]};
   box-shadow: 0 0 3px 1px ${({ status }: { status: Status }) => colors[status]};
   background-color: ${colors.componentBackground};
-
   max-width: ${sizes.mediumMax};
   padding: .2rem;
   grid-column-gap: .7rem;
@@ -74,7 +77,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
   }).addTransformation('t_thumb-person');
 
   const listItem = (
-    <div style={{ display: 'contents', cursor: 'pointer' }}>
+    <div role="button" style={{ display: 'contents', cursor: 'pointer' }}>
       <StyledDiv style={{ gridArea: 'rank' }}>
         {rank}
       </StyledDiv>
@@ -94,7 +97,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
         {society}
       </StyledDiv>
       <StyledPhoto>
-        <AdvancedImage cldImg={image} />
+        <AdvancedImage cldImg={image} plugins={[lazyload()]} alt={`${name} ${family}`} />
       </StyledPhoto>
     </div>
   );
@@ -109,13 +112,14 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       />
       <Modal
         trigger={(
-          <StyledDiv style={{ gridArea: 'score', cursor: 'pointer' }}>
+          <StyledDiv role="button" style={{ gridArea: 'score', cursor: 'pointer' }}>
             <Award width="14" height="14" />
             {score}
           </StyledDiv>
         )}
-        title="Title"
-        content="content"
+        title={`${person.name} ${person.family.toUpperCase()}`}
+        description="Description"
+        content={<div>Content</div>}
       />
     </StyledListItem>
   );

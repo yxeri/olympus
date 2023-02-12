@@ -74,6 +74,7 @@ const StyledSelectItem = styled(SelectItem)`
   display: grid;
   grid-gap: .2rem;
   grid-auto-flow: column;
+  padding: .2rem;
 `;
 
 const SelectPortal = styled(Portal)`
@@ -114,14 +115,14 @@ const Select = <T,>({
 
   return (
     <Root defaultValue={defaultValue} onValueChange={onValueChange}>
-      <SelectTrigger>
+      <SelectTrigger aria-label="Select list filtering">
         <Value placeholder={placeholder} />
         <SelectIcon>
           <ChevronDownIcon alt="Chevron down" width={sizes.largeIcon} height={sizes.largeIcon} />
         </SelectIcon>
       </SelectTrigger>
       <SelectPortal>
-        <Content>
+        <Content position="popper">
           <ScrollUpButton>
             <ChevronUpIcon alt="Chevron up" width={sizes.largeIcon} height={sizes.largeIcon} />
           </ScrollUpButton>
