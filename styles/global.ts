@@ -20,7 +20,7 @@ export const colors = {
 
 export const sizes = {
   mediumMax: '600px',
-  max: '800px',
+  max: '900px',
   gridWidth: ['150px', 150] as [string, number],
   smallImageHeight: ['50px', 50] as [string, number],
   largeIcon: 20,

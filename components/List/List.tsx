@@ -12,7 +12,7 @@ const variants = (variant?: ListVariants) => {
   }
 
   return css`
-    @media (max-width: ${sizes.mediumMax}) {
+    @media (max-width: ${sizes.max}) {
       width: 100%;
       max-width: 100%;
     }
