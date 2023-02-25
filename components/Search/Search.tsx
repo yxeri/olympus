@@ -2,14 +2,14 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { debounce } from 'throttle-debounce';
-import { searchStringAtom } from '../../atoms/filter';
+import { searchStringAtom } from 'atoms/filter';
 import {
   borders,
   colors,
   sizes,
-} from '../../styles/global';
-import SearchIcon from '../../assets/search.svg';
-import XIcon from '../../assets/x.svg';
+} from 'styles/global';
+import SearchIcon from 'assets/search.svg';
+import XIcon from 'assets/x.svg';
 
 const StyledInput = styled.input`
   background-color: ${colors.clickableBackground};

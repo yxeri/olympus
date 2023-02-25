@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import Button, { ButtonProps } from '../../Button/Button';
+import Button, { ButtonProps } from 'components/Button/Button';
 import {
   listVariantAtom,
   PersonListVariant
-} from '../../../atoms/filter';
+} from 'atoms/filter';
 
 type ListVariantButtonProps = {
   listVariant: PersonListVariant,

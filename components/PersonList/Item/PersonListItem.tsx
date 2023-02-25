@@ -5,19 +5,19 @@ import {
   AdvancedImage,
   lazyload
 } from '@cloudinary/react';
-import ListItem from '../../List/ListItem';
+import ListItem from 'components/List/ListItem';
 import {
   Person,
   Status,
   statusCollection,
   Year,
-} from '../../../data';
-import Modal from '../../Modal/Modal';
+} from 'data';
+import Modal from 'components/Modal/Modal';
 import {
   colors,
   sizes,
-} from '../../../styles/global';
-import Award from '../../../assets/award.svg';
+} from 'styles/global';
+import Award from 'assets/award.svg';
 
 export type PersonListItemProps = {
   person: Person,

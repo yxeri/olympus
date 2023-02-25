@@ -4,7 +4,7 @@ import {
   borders,
   colors,
   sizes,
-} from '../../styles/global';
+} from 'styles/global';
 
 export type ButtonProps = {
   isSelected?: boolean;

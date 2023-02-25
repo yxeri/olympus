@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import { colors } from '../../styles/global';
-import LogoImage from '../../assets/olympus.jpg.webp';
-import SoteiraLogo from '../../assets/soteira-small-logo.png';
+import { colors } from 'styles/global';
+import LogoImage from 'assets/olympus.jpg.webp';
+import SoteiraLogo from 'assets/soteira-small-logo.png';
 
 const StyledDiv = styled.div`
   position: sticky;

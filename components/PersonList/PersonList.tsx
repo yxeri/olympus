@@ -1,17 +1,17 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { Person, } from 'data';
+import { sizes } from 'styles/global';
+import { usePeople } from '@hooks/people';
 import { useRecoilValue } from 'recoil';
-import { Person, } from '../../data';
-import PersonListItem from './Item/PersonListItem';
 import List from '../List/List';
+import PersonListGridItem from './Item/PersonListGridItem';
+import PersonListItem from './Item/PersonListItem';
 import {
   listVariantAtom,
   searchStringAtom,
-  sortByAtom,
+  sortByAtom
 } from '../../atoms/filter';
-import { sizes } from '../../styles/global';
-import PersonListGridItem from './Item/PersonListGridItem';
-import { peopleAtom } from '../../atoms/person';
 
 type PersonListProps = {
 };
@@ -35,9 +35,9 @@ const PersonList: React.FC<PersonListProps> = () => {
   const listVariant = useRecoilValue(listVariantAtom);
   const sortBy = useRecoilValue(sortByAtom);
   const searchString = useRecoilValue(searchStringAtom);
-  const people = useRecoilValue(peopleAtom);
+  const { people } = usePeople();
 
-  const sortedPersons = useMemo(() => [...people].sort((a, b) => {
+  const sortedPeople = [...people].sort((a, b) => {
     if (sortBy === 'alphabetical') {
       const aName = `${a.name} ${a.family}`;
       const bName = `${b.name} ${b.family}`;
@@ -54,17 +54,17 @@ const PersonList: React.FC<PersonListProps> = () => {
     }
 
     return a[sortBy] > b[sortBy] ? 1 : -1;
-  }), [sortBy, people]);
-  const persons = getFilteredList({ searchString, list: sortedPersons })
+  });
+  const personItems = getFilteredList({ searchString, list: sortedPeople })
     .map((person) => (
       listVariant === 'grid'
-        ? <PersonListGridItem key={`${person.name}${person.family}`} person={person} />
-        : <PersonListItem key={`${person.name}${person.family}`} person={person} />
+        ? <PersonListGridItem key={person._id ?? `${person.name}${person.family}`} person={person} />
+        : <PersonListItem key={person._id ?? `${person.name}${person.family}`} person={person} />
     ));
 
   return (
     <StyledList variant={listVariant}>
-      {persons}
+      {personItems}
     </StyledList>
   );
 };

@@ -1,5 +1,7 @@
-import Filter from '../components/Filter/Filter';
-import PersonList from '../components/PersonList/PersonList';
+import {
+  Filter,
+  PersonList
+} from '@components';
 
 export default function People() {
   return (

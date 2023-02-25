@@ -9,7 +9,7 @@ import {
   calendarsAtom,
   FullCalendarEvent,
   RecurDay
-} from '../../atoms/calendar';
+} from 'atoms/calendar';
 
 // [
 //     [

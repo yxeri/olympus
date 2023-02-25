@@ -11,7 +11,7 @@ import {
 import Image from 'next/image';
 import styled, { keyframes } from 'styled-components';
 import React, { ReactNode } from 'react';
-import { sizes } from '../../styles/global';
+import { sizes } from 'styles/global';
 
 const fadeIn = keyframes`
   from {

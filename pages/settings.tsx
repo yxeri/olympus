@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import { CldUploadWidget } from 'next-cloudinary';
-import CsvReader from '../components/CsvReader/CsvReader';
-import CsvDownloader from '../components/CsvDownloader/CsvDownloader';
-import IcalReader from '../components/IcalReader/IcalReader';
-import { colors } from '../styles/global';
+import {
+  CsvDownloader,
+  CsvReader,
+  IcalReader,
+} from '@components';
+import { colors } from 'styles/global';
 
 const StyledDiv = styled.div`
   display: grid;

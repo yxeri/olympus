@@ -1,9 +1,8 @@
 import { useCSVDownloader } from 'react-papaparse';
-import { useRecoilValue } from 'recoil';
-import { peopleAtom } from '../../atoms/person';
+import { usePeople } from '@hooks/people';
 
 const CsvDownloader = () => {
-  const people = useRecoilValue(peopleAtom);
+  const { people } = usePeople();
   const { CSVDownloader, Type } = useCSVDownloader();
 
   return (

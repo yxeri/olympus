@@ -11,7 +11,7 @@ export type Year = keyof typeof YearObject;
 export const PersonTypeObject = { Discipli: '', Questi: '' };
 export type PersonType = keyof typeof PersonTypeObject;
 
-export const PersonObject: Omit<Person, 'id'> = {
+export const PersonObject: Omit<Person, '_id'> = {
   rank: 1,
   family: '',
   name: '',
@@ -23,7 +23,7 @@ export const PersonObject: Omit<Person, 'id'> = {
 };
 
 export type Person = {
-  id: string,
+  _id: string,
   rank: number,
   family: string,
   name: string,

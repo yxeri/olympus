@@ -22,10 +22,10 @@ import {
   borders,
   colors,
   sizes,
-} from '../../styles/global';
-import CheckIcon from '../../assets/check.svg';
-import ChevronUpIcon from '../../assets/chevron-up.svg';
-import ChevronDownIcon from '../../assets/chevron-down.svg';
+} from 'styles/global';
+import CheckIcon from 'assets/check.svg';
+import ChevronUpIcon from 'assets/chevron-up.svg';
+import ChevronDownIcon from 'assets/chevron-down.svg';
 
 export type SelectItemType<T> = {
   label: string,

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { sizes } from '../../styles/global';
+import { sizes } from 'styles/global';
 
 export type ListVariants = 'list' | 'grid';
 

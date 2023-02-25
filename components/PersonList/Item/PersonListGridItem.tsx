@@ -6,19 +6,19 @@ import {
   placeholder
 } from '@cloudinary/react';
 import { CloudinaryImage } from '@cloudinary/url-gen';
-import { colors, } from '../../../styles/global';
+import { colors, } from 'styles/global';
 import {
   Status,
   statusCollection,
-} from '../../../data';
-import Modal from '../../Modal/Modal';
+} from 'data';
+import Modal from 'components/Modal/Modal';
+import ListItem from 'components/List/ListItem';
 import {
   PersonListItemProps,
   romanNumbers,
   StatusDiv,
   StyledDiv,
 } from './PersonListItem';
-import ListItem from '../../List/ListItem';
 
 const StyledListItem = styled(ListItem)`
   display: grid;

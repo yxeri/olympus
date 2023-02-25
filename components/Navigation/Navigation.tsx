@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import {
   colors,
   sizes,
-} from '../../styles/global';
-import Link from '../Link/Link';
-import LogoImage from '../../assets/olympus.jpg.webp';
-import CalendarIcon from '../../assets/calendar-nav.svg';
-import SettingsIcon from '../../assets/settings.svg';
-import PersonIcon from '../../assets/person-nav.svg';
+} from 'styles/global';
+import Link from 'components/Link/Link';
+import LogoImage from 'assets/olympus.jpg.webp';
+import CalendarIcon from 'assets/calendar-nav.svg';
+import SettingsIcon from 'assets/settings.svg';
+import PersonIcon from 'assets/person-nav.svg';
+import BookIcon from 'assets/book-nav.svg';
 
 const StyledDiv = styled.div`
   display: grid;
@@ -91,8 +92,8 @@ const Navigation = () => (
       </JustifiedDiv>
       <JustifiedDiv justify="flex-start">
         <LinkDiv>
-          <Link href="/calendar" aria-label="Calendar">
-            <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+          <Link href="/library" aria-label="Library">
+            <BookIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </Link>
         </LinkDiv>
         <LinkDiv>

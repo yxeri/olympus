@@ -2,8 +2,8 @@ import { useRecoilState } from 'recoil';
 import {
   PersonSortable,
   sortByAtom,
-} from '../../../atoms/filter';
-import Select from '../../Select/Select';
+} from 'atoms/filter';
+import Select from 'components/Select/Select';
 
 const sortBy: Array<{ label: string, value: PersonSortable }> = [
   { label: 'Namn', value: 'alphabetical' },

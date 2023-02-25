@@ -4,20 +4,16 @@ import {
 } from 'react-papaparse';
 import React from 'react';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
 import {
   borders,
   colors
-} from '../../styles/global';
+} from 'styles/global';
 import {
   Person,
-  PersonObject,
-  PersonTypeObject,
-  SocietyObject,
-  StatusObject,
-  YearObject
-} from '../../data';
-import { peopleAtom } from '../../atoms/person';
+  PersonObject
+} from 'data';
+import { validatePerson } from 'utils/validatePerson';
+import { usePeople } from '@hooks/people';
 
 const StyledDiv = styled.div`
   border: ${borders.standard};
@@ -25,7 +21,10 @@ const StyledDiv = styled.div`
 `;
 
 const FileView: React.FC<any> = ({
-  ProgressBar, getRemoveFileProps, Remove, acceptedFile,
+  ProgressBar,
+  getRemoveFileProps,
+  Remove,
+  acceptedFile,
 }) => (
   <div>
     <div>
@@ -46,7 +45,7 @@ const FileView: React.FC<any> = ({
 );
 
 const CsvReader = () => {
-  const [, setPersons] = useRecoilState(peopleAtom);
+  const { insert } = usePeople();
   const { CSVReader } = useCSVReader();
 
   return (
@@ -78,55 +77,22 @@ const CsvReader = () => {
           return null;
         }
 
-        const parsedPeople: Person[] = rows
-          .map((row) => (
-            Object
-              .fromEntries(row.map((value, index) => [columns[index], value]))
-          ))
-          .filter((row, index) => {
-            let isValidPerson = true;
-            const errorMsg = [`Row ${index + 2}:`];
+        const parsedPeople: Person[] = rows.reduce<Person[]>((people, row, currentIndex) => {
+          const personObject = Object
+            .fromEntries(row.map((value, index) => [columns[index], value]));
 
-            Object.keys(PersonObject).forEach((key) => {
-              if (row[key] === undefined) {
-                errorMsg.push(`missing ${key}`);
+          const [isValidPerson, errors] = validatePerson(personObject);
 
-                isValidPerson = false;
-              }
-            });
+          if (isValidPerson) {
+            people.push(personObject as unknown as Person);
+          } else {
+            [`Row ${currentIndex + 2}:`, ...errors].forEach((msg) => console.log(msg));
+          }
 
-            if (!Object.keys(SocietyObject).includes(row.society)) {
-              isValidPerson = false;
+          return people;
+        }, []);
 
-              errorMsg.push(`valid societies are: ${Object.keys(SocietyObject)}`);
-            }
-
-            if (!Object.keys(StatusObject).includes(row.status)) {
-              isValidPerson = false;
-
-              errorMsg.push(`valid status are: ${Object.keys(StatusObject)}`);
-            }
-
-            if (!Object.keys(YearObject).includes(row.year.toString())) {
-              isValidPerson = false;
-
-              errorMsg.push(`valid years are: ${Object.keys(YearObject)}`);
-            }
-
-            if (!Object.keys(PersonTypeObject).includes(row.type)) {
-              isValidPerson = false;
-
-              errorMsg.push(`valid types are: ${Object.keys(PersonTypeObject)}`);
-            }
-
-            if (errorMsg.length > 1) {
-              errorMsg.forEach((msg) => console.log(msg));
-            }
-
-            return isValidPerson;
-          }) as unknown as Person[];
-
-        setPersons(parsedPeople);
+        insert(parsedPeople);
 
         return true;
       }}
