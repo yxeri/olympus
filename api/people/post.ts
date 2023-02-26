@@ -1,67 +1,86 @@
-import {
-  NextApiRequest,
-  NextApiResponse
-} from 'next';
-import { validatePerson } from 'utils/validatePerson';
+import { Person } from '@data';
 import {
   collection,
   createPersonSet
 } from 'lib/db/tools';
 import {
   AnyBulkWriteOperation,
-  MongoBulkWriteError
+  MongoBulkWriteError,
+  ObjectId
 } from 'mongodb';
+import {
+  NextApiRequest,
+  NextApiResponse
+} from 'next';
+import { validatePerson } from 'utils/validatePerson';
 
 export default async function post(req: NextApiRequest, res: NextApiResponse) {
   try {
     const dbCollection = await collection('people');
-    const { people } = JSON.parse(req.body);
+    const { people } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
 
     if (!Array.isArray(people)) {
       throw Error('Expected People[]');
     }
 
-    const failed: number[] = [];
-    const filteredPeople = people.filter((person, index) => {
-      const [isValid] = validatePerson(person);
+    const filteredPeople = people.filter((person) => validatePerson(person)[0]);
+    const filteredIds: string[] = filteredPeople.map((person) => person._id);
 
-      if (!isValid) {
-        failed.push(index);
-      }
-
-      return isValid;
-    });
-
+    const updatedIds: Array<{ _id?: ObjectId, name?: string, family?: string }> = [];
     const {
       insertedIds,
-      failedIds,
+      existIndexes,
     } = await dbCollection
-      .insertMany(filteredPeople, { ordered: false })
+      .insertMany(filteredPeople.map((person) => ({
+        _id: person._id
+          ? new ObjectId(person._id)
+          : undefined,
+        ...person,
+      })), { ordered: false })
       .then((result) => ({
         insertedIds: Object.values(result.insertedIds),
-        failedIds: [] as string[],
+        existIndexes: ([] as number[]),
       }))
       .catch((operation: MongoBulkWriteError) => {
-        const failedWriteIds: string[] = Array.isArray(operation.writeErrors)
-          ? operation.writeErrors.map((error) => error.err.op._id.valueOf())
+        const indexes: number[] = [];
+        const existIds = Array.isArray(operation.writeErrors)
+          ? operation.writeErrors.reduce<string[]>((failed, error) => {
+            failed.push(error.err.op._id);
+            indexes.push(error.index);
+
+            return failed;
+          }, [])
           : [];
 
         return {
-          failedIds: failedWriteIds,
-          insertedIds: Object.values(operation.result.insertedIds),
+          existIndexes: indexes,
+          insertedIds: Object
+            .values(operation.result.insertedIds)
+            .filter((id) => !existIds.includes(id)),
         };
       });
 
-    if (failedIds?.length > 0) {
+    if (existIndexes.length > 0) {
       const operations: AnyBulkWriteOperation[] = [];
 
       filteredPeople
-        .filter((person) => failedIds.includes(person._id))
-        .forEach((person) => {
+        .reduce<[string | undefined, Person][]>((existingPeople, person, index) => {
+        if (existIndexes.includes(index)) {
+          existingPeople.push([filteredIds[index], person]);
+        }
+
+        return existingPeople;
+      }, [])
+        .forEach(([id, person]) => {
+          const filter = id
+            ? { _id: new ObjectId(id) }
+            : { name: person.name, family: person.family };
+          updatedIds.push(filter);
+
           try {
             operations.push({
               updateOne: {
-                filter: { name: person.name, family: person.family },
+                filter,
                 update: createPersonSet(person).set,
               },
             });
@@ -70,12 +89,14 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
           }
         });
 
-      await dbCollection.bulkWrite(operations);
+      if (operations.length > 0) {
+        await dbCollection.bulkWrite(operations);
+      }
     }
 
     res.status(200).json({
-      failed: failed.length > 0 && failed,
-      ids: insertedIds,
+      updatedIndexes: updatedIds,
+      insertedIds: insertedIds.map((id) => id.toString()),
     });
   } catch (error: any) {
     console.log(error);

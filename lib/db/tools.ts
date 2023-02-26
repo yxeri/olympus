@@ -1,5 +1,5 @@
+import { PersonObject } from '@data';
 import clientPromise from './mongodb';
-import { PersonObject } from '../../data';
 
 export type Tools = 'people';
 

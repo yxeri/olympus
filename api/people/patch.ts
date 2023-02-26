@@ -1,42 +1,73 @@
 import {
-  NextApiRequest,
-  NextApiResponse
-} from 'next';
-import { ObjectId } from 'mongodb';
+  Person,
+  PersonObject
+} from '@data';
 import {
   collection,
   createPersonSet
 } from 'lib/db/tools';
-import { PersonObject } from 'data';
+import {
+  AnyBulkWriteOperation,
+  ObjectId
+} from 'mongodb';
+import {
+  NextApiRequest,
+  NextApiResponse
+} from 'next';
 
 export default async function patch(req: NextApiRequest, res: NextApiResponse) {
   try {
     const dbCollection = await collection('people');
     const {
-      ids,
-      update
+      people,
+      updateAll
     }: {
-      ids: string[],
-      update: Partial<typeof PersonObject>,
-    } = JSON.parse(req.body);
+      people: Partial<Person>[],
+      updateAll?: Partial<typeof PersonObject>,
+    } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
 
-    if (!Array.isArray(ids) || !update || Object.keys(update).length <= 0) {
-      throw Error('Expected ids: [id] and update: partial Person');
+    if (
+      !Array.isArray(people)
+      || !people.every((person) => (person._id || (person.name && person.family)))
+    ) {
+      throw Error(
+        `Expected { 
+          people: Partial<Person & Required<{ _id | name & family }>>[], 
+          update: Partial<Person>,
+         }`
+      );
     }
 
-    const {
-      failed,
-      set: dbUpdate,
-    } = createPersonSet(update);
+    const operations: AnyBulkWriteOperation[] = [];
+    let modified = 0;
+    let matched = 0;
 
-    const { modifiedCount } = await dbCollection.updateMany(
-      { _id: { $in: ids.map((id) => new ObjectId(id)) } },
-      dbUpdate,
-    );
+    people.forEach((person) => {
+      const filter = person._id
+        ? { _id: new ObjectId(person._id) }
+        : { name: person.name, family: person.family };
+
+      operations.push({
+        updateOne: {
+          filter,
+          update: createPersonSet(updateAll ?? person).set,
+        },
+      });
+    });
+
+    if (operations.length > 0) {
+      const {
+        matchedCount,
+        modifiedCount,
+      } = await dbCollection.bulkWrite(operations, { ordered: false });
+
+      modified = modifiedCount;
+      matched = matchedCount;
+    }
 
     res.status(200).json({
-      failed,
-      count: modifiedCount,
+      modified,
+      matched,
     });
   } catch (error: any) {
     res.status(500).json({

@@ -1,18 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
 import {
   AdvancedImage,
   lazyload,
   placeholder
 } from '@cloudinary/react';
 import { CloudinaryImage } from '@cloudinary/url-gen';
-import { colors, } from 'styles/global';
 import {
   Status,
   statusCollection,
-} from 'data';
-import Modal from 'components/Modal/Modal';
+} from '@data';
 import ListItem from 'components/List/ListItem';
+import Modal from 'components/Modal/Modal';
+import React from 'react';
+import styled from 'styled-components';
+import { colors } from 'styles/global';
 import {
   PersonListItemProps,
   romanNumbers,
@@ -47,7 +47,11 @@ const StyledPhoto = styled.div`
 
 const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
   const {
-    year, family, name, status, society,
+    year,
+    family,
+    name,
+    status,
+    society,
   } = person;
 
   const image = new CloudinaryImage(`olympus/people/${name}-${family}`, {
@@ -83,7 +87,7 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
           gridArea: 'status', justifySelf: 'center',
         }}
       >
-        {statusCollection[status]}
+        {statusCollection[(status as Status)]}
       </StatusDiv>
       <StyledDiv
         style={{

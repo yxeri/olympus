@@ -1,19 +1,19 @@
 import {
+  Person,
+  PersonObject
+} from '@data';
+import { usePeople } from '@hooks/people';
+import React from 'react';
+import {
   formatFileSize,
   useCSVReader,
 } from 'react-papaparse';
-import React from 'react';
 import styled from 'styled-components';
 import {
   borders,
   colors
 } from 'styles/global';
-import {
-  Person,
-  PersonObject
-} from 'data';
 import { validatePerson } from 'utils/validatePerson';
-import { usePeople } from '@hooks/people';
 
 const StyledDiv = styled.div`
   border: ${borders.standard};

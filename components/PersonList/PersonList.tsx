@@ -1,17 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Person, } from 'data';
-import { sizes } from 'styles/global';
+import { Person } from '@data';
 import { usePeople } from '@hooks/people';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
-import List from '../List/List';
-import PersonListGridItem from './Item/PersonListGridItem';
-import PersonListItem from './Item/PersonListItem';
+import styled from 'styled-components';
+import { sizes } from 'styles/global';
 import {
   listVariantAtom,
   searchStringAtom,
   sortByAtom
 } from '../../atoms/filter';
+import List from '../List/List';
+import PersonListGridItem from './Item/PersonListGridItem';
+import PersonListItem from './Item/PersonListItem';
 
 type PersonListProps = {
 };

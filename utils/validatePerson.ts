@@ -4,7 +4,7 @@ import {
   SocietyObject,
   StatusObject,
   YearObject
-} from '../data';
+} from '@data';
 
 export const validatePerson = (person: any): [boolean, string[]] => {
   const errors = [];

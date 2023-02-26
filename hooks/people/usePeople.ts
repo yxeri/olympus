@@ -1,8 +1,8 @@
-import useSwr, { SWRResponse } from 'swr';
 import {
   Person,
   PersonObject
-} from 'data';
+} from '@data';
+import useSwr, { SWRResponse } from 'swr';
 
 type UpdatePeople = (ids: string[], update: Partial<typeof PersonObject>) => void;
 type InsertPeople = (people: Array<typeof PersonObject>) => void;

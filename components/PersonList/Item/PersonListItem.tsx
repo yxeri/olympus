@@ -1,23 +1,23 @@
-import React from 'react';
-import styled from 'styled-components';
-import { CloudinaryImage } from '@cloudinary/url-gen';
 import {
   AdvancedImage,
   lazyload
 } from '@cloudinary/react';
-import ListItem from 'components/List/ListItem';
+import { CloudinaryImage } from '@cloudinary/url-gen';
 import {
   Person,
   Status,
   statusCollection,
   Year,
-} from 'data';
+} from '@data';
+import Award from 'assets/award.svg';
+import ListItem from 'components/List/ListItem';
 import Modal from 'components/Modal/Modal';
+import React from 'react';
+import styled from 'styled-components';
 import {
   colors,
   sizes,
 } from 'styles/global';
-import Award from 'assets/award.svg';
 
 export type PersonListItemProps = {
   person: Person,

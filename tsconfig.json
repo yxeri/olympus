@@ -19,7 +19,8 @@
       "@hooks*": ["hooks*"],
       "@api*": ["api*"],
       "@components": ["components"],
-      "@assets*": ["assets*"]
+      "@assets*": ["assets*"],
+      "@data": ["types/data"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
