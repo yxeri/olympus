@@ -12,7 +12,7 @@ type UsePeopleReturn = Omit<SWRResponse, 'data'> & {
   insert: InsertPeople,
 };
 
-const url = '/api/people';
+export const url = '/api/people';
 
 export default function usePeople(): UsePeopleReturn {
   const {

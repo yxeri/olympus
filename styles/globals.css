@@ -3,11 +3,12 @@ html, body {
   margin: 0;
   background-color: #3d3b35;
   color: #3a3a3a;
+  --toastify-toast-width: fit-content;
 }
 
 .main-container {
   box-sizing: border-box;
-  padding: 0 .5rem;
+  padding: 0 1rem;
   max-width: 800px;
   margin: 0 auto;
   display: grid;

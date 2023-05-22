@@ -58,8 +58,8 @@ const PersonList: React.FC<PersonListProps> = () => {
   const personItems = getFilteredList({ searchString, list: sortedPeople })
     .map((person) => (
       listVariant === 'grid'
-        ? <PersonListGridItem key={person._id ?? `${person.name}${person.family}`} person={person} />
-        : <PersonListItem key={person._id ?? `${person.name}${person.family}`} person={person} />
+        ? <PersonListGridItem key={person._id?.toString() ?? `${person.name}${person.family}`} person={person} />
+        : <PersonListItem key={person._id?.toString() ?? `${person.name}${person.family}`} person={person} />
     ));
 
   return (

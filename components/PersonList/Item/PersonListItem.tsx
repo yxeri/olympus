@@ -11,7 +11,7 @@ import {
 } from '@data';
 import Award from 'assets/award.svg';
 import ListItem from 'components/List/ListItem';
-import Modal from 'components/Modal/Modal';
+import Modal, { Trigger } from 'components/Modal/Modal';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -56,11 +56,18 @@ const StyledListItem = styled(ListItem)`
   max-width: ${sizes.mediumMax};
   padding: .2rem;
   grid-column-gap: .7rem;
+  grid-template-columns: 1fr 1.6rem;
+`;
+
+const StyledTrigger = styled(Trigger)`
+  display: grid;
+  align-items: center;
+  grid-column-gap: .7rem;
+  grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight[0]};
   grid-template-areas:
-    "rank year name photo score"
-    "rank status name photo score"
-    "rank status society photo score";
-  grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight[0]} 1.6rem;
+    "rank year name photo"
+    "rank status name photo"
+    "rank status society photo";
 `;
 
 export const StatusDiv = styled(StyledDiv)`
@@ -77,7 +84,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
   }).addTransformation('t_thumb-person');
 
   const listItem = (
-    <div role="button" style={{ display: 'contents', cursor: 'pointer' }}>
+    <StyledTrigger>
       <StyledDiv style={{ gridArea: 'rank' }}>
         {rank}
       </StyledDiv>
@@ -90,7 +97,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       >
         {statusCollection[status]}
       </StatusDiv>
-      <StyledDiv style={{ gridArea: 'name' }}>
+      <StyledDiv style={{ gridArea: 'name', textTransform: 'capitalize' }}>
         {`${name} ${family.toUpperCase()}`}
       </StyledDiv>
       <StyledDiv style={{ gridArea: 'society' }}>
@@ -99,11 +106,11 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       <StyledPhoto>
         <AdvancedImage cldImg={image} plugins={[lazyload()]} alt={`${name} ${family}`} />
       </StyledPhoto>
-    </div>
+    </StyledTrigger>
   );
 
   return (
-    <StyledListItem status={status} variant="list">
+    <StyledListItem status={status}>
       <Modal
         trigger={listItem}
         title={`${person.name} ${person.family.toUpperCase()}`}
@@ -112,10 +119,15 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       />
       <Modal
         trigger={(
-          <StyledDiv role="button" style={{ gridArea: 'score', cursor: 'pointer' }}>
-            <Award width="14" height="14" />
-            {score}
-          </StyledDiv>
+          <Trigger style={{
+            display: 'grid',
+            cursor: 'pointer',
+            justifyItems: 'center',
+          }}
+          >
+            <Award style={{ alignSelf: 'center' }} width="14" height="14" />
+            <span style={{ alignSelf: 'center' }}>{score}</span>
+          </Trigger>
         )}
         title={`${person.name} ${person.family.toUpperCase()}`}
         description="Description"

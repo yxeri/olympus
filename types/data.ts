@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 export const SocietyObject = { Bacchus: '', Bellona: '', Pheme: '' };
 export type Society = keyof typeof SocietyObject;
 export const StatusObject = {
@@ -20,10 +22,11 @@ export const PersonObject: Omit<Person, '_id'> = {
   year: 0,
   type: 'Discipli',
   score: 0,
+  profile: {},
 };
 
 export type Person = {
-  _id: string,
+  _id?: ObjectId | string,
   rank: number,
   family: string,
   name: string,
@@ -32,6 +35,8 @@ export type Person = {
   year: Year,
   type: PersonType,
   score: number,
+  mail?: string,
+  profile: Record<string, any>,
 };
 
 export const statusCollection: { [key in Status]: string } = {

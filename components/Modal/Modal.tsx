@@ -5,12 +5,12 @@ import {
   Overlay,
   Portal,
   Root,
-  Title,
-  Trigger,
+  Title as RadixTitle,
+  Trigger as RadixTrigger,
 } from '@radix-ui/react-dialog';
-import Image from 'next/image';
-import styled, { keyframes } from 'styled-components';
+import CloseIcon from 'assets/x.svg';
 import React, { ReactNode } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { sizes } from 'styles/global';
 
 const fadeIn = keyframes`
@@ -27,6 +27,7 @@ const DialogOverlay = styled(Overlay)`
   position: fixed;
   inset: 0;
   animation: ${fadeIn} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 3;
 `;
 
 const DialogContent = styled(Content)`
@@ -35,11 +36,14 @@ const DialogContent = styled(Content)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 95vw;
+  width: calc(100vw - 2rem);
   max-width: ${sizes.mediumMax};
-  padding: .8rem;
-  background-color: white;
+  padding: 1rem;
+  background-color: #ccc7b5;
   box-shadow: hsl(206 22% 7% / 35%) 0 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  z-index: 3;
+  display: grid;
+  grid-gap: 1rem;
 `;
 
 const DialogClose = styled(Close)`
@@ -48,6 +52,23 @@ const DialogClose = styled(Close)`
   position: absolute;
   top: 0;
   right: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+`;
+
+export const Trigger = styled(RadixTrigger)`
+  margin: unset;
+  padding: unset;
+  font: inherit;
+  background: unset;
+  border: unset;
+`;
+
+const Title = styled(RadixTitle)`
+  margin: 0;
+  
 `;
 
 type ModalProps = {
@@ -56,13 +77,22 @@ type ModalProps = {
   title: string | ReactNode,
   description?: string | ReactNode,
   content: ReactNode,
+  onOpenChange?: (open: boolean) => void,
+  defaultOpen?: boolean,
+  open?: boolean,
 };
 
 const Modal: React.FC<ModalProps> = ({
-  trigger, interaction, title, description, content,
+  trigger,
+  interaction,
+  title,
+  description,
+  content,
+  onOpenChange,
+  defaultOpen,
 }) => (
-  <Root>
-    <Trigger asChild>{trigger}</Trigger>
+  <Root defaultOpen={defaultOpen} onOpenChange={(newOpen) => onOpenChange && onOpenChange(newOpen)}>
+    {trigger}
     <Portal>
       <DialogOverlay />
       <DialogContent>
@@ -71,7 +101,7 @@ const Modal: React.FC<ModalProps> = ({
         {content}
         {interaction && <div>{interaction}</div>}
         <DialogClose>
-          <Image src="/x.svg" alt="Close" width={24} height={24} />
+          <CloseIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
         </DialogClose>
       </DialogContent>
     </Portal>

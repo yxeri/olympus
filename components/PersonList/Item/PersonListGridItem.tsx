@@ -9,7 +9,7 @@ import {
   statusCollection,
 } from '@data';
 import ListItem from 'components/List/ListItem';
-import Modal from 'components/Modal/Modal';
+import Modal, { Trigger } from 'components/Modal/Modal';
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'styles/global';
@@ -20,7 +20,7 @@ import {
   StyledDiv,
 } from './PersonListItem';
 
-const StyledListItem = styled(ListItem)`
+const StyledTrigger = styled(Trigger)`
   display: grid;
   border: 2px solid ${({ status }: { status: Status }) => colors[status]};
   box-shadow: 0 0 3px 1px ${({ status }: { status: Status }) => colors[status]};
@@ -56,50 +56,56 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
 
   const image = new CloudinaryImage(`olympus/people/${name}-${family}`, {
     cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  }).addTransformation('t_preview-person');
+  }).addTransformation('t_profile');
 
   const listItem = (
-    <StyledListItem status={status} variant="grid" style={{ cursor: 'pointer' }}>
-      <StyledPhoto>
-        <AdvancedImage cldImg={image} plugins={[lazyload(), placeholder()]} alt={`${name} ${family}`} />
-      </StyledPhoto>
-      <StyledDiv style={{
-        gridArea: 'name', justifySelf: 'flex-start',
-      }}
-      >
-        {name}
-      </StyledDiv>
-      <StyledDiv style={{
-        gridArea: 'family', justifySelf: 'flex-start',
-      }}
-      >
-        {family.toUpperCase()}
-      </StyledDiv>
-      <StyledDiv style={{
-        gridArea: 'year', justifySelf: 'center',
-      }}
-      >
-        {romanNumbers[year]}
-      </StyledDiv>
-      <StatusDiv
-        status={status}
-        style={{
-          gridArea: 'status', justifySelf: 'center',
+    <ListItem>
+      <StyledTrigger status={status} style={{ cursor: 'pointer' }}>
+        <StyledPhoto>
+          <AdvancedImage cldImg={image} plugins={[lazyload(), placeholder()]} alt={`${name} ${family}`} />
+        </StyledPhoto>
+        <StyledDiv style={{
+          gridArea: 'name',
+          justifySelf: 'flex-start',
+          textTransform: 'capitalize',
         }}
-      >
-        {statusCollection[(status as Status)]}
-      </StatusDiv>
-      <StyledDiv
-        style={{
-          width: '100%',
-          gridArea: 'society',
-          justifySelf: 'flex-end',
-          overflow: 'hidden',
+        >
+          {name}
+        </StyledDiv>
+        <StyledDiv style={{
+          gridArea: 'family',
+          justifySelf: 'flex-start',
+          textTransform: 'uppercase',
         }}
-      >
-        {society}
-      </StyledDiv>
-    </StyledListItem>
+        >
+          {family}
+        </StyledDiv>
+        <StyledDiv style={{
+          gridArea: 'year', justifySelf: 'center',
+        }}
+        >
+          {romanNumbers[year]}
+        </StyledDiv>
+        <StatusDiv
+          status={status}
+          style={{
+            gridArea: 'status', justifySelf: 'center',
+          }}
+        >
+          {statusCollection[(status as Status)]}
+        </StatusDiv>
+        <StyledDiv
+          style={{
+            width: '100%',
+            gridArea: 'society',
+            justifySelf: 'flex-end',
+            overflow: 'hidden',
+          }}
+        >
+          {society}
+        </StyledDiv>
+      </StyledTrigger>
+    </ListItem>
   );
 
   return (

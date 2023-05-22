@@ -1,15 +1,17 @@
+import BookIcon from 'assets/book-nav.svg';
+import CalendarIcon from 'assets/calendar-nav.svg';
+import PhotoIcon from 'assets/camera-nav.svg';
+import MessageIcon from 'assets/message-circle-nav.svg';
+import LogoImage from 'assets/olympus.jpg.webp';
+import PersonIcon from 'assets/person-nav.svg';
+import SettingsIcon from 'assets/settings.svg';
+import Link from 'components/Link/Link';
 import Image from 'next/image';
 import styled from 'styled-components';
 import {
   colors,
   sizes,
 } from 'styles/global';
-import Link from 'components/Link/Link';
-import LogoImage from 'assets/olympus.jpg.webp';
-import CalendarIcon from 'assets/calendar-nav.svg';
-import SettingsIcon from 'assets/settings.svg';
-import PersonIcon from 'assets/person-nav.svg';
-import BookIcon from 'assets/book-nav.svg';
 
 const StyledDiv = styled.div`
   display: grid;
@@ -22,11 +24,11 @@ const StyledDiv = styled.div`
 const Line = styled.div`
   position: absolute;
   top: 0;
-  height: 2.6rem;
+  height: 3.2rem;
   width: 100%;
   background-color: ${colors.primaryTransBackground};
-  border-bottom-left-radius: 50%;
-  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 25%;
+  border-bottom-right-radius: 25%;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 1;
@@ -34,9 +36,9 @@ const Line = styled.div`
 
 const ContainerDiv = styled.div`
   display: grid;
-  grid-column-gap: calc(60px + .8rem);
+  grid-column-gap: calc(60px + 2rem);
   grid-template-columns: 1fr 1fr;
-  padding: .6rem;
+  padding: 1rem;
   z-index: 2;
 `;
 
@@ -52,17 +54,13 @@ const JustifiedDiv = styled.div<{ justify: 'flex-start' | 'flex-end' }>`
   ${({ justify }) => justify === 'flex-end' && 'margin-left: auto'};
 `;
 
-const LinkDiv = styled.div`
-  padding: 0 .2rem;
-`;
-
 const Logo = styled(Link)`
   position: absolute;
   margin-left: auto;
   margin-right: auto;
   left: 0;
   right: 0;
-  top: 0;
+  top: .5rem;
   display: grid;
   width: fit-content;
   height: fit-content;
@@ -74,44 +72,57 @@ const Logo = styled(Link)`
   }
 `;
 
+const StyledLink = styled(Link)`
+  margin: 0 .2rem;
+  position: relative;
+  ::before {
+    content: '';
+    position: absolute;
+    left: -.5rem;
+    top: -.5rem;
+    padding: .5rem;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 const Navigation = () => (
   <StyledDiv>
     <Line />
     <ContainerDiv>
       <JustifiedDiv justify="flex-end">
-        <LinkDiv>
-          <Link href="/people" aria-label="People">
-            <PersonIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-          </Link>
-        </LinkDiv>
-        <LinkDiv>
-          <Link href="/calendar" aria-label="Calendar">
-            <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-          </Link>
-        </LinkDiv>
+        <StyledLink href="/messages" aria-label="Messages">
+          <MessageIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+        </StyledLink>
+        <StyledLink href="/people" aria-label="People">
+          <PersonIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+        </StyledLink>
+        <StyledLink href="/calendar" aria-label="Calendar">
+          <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+        </StyledLink>
       </JustifiedDiv>
+      <Logo href="/">
+        <Image
+          style={{ objectFit: 'contain' }}
+          src={LogoImage}
+          alt="Olympus"
+          width={60}
+          height={60}
+        />
+      </Logo>
       <JustifiedDiv justify="flex-start">
-        <LinkDiv>
-          <Link href="/library" aria-label="Library">
-            <BookIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-          </Link>
-        </LinkDiv>
-        <LinkDiv>
-          <Link href="/settings" aria-label="Settings">
-            <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-          </Link>
-        </LinkDiv>
+        <StyledLink href="/library" aria-label="Library">
+          <BookIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+        </StyledLink>
+        <StyledLink href="/settings" aria-label="Settings">
+          <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+        </StyledLink>
+        <StyledLink href="/photos" aria-label="Photos">
+          <PhotoIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+        </StyledLink>
       </JustifiedDiv>
     </ContainerDiv>
-    <Logo href="/">
-      <Image
-        style={{ objectFit: 'contain' }}
-        src={LogoImage}
-        alt="Olympus"
-        width={60}
-        height={60}
-      />
-    </Logo>
+
   </StyledDiv>
 );
 

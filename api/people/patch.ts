@@ -1,23 +1,53 @@
 import {
+  Id,
+  IdName
+} from '@api/people/types';
+import {
   Person,
   PersonObject
 } from '@data';
 import {
   collection,
-  createPersonSet
+  createSet
 } from 'lib/db/tools';
 import {
   AnyBulkWriteOperation,
-  ObjectId
+  ObjectId,
+  UpdateFilter,
+  UpdateResult
 } from 'mongodb';
 import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
 
-export default async function patch(req: NextApiRequest, res: NextApiResponse) {
+type ResponseSuccess = {
+  modified: number,
+  matched: number,
+};
+
+type ResponseError = {
+  error: string,
+};
+
+type Response = ResponseSuccess | ResponseError;
+
+export const updatePerson: (
+  id: IdName,
+  update: UpdateFilter<Person>,
+) => Promise<UpdateResult> = async (
+  id,
+  update,
+) => {
+  console.log(update);
+  const peopleCollection = await collection<Person>('people');
+
+  return peopleCollection.updateOne(id, update);
+};
+
+export default async function patch(req: NextApiRequest, res: NextApiResponse<Response>) {
   try {
-    const dbCollection = await collection('people');
+    const dbCollection = await collection<Person>('people');
     const {
       people,
       updateAll
@@ -32,25 +62,35 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse) {
     ) {
       throw Error(
         `Expected { 
-          people: Partial<Person & Required<{ _id | name & family }>>[], 
+          people: _id | name & family, 
           update: Partial<Person>,
          }`
       );
     }
 
-    const operations: AnyBulkWriteOperation[] = [];
+    const operations: AnyBulkWriteOperation<Person>[] = [];
     let modified = 0;
     let matched = 0;
 
     people.forEach((person) => {
-      const filter = person._id
+      if (person.name) {
+        // eslint-disable-next-line no-param-reassign
+        person.name = person.name.toLowerCase();
+      }
+
+      if (person.family) {
+        // eslint-disable-next-line no-param-reassign
+        person.family = person.family.toLowerCase();
+      }
+
+      const filter: Id = person._id
         ? { _id: new ObjectId(person._id) }
-        : { name: person.name, family: person.family };
+        : { name: person.name as string, family: person.family as string };
 
       operations.push({
         updateOne: {
           filter,
-          update: createPersonSet(updateAll ?? person).set,
+          update: createSet<typeof PersonObject>(updateAll ?? person, PersonObject).set,
         },
       });
     });

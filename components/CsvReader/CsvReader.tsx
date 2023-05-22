@@ -64,8 +64,9 @@ const CsvReader = () => {
 
         const columns: string[] = results.data.slice(0, 1)?.[0];
         const rows: string[][] = results.data.slice(1, -1);
+        const { profile, score, ...personObject } = PersonObject;
 
-        if (!Object.keys(PersonObject).every((key) => {
+        if (!Object.keys(personObject).every((key) => {
           const includes = columns.includes(key);
 
           if (!includes) {
@@ -78,13 +79,18 @@ const CsvReader = () => {
         }
 
         const parsedPeople: Person[] = rows.reduce<Person[]>((people, row, currentIndex) => {
-          const personObject = Object
+          const object = Object
             .fromEntries(row.map((value, index) => [columns[index], value]));
+          const person = {
+            ...object,
+            score: object.score ?? -1,
+            profile: object.profile ?? {},
+          };
 
-          const [isValidPerson, errors] = validatePerson(personObject);
+          const [isValidPerson, errors] = validatePerson(person);
 
           if (isValidPerson) {
-            people.push(personObject as unknown as Person);
+            people.push(person as unknown as Person);
           } else {
             [`Row ${currentIndex + 2}:`, ...errors].forEach((msg) => console.log(msg));
           }

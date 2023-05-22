@@ -16,6 +16,9 @@ import {
   Value,
   Viewport,
 } from '@radix-ui/react-select';
+import CheckIcon from 'assets/check.svg';
+import ChevronDownIcon from 'assets/chevron-down.svg';
+import ChevronUpIcon from 'assets/chevron-up.svg';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -23,9 +26,6 @@ import {
   colors,
   sizes,
 } from 'styles/global';
-import CheckIcon from 'assets/check.svg';
-import ChevronUpIcon from 'assets/chevron-up.svg';
-import ChevronDownIcon from 'assets/chevron-down.svg';
 
 export type SelectItemType<T> = {
   label: string,
@@ -51,6 +51,8 @@ const SelectTrigger = styled(Trigger)`
   border: ${borders.standard};
   border-radius: ${sizes.corner};
   box-shadow: 0 2px 5px rgba(22, 23, 24, 0.5);
+  cursor: pointer;
+  height: 100%;
 `;
 
 const SelectIcon = styled(Icon)`
@@ -75,6 +77,7 @@ const StyledSelectItem = styled(SelectItem)`
   grid-gap: .2rem;
   grid-auto-flow: column;
   padding: .2rem;
+  cursor: pointer;
 `;
 
 const SelectPortal = styled(Portal)`

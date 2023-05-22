@@ -1,15 +1,15 @@
+import SearchIcon from 'assets/search.svg';
+import XIcon from 'assets/x.svg';
+import { searchStringAtom } from 'atoms/filter';
+import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { useState } from 'react';
-import { debounce } from 'throttle-debounce';
-import { searchStringAtom } from 'atoms/filter';
 import {
   borders,
   colors,
   sizes,
 } from 'styles/global';
-import SearchIcon from 'assets/search.svg';
-import XIcon from 'assets/x.svg';
+import { debounce } from 'throttle-debounce';
 
 const StyledInput = styled.input`
   background-color: ${colors.clickableBackground};
@@ -17,6 +17,8 @@ const StyledInput = styled.input`
   padding: .3rem;
   border: ${borders.standard};
   min-height: ${sizes.largeIcon}px;
+  height: 100%;
+  box-sizing: border-box;
 `;
 
 const StyledDiv = styled.div`
@@ -24,6 +26,7 @@ const StyledDiv = styled.div`
   display: grid;
   grid-auto-flow: column;
   align-items: center;
+  height: 100%;
 `;
 
 const SearchImage = styled(SearchIcon)<{ isHidden: boolean }>`

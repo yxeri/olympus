@@ -1,7 +1,14 @@
-import { Person } from '@data';
+import {
+  Id,
+  ResponseError
+} from '@api/people/types';
+import {
+  Person,
+  PersonObject
+} from '@data';
 import {
   collection,
-  createPersonSet
+  createSet
 } from 'lib/db/tools';
 import {
   AnyBulkWriteOperation,
@@ -12,21 +19,46 @@ import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
+import { ApiError } from 'next/dist/server/api-utils';
+
 import { validatePerson } from 'utils/validatePerson';
 
-export default async function post(req: NextApiRequest, res: NextApiResponse) {
+type ResponseSuccess = {
+  updatedIndexes: Id[],
+  insertedIds: string[],
+};
+
+type ResponseData = ResponseError | ResponseSuccess;
+
+export default async function post(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   try {
-    const dbCollection = await collection('people');
+    const dbCollection = await collection<Person>('people');
     const { people } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
 
     if (!Array.isArray(people)) {
-      throw Error('Expected People[]');
+      throw new ApiError(400, 'Expected People[]');
     }
 
-    const filteredPeople = people.filter((person) => validatePerson(person)[0]);
-    const filteredIds: string[] = filteredPeople.map((person) => person._id);
+    const filteredIds: string[] = [];
+    const filteredPeople: Person[] = people.reduce((filtered, person) => {
+      if (validatePerson(person)[0]) {
+        filtered.push({
+          ...person,
+          name: person.name.toLowerCase(),
+          family: person.family.toLowerCase(),
+        });
 
-    const updatedIds: Array<{ _id?: ObjectId, name?: string, family?: string }> = [];
+        if (person._id) {
+          filteredIds.push(person._id);
+        }
+      }
+
+      return filtered;
+    }, []);
+
+    console.log(filteredPeople);
+
+    const updatedIds: Id[] = [];
     const {
       insertedIds,
       existIndexes,
@@ -36,6 +68,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
           ? new ObjectId(person._id)
           : undefined,
         ...person,
+        profile: person.profile ?? {},
       })), { ordered: false })
       .then((result) => ({
         insertedIds: Object.values(result.insertedIds),
@@ -51,17 +84,18 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
             return failed;
           }, [])
           : [];
+        const inserted = (Object
+          .values(operation.result.insertedIds)
+          .filter((id) => !existIds.includes(id)) as string[]);
 
         return {
           existIndexes: indexes,
-          insertedIds: Object
-            .values(operation.result.insertedIds)
-            .filter((id) => !existIds.includes(id)),
+          insertedIds: inserted,
         };
       });
 
     if (existIndexes.length > 0) {
-      const operations: AnyBulkWriteOperation[] = [];
+      const operations: AnyBulkWriteOperation<Person>[] = [];
 
       filteredPeople
         .reduce<[string | undefined, Person][]>((existingPeople, person, index) => {
@@ -72,7 +106,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
         return existingPeople;
       }, [])
         .forEach(([id, person]) => {
-          const filter = id
+          const filter: Id = id
             ? { _id: new ObjectId(id) }
             : { name: person.name, family: person.family };
           updatedIds.push(filter);
@@ -81,7 +115,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
             operations.push({
               updateOne: {
                 filter,
-                update: createPersonSet(person).set,
+                update: createSet<typeof PersonObject>(person, PersonObject).set,
               },
             });
           } catch (error) {
@@ -100,7 +134,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error: any) {
     console.log(error);
-    res.status(500).json({
+    res.status(error?.status ?? 500).json({
       error: error.message,
     });
   }

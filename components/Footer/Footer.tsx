@@ -1,15 +1,15 @@
-import styled from 'styled-components';
-import Image from 'next/image';
-import { colors } from 'styles/global';
 import LogoImage from 'assets/olympus.jpg.webp';
 import SoteiraLogo from 'assets/soteira-small-logo.png';
+import Image from 'next/image';
+import styled from 'styled-components';
+import { colors } from 'styles/global';
 
 const StyledDiv = styled.div`
   position: sticky;
   bottom: 0;
   color: ${colors.brightColor};
-  padding: .4rem;
-  margin-top: 1rem;
+  padding: 1rem;
+  margin-top: .5rem;
   text-align: center;
   display: grid;
   justify-content: center;
@@ -39,7 +39,6 @@ const TextDiv = styled.div`
 const BottomMessage = styled.div`
   box-sizing: border-box;
   color: ${colors.brightColor};
-  padding-top: .4rem;
   padding-bottom: 1rem;
   text-align: center;
   font-size: .9rem;

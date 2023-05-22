@@ -1,15 +1,16 @@
-import styled from 'styled-components';
-import { CldUploadWidget } from 'next-cloudinary';
 import {
   CsvDownloader,
   CsvReader,
   IcalReader,
 } from '@components';
+import { CldUploadWidget } from 'next-cloudinary';
+import styled from 'styled-components';
 import { colors } from 'styles/global';
+import Auth from '../components/Auth/Auth';
 
 const StyledDiv = styled.div`
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: 1rem; 
   width: fit-content;
   max-width: 100%;
 `;
@@ -17,6 +18,7 @@ const StyledDiv = styled.div`
 export default function Settings() {
   return (
     <StyledDiv className="main-container">
+      <Auth />
       <CsvReader />
       <CsvDownloader />
       <IcalReader />
@@ -47,7 +49,7 @@ export default function Settings() {
           sources: ['local', 'url', 'camera'],
         }}
         signatureEndpoint="/api/cloudinarySignature"
-        uploadPreset="olympus-people"
+        uploadPreset="people"
         onUpload={() => {}}
       >
         {({ open }: { open: () => void }) => {

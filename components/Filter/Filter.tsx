@@ -1,13 +1,11 @@
 import * as Popover from '@radix-ui/react-popover';
-import styled from 'styled-components';
-import { sizes } from 'styles/global';
-import Search from 'components/Search/Search';
 import FilterIcon from 'assets/filter.svg';
 import XIcon from 'assets/x.svg';
-import ListIcon from 'assets/list.svg';
-import GridIcon from 'assets/grid.svg';
-import ListVariantButton from './ListVariantButton/ListVariantButton';
+import Search from 'components/Search/Search';
+import styled from 'styled-components';
+import { sizes } from 'styles/global';
 import SortBy from './SortBy/SortBy';
+import VariantPicker from './VariantPicker/VariantPicker';
 
 const StyledDiv = styled.div`
   display: grid;
@@ -36,20 +34,7 @@ const Filter = () => (
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
-    <div style={{ display: 'flex' }}>
-      <ListVariantButton
-        listVariant="list"
-        style={{ borderRight: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-      >
-        <ListIcon alt="List" width={sizes.largeIcon} height={sizes.largeIcon} />
-      </ListVariantButton>
-      <ListVariantButton
-        listVariant="grid"
-        style={{ borderLeft: 0, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-      >
-        <GridIcon alt="Grid" width={sizes.largeIcon} height={sizes.largeIcon} />
-      </ListVariantButton>
-    </div>
+    <VariantPicker />
     <Search />
     <SortBy />
   </StyledDiv>
