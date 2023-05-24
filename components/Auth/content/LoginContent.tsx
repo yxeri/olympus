@@ -69,8 +69,6 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
           return;
         }
 
-        console.log(signupData.data.user);
-
         if ((signupData.data.user?.identities?.length ?? 0) === 0) {
           toast.error(getDictionaryValue('auth', 'existsError'));
 
