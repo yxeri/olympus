@@ -33,7 +33,7 @@ const getFilteredList = ({ list, searchString }: { list: Person[], searchString?
 
 const PersonList: React.FC<PersonListProps> = () => {
   const listVariant = useRecoilValue(listVariantAtom);
-  const sortBy = useRecoilValue(sortByAtom) ?? 'rank';
+  const sortBy = useRecoilValue(sortByAtom);
   const searchString = useRecoilValue(searchStringAtom);
   const { people } = usePeople();
 

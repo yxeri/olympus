@@ -10,7 +10,7 @@ import { SWRConfig } from 'swr';
 
 type StaticProps = {
   fallback: {
-    [url]: Person[],
+    [url]: { people?: Person[] },
   },
 };
 
@@ -31,7 +31,7 @@ export const getStaticProps: GetStaticProps<StaticProps> = async () => {
   return {
     props: {
       fallback: {
-        [url]: people.map((person) => ({ ...person, _id: person?._id?.toString() })),
+        [url]: { people: people.map((person) => ({ ...person, _id: person?._id?.toString() })) },
       },
     },
   };
