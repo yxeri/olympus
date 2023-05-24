@@ -57,24 +57,26 @@ const dictionary = {
     },
     existsError: {
       [Locale.SV]: 'Användaren existerar redan',
-      [Locale.EN]: 'User already exists'
+      [Locale.EN]: 'User already exists',
     },
   },
 };
-const defaultLocale = Locale.EN;
+const defaultLocale: Locale = Locale.EN;
+
+type Dictionary = {
+  [group in keyof typeof dictionary]: {
+    [field in keyof typeof dictionary[group]]: {
+      [locale in Locale]: string;
+    };
+  };
+};
 
 export const useDictionary = () => ({
-  dictionary,
-  getDictionaryValue: <G,>(
-    group: G & keyof typeof dictionary,
-    field: keyof typeof dictionary[G & keyof typeof dictionary],
+  dictionary: (dictionary as Dictionary),
+  getDictionaryValue: <G, >(
+    group: G & keyof Dictionary,
+    field: keyof Dictionary[typeof group],
     locale: Locale = defaultLocale,
-  ): string | undefined => {
-    // @ts-ignore
-    const value = dictionary[group]?.[field]?.[locale]
-      // @ts-ignore
-      ?? dictionary[group]?.[field]?.[defaultLocale];
-
-    return value;
-  },
+  ): string | undefined => (dictionary as Dictionary)?.[group]?.[field]?.[locale]
+  ?? (dictionary as Dictionary)?.[group]?.[field]?.[defaultLocale],
 });
