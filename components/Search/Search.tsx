@@ -1,7 +1,10 @@
 import SearchIcon from 'assets/search.svg';
 import XIcon from 'assets/x.svg';
 import { searchStringAtom } from 'atoms/filter';
-import { useState } from 'react';
+import {
+  useCallback,
+  useState
+} from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import {
@@ -43,13 +46,14 @@ const ClearImage = styled(XIcon)<{ isHidden: boolean }>`
 
 const Search = () => {
   const [searchString, setSearchString] = useRecoilState(searchStringAtom);
+  const [value, setValue] = useState(searchString);
   const [hasContent, setHasContent] = useState(!!searchString);
 
-  const updateSearchString = debounce(
-    300,
+  const updateSearchString = useCallback(debounce(
+    250,
     (newString: string) => setSearchString(newString),
     { atBegin: false }
-  );
+  ), []);
 
   return (
     <StyledDiv>
@@ -60,14 +64,21 @@ const Search = () => {
         height={sizes.largeIcon}
       />
       <StyledInput
+        value={value}
         aria-label="Search"
         defaultValue={searchString}
-        onChange={({ currentTarget }) => updateSearchString(currentTarget.value)}
+        onChange={({ currentTarget }) => {
+          updateSearchString(currentTarget.value);
+          setValue(currentTarget.value);
+        }}
         onFocus={() => setHasContent(true)}
         onBlur={() => setHasContent(!!searchString)}
       />
       <ClearImage
-        onClick={() => setSearchString('')}
+        onClick={() => {
+          setSearchString('');
+          setValue('');
+        }}
         isHidden={!searchString}
         src="/x.svg"
         alt="Clear"

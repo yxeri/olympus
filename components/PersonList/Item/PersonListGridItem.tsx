@@ -21,6 +21,7 @@ import {
 } from './PersonListItem';
 
 const StyledTrigger = styled(Trigger)`
+  width: 100%;
   display: grid;
   border: 2px solid ${({ status }: { status: Status }) => colors[status]};
   box-shadow: 0 0 3px 1px ${({ status }: { status: Status }) => colors[status]};
@@ -38,7 +39,7 @@ const StyledTrigger = styled(Trigger)`
 const StyledPhoto = styled.div`
   grid-area: photo;
   display: grid;
-  min-height: 140px;
+  height: 176px;
   
   img {
     max-width: 100%;

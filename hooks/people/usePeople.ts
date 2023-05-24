@@ -16,9 +16,12 @@ export const url = '/api/people';
 
 export default function usePeople(): UsePeopleReturn {
   const {
-    data,
+    data = [],
     ...swr
-  } = useSwr(url, (urlKey) => fetch(urlKey).then((res) => res.json()));
+  } = useSwr(
+    url,
+    (urlKey) => fetch(urlKey).then((res) => res.json()).then((json) => json.data)
+  );
   const updatePeople: UpdatePeople = (ids, update) => fetch(url, {
     method: 'PATCH',
     body: JSON.stringify({ ids, update }),
@@ -30,8 +33,8 @@ export default function usePeople(): UsePeopleReturn {
 
   return {
     ...swr,
+    people: data,
     update: updatePeople,
     insert: insertPeople,
-    people: data?.people ?? [],
   };
 }
