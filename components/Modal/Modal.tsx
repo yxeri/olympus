@@ -38,7 +38,8 @@ const DialogContent = styled(Content)`
   transform: translate(-50%, -50%);
   width: calc(100vw - 2rem);
   max-width: ${sizes.mediumMax};
-  padding: 1rem;
+  max-height: calc(100vh - 2rem);
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
   background-color: #ccc7b5;
   box-shadow: hsl(206 22% 7% / 35%) 0 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   z-index: 3;
@@ -50,8 +51,8 @@ const DialogClose = styled(Close)`
   display: grid;
   align-items: center;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: .2rem;
+  right: .2rem;
   border: none;
   background: none;
   cursor: pointer;
@@ -67,7 +68,7 @@ export const Trigger = styled(RadixTrigger)`
 `;
 
 const Title = styled(RadixTitle)`
-  margin: 0;
+  margin: 0 auto;
   
 `;
 

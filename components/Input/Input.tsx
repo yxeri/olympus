@@ -3,7 +3,7 @@ import {
   Field,
   Label
 } from '@radix-ui/react-form';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   RegisterOptions,
   useFormContext,
@@ -17,11 +17,18 @@ import {
 import Container from '../Container/Container';
 
 const StyledField = styled(Field)`
+  position: relative;
   display: grid;
   outline: none;
+  background-color: white;
   [data-invalid="true"] {
     border-color: ${colors.errorBorder};
-    background: ${colors.error};
+    background-color: ${colors.error};
+  }
+  
+  &[data-invalid="true"] {
+    border-color: ${colors.errorBorder};
+    background-color: ${colors.error};
   }
 `;
 
@@ -31,31 +38,64 @@ const StyledInput = styled(Control)`
   border: ${borders.standard};
 `;
 
+const FocusPlaceholder = styled.div`
+  position: absolute;
+  top: -1.1rem;
+  left: .3rem;
+  background-color: inherit;
+  border-top-left-radius: .2rem;
+  border-top-right-radius: .2rem;
+  font-size: .9rem;
+  padding: .1rem .2rem;
+  border-top: ${borders.standard};
+  border-left: ${borders.standard};
+  border-right: ${borders.standard};
+  //text-shadow: 0px 0px 1px rgba(0,0,0,0.5);
+`;
+
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   name: string,
   label?: string,
   options?: RegisterOptions,
 };
 
-const Input: React.FC<InputProps> = ({
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   name,
   label,
   options,
   ...otherProps
-}) => {
+}, ref) => {
+  const [focused, setFocused] = useState(false);
   const { register } = useFormContext();
+  const { ref: formRef, ...registerProps } = register(name, options);
 
   return (
     <Container>
       <StyledField name={name}>
         {label && <Label>{label}</Label>}
+        {!label
+          && focused
+          && otherProps.placeholder
+          && <FocusPlaceholder>{otherProps.placeholder}</FocusPlaceholder>}
         <StyledInput
           {...otherProps}
-          {...register(name, options)}
+          {...registerProps}
+          ref={(e) => {
+            formRef(e);
+
+            if (typeof ref === 'function') {
+              ref(e);
+            } else if (ref) {
+              // eslint-disable-next-line no-param-reassign
+              ref.current = e;
+            }
+          }}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
         />
       </StyledField>
     </Container>
   );
-};
+});
 
 export default Input;
