@@ -41,18 +41,24 @@ type SelectProps<T> = {
 };
 
 const SelectTrigger = styled(Trigger)`
-  all: unset;
+  color: inherit;
   box-sizing: border-box;
   display: grid;
   align-items: center;
   grid-auto-flow: column;
-  background-color: #f6f2dc;
+  background-color: ${colors.clickableBackground};
   padding: .3rem;
   border: ${borders.standard};
   border-radius: ${sizes.corner};
   box-shadow: 0 2px 5px rgba(22, 23, 24, 0.5);
   cursor: pointer;
   height: 100%;
+  width: 100%;
+  font: inherit;
+  &[data-state="open"] {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 `;
 
 const SelectIcon = styled(Icon)`
@@ -78,15 +84,18 @@ const StyledSelectItem = styled(SelectItem)`
   grid-auto-flow: column;
   padding: .2rem;
   cursor: pointer;
+  box-sizing: border-box;
 `;
 
 const SelectPortal = styled(Portal)`
-  margin-left: -.1rem;
-  margin-top: -.1rem;
+  margin-top: -2.4rem;
+  box-sizing: border-box;
   background-color: ${colors.clickableBackground};
   border-radius: ${sizes.corner};
-  box-shadow: 0 10px 38px -10px rgba(22, 23, 24, 0.5), 0px 10px 20px -15px rgba(22, 23, 24, 0.5);
+  box-shadow: 5px 15px 15px 0 rgba(22, 23, 24, 0.5);
   z-index: 10;
+  border: ${borders.standard};
+  width: 100%;
 `;
 
 const SelectViewport = styled(Viewport)`

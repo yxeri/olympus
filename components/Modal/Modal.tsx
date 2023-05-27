@@ -65,6 +65,7 @@ export const Trigger = styled(RadixTrigger)`
   font: inherit;
   background: unset;
   border: unset;
+  color: inherit;
 `;
 
 const Title = styled(RadixTitle)`
@@ -101,7 +102,7 @@ const Modal: React.FC<ModalProps> = ({
         {description && <Description>{description}</Description>}
         {content}
         {interaction && <div>{interaction}</div>}
-        <DialogClose>
+        <DialogClose aria-label="Close window">
           <CloseIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
         </DialogClose>
       </DialogContent>

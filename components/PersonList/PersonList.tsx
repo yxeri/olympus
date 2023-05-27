@@ -1,11 +1,12 @@
 import { Person } from '@data';
 import { usePeople } from '@hooks/people';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { sizes } from 'styles/global';
 import {
   listVariantAtom,
+  PersonListVariant,
   searchStringAtom,
   sortByAtom
 } from '../../atoms/filter';
@@ -22,14 +23,25 @@ const StyledList = styled(List)`
   grid-auto-flow: row;
 `;
 
-const getFilteredList = ({ list, searchString }: { list: Person[], searchString?: string }) => (
-  searchString
-    ? list
-      .filter(({ name, family }) => searchString === '' || `${name} ${family}}`
-        .toLowerCase()
-        .includes(searchString.toLowerCase()))
-    : list
-);
+const getFilteredItems = ({
+  list,
+  searchString, listVariant
+}: {
+  list: Person[],
+  searchString?: string,
+  listVariant?: PersonListVariant,
+}) => list.reduce((filteredList, person) => {
+  if (!searchString || searchString === '' || `${person.name} ${person.family}`.toLowerCase().includes(searchString.toLowerCase())) {
+    const Comp = listVariant === 'grid' ? PersonListGridItem : PersonListItem;
+
+    return [
+      ...filteredList,
+      <Comp key={person._id?.toString() ?? `${person.name}${person.family}`} person={person} />
+    ];
+  }
+
+  return filteredList;
+}, [] as ReactNode[]);
 
 const PersonList: React.FC<PersonListProps> = () => {
   const listVariant = useRecoilValue(listVariantAtom);
@@ -55,16 +67,10 @@ const PersonList: React.FC<PersonListProps> = () => {
 
     return a[sortBy] > b[sortBy] ? 1 : -1;
   });
-  const personItems = getFilteredList({ searchString, list: sortedPeople })
-    .map((person) => (
-      listVariant === 'grid'
-        ? <PersonListGridItem key={person._id?.toString() ?? `${person.name}${person.family}`} person={person} />
-        : <PersonListItem key={person._id?.toString() ?? `${person.name}${person.family}`} person={person} />
-    ));
 
   return (
     <StyledList variant={listVariant}>
-      {personItems}
+      {getFilteredItems({ searchString, listVariant, list: sortedPeople })}
     </StyledList>
   );
 };

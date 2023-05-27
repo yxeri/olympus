@@ -9,22 +9,22 @@ type LinkProps = {
 } & PropsWithChildren;
 
 const StyledLink = styled(NextLink)<{ isActive: boolean }>`
-  all: unset;
+  color: inherit;
   cursor: pointer;
   font-weight: bold;
-  display: grid; 
-  
-  :focus {
+  display: grid;
+
+  ${({ isActive }) => (isActive ? `
     > * {
-      stroke: ${colors.selected};
+      stroke: ${colors.active};
     }
-  }
-  
-  ${({ isActive }) => isActive && `
-    > * {
-      stroke: ${colors.selected};
+  ` : `
+    :focus {
+      > * {
+        stroke: ${colors.selected};
+      }
     }
-  `}
+  `)}
 `;
 
 const Link: React.FC<LinkProps> = ({ children, ...props }) => {

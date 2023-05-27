@@ -11,6 +11,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const StyledButton = styled.button<{ isSelected?: boolean }>`
+  color: inherit;
   font: inherit;
   text-align: left;
   display: grid;

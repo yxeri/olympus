@@ -3,7 +3,7 @@ import {
   sortByAtom,
 } from 'atoms/filter';
 import Select from 'components/Select/Select';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 const sortBy: Array<{ label: string, value: PersonSortable }> = [
   { label: 'Namn', value: 'alphabetical' },
@@ -14,11 +14,10 @@ const sortBy: Array<{ label: string, value: PersonSortable }> = [
 ];
 
 const SortBy = () => {
-  const [selectedSortBy, setSortBy] = useRecoilState(sortByAtom);
+  const setSortBy = useSetRecoilState(sortByAtom);
 
   return (
     <Select
-      defaultValue={selectedSortBy}
       placeholder="Sortera"
       items={sortBy}
       onValueChange={setSortBy}
