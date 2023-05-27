@@ -13,7 +13,7 @@ import {
   sizes,
 } from 'styles/global';
 
-const StyledDiv = styled.div`
+const StyledNav = styled.nav`
   display: grid;
   position: sticky;
   top: 0;
@@ -87,43 +87,58 @@ const StyledLink = styled(Link)`
 `;
 
 const Navigation = () => (
-  <StyledDiv>
-    <Line />
-    <ContainerDiv>
-      <JustifiedDiv justify="flex-end">
-        <StyledLink href="/messages" aria-label="Messages">
-          <MessageIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-        </StyledLink>
-        <StyledLink href="/people" aria-label="People">
-          <PersonIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-        </StyledLink>
-        <StyledLink href="/calendar" aria-label="Calendar">
-          <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-        </StyledLink>
-      </JustifiedDiv>
-      <Logo href="/">
-        <Image
-          style={{ objectFit: 'contain' }}
-          src={LogoImage}
-          alt="Olympus"
-          width={60}
-          height={60}
-        />
-      </Logo>
-      <JustifiedDiv justify="flex-start">
-        <StyledLink href="/library" aria-label="Library">
-          <BookIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-        </StyledLink>
-        <StyledLink href="/settings" aria-label="Settings">
-          <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-        </StyledLink>
-        <StyledLink href="/photos" aria-label="Photos">
-          <PhotoIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-        </StyledLink>
-      </JustifiedDiv>
-    </ContainerDiv>
-
-  </StyledDiv>
+  <StyledNav>
+    <ul style={{ display: 'contents' }}>
+      <Line />
+      <ContainerDiv>
+        <JustifiedDiv justify="flex-end">
+          <li style={{ display: 'contents' }}>
+            <StyledLink href="/messages" aria-label="Messages">
+              <MessageIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            </StyledLink>
+          </li>
+          <li style={{ display: 'contents' }}>
+            <StyledLink href="/people" aria-label="People">
+              <PersonIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            </StyledLink>
+          </li>
+          <li style={{ display: 'contents' }}>
+            <StyledLink href="/calendar" aria-label="Calendar">
+              <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            </StyledLink>
+          </li>
+        </JustifiedDiv>
+        <li style={{ display: 'contents' }}>
+          <Logo href="/">
+            <Image
+              style={{ objectFit: 'contain' }}
+              src={LogoImage}
+              alt="Olympus"
+              width={60}
+              height={60}
+            />
+          </Logo>
+        </li>
+        <JustifiedDiv justify="flex-start">
+          <li style={{ display: 'contents' }}>
+            <StyledLink href="/library" aria-label="Library">
+              <BookIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            </StyledLink>
+          </li>
+          <li style={{ display: 'contents' }}>
+            <StyledLink href="/settings" aria-label="Settings">
+              <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            </StyledLink>
+          </li>
+          <li style={{ display: 'contents' }}>
+            <StyledLink href="/photos" aria-label="Photos">
+              <PhotoIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+            </StyledLink>
+          </li>
+        </JustifiedDiv>
+      </ContainerDiv>
+    </ul>
+  </StyledNav>
 );
 
 export default Navigation;

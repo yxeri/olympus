@@ -4,7 +4,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { colors } from 'styles/global';
 
-const StyledDiv = styled.div`
+const StyledDiv = styled.footer`
   position: sticky;
   bottom: 0;
   color: ${colors.brightColor};

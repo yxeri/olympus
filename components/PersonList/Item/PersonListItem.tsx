@@ -84,7 +84,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
   }).addTransformation('t_thumb-person');
 
   const listItem = (
-    <StyledTrigger>
+    <StyledTrigger aria-label={`${name} ${family}, ${statusCollection[(status as Status)]}, ${society}`}>
       <StyledDiv style={{ gridArea: 'rank' }}>
         {rank}
       </StyledDiv>
@@ -119,11 +119,13 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       />
       <Modal
         trigger={(
-          <Trigger style={{
-            display: 'grid',
-            cursor: 'pointer',
-            justifyItems: 'center',
-          }}
+          <Trigger
+            aria-label={`rank ${score}`}
+            style={{
+              display: 'grid',
+              cursor: 'pointer',
+              justifyItems: 'center',
+            }}
           >
             <Award style={{ alignSelf: 'center' }} width="14" height="14" />
             <span style={{ alignSelf: 'center' }}>{score}</span>

@@ -61,7 +61,11 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
 
   const listItem = (
     <ListItem>
-      <StyledTrigger status={status} style={{ cursor: 'pointer' }}>
+      <StyledTrigger
+        aria-label={`${name} ${family}, ${statusCollection[(status as Status)]}, ${society}`}
+        status={status}
+        style={{ cursor: 'pointer' }}
+      >
         <StyledPhoto>
           <AdvancedImage cldImg={image} plugins={[lazyload(), placeholder()]} alt={`${name} ${family}`} />
         </StyledPhoto>

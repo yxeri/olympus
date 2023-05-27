@@ -19,7 +19,7 @@ const variants = (variant?: ListVariants) => {
   `;
 };
 
-export default styled.ul`
+export default styled.ol`
   list-style-type: none;
   margin: 0;
   padding: 0;

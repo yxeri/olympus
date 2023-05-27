@@ -19,12 +19,16 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
       initialSession={pageProps.initialSession}
     >
       <RecoilRoot>
-        <Navigation />
+        <header>
+          <Navigation />
+        </header>
         <ToastContainer
           position="top-center"
           theme="dark"
         />
-        <Component {...pageProps} />
+        <main>
+          <Component {...pageProps} />
+        </main>
         <Footer />
       </RecoilRoot>
     </SessionContextProvider>
