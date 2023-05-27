@@ -7,7 +7,7 @@ import { sizes } from 'styles/global';
 import SortBy from './SortBy/SortBy';
 import VariantPicker from './VariantPicker/VariantPicker';
 
-const StyledDiv = styled.section`
+const StyledDiv = styled.div`
   display: grid;
   grid-auto-flow: column;
   width: fit-content;
@@ -17,7 +17,7 @@ const StyledDiv = styled.section`
 `;
 
 const Filter = () => (
-  <StyledDiv aria-label="filters">
+  <StyledDiv aria-label="filters" role="toolbar">
     <Popover.Root>
       <Popover.Trigger style={{ display: 'none' }}>
         <FilterIcon alt="Filter" width={sizes.largeIcon} height={sizes.largeIcon} />
