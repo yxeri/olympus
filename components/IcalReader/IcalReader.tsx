@@ -1,90 +1,23 @@
 import {
-  useRecoilState,
-  useSetRecoilState
-} from 'recoil';
+  calendarEventsAtom,
+  calendarsAtom,
+  FullEvent
+} from 'atoms/calendar';
+import dayjs from 'dayjs';
+import dayjsUtc from 'dayjs/plugin/utc';
 // @ts-ignore
 import iCal from 'ical.js';
 import {
-  calendarEventsAtom,
-  calendarsAtom,
-  FullCalendarEvent,
-  RecurDay
-} from 'atoms/calendar';
+  useRecoilState,
+  useSetRecoilState
+} from 'recoil';
+import {
+  Frequency,
+  Weekday,
+  WeekdayStr
+} from 'rrule';
 
-// [
-//     [
-//         "dtstart",
-//         {},
-//         "date",
-//         "2022-07-29"
-//     ],
-//     [
-//         "dtend",
-//         {},
-//         "date",
-//         "2022-08-02"
-//     ],
-//     [
-//         "dtstamp",
-//         {},
-//         "date-time",
-//         "2023-01-22T12:44:40Z"
-//     ],
-//     [
-//         "uid",
-//         {},
-//         "text",
-//         "19lik0r8qdfj6mfoe0n7g7j0vj@google.com"
-//     ],
-//     [
-//         "created",
-//         {},
-//         "date-time",
-//         "2022-07-22T18:11:40Z"
-//     ],
-//     [
-//         "description",
-//         {},
-//         "text",
-//         ""
-//     ],
-//     [
-//         "last-modified",
-//         {},
-//         "date-time",
-//         "2022-07-22T18:11:40Z"
-//     ],
-//     [
-//         "location",
-//         {},
-//         "text",
-//         ""
-//     ],
-//     [
-//         "sequence",
-//         {},
-//         "integer",
-//         0
-//     ],
-//     [
-//         "status",
-//         {},
-//         "text",
-//         "CONFIRMED"
-//     ],
-//     [
-//         "summary",
-//         {},
-//         "text",
-//         "Värmland"
-//     ],
-//     [
-//         "transp",
-//         {},
-//         "text",
-//         "TRANSPARENT"
-//     ]
-// ]
+dayjs.extend(dayjsUtc);
 
 type JsonEvent = [
   label: string,
@@ -127,12 +60,12 @@ const IcalReader = () => {
 
                 const calendarName = component.getFirstPropertyValue('x-wr-calname');
 
-                const parsedEvents: [string, FullCalendarEvent][] = component
+                const parsedEvents: [string, FullEvent][] = component
                   .getAllSubcomponents('vevent')
                   .map((calendarEvent: { toJSON: () => JsonEvent }) => {
                     const [, event] = calendarEvent.toJSON();
 
-                    const fullCalendarEvent: FullCalendarEvent = event
+                    const fullEvent: FullEvent = event
                       .reduce((previous, current) => {
                         const [label, , , value] = current;
                         switch (label) {
@@ -146,13 +79,13 @@ const IcalReader = () => {
                             return {
                               ...previous,
                               allDay: !value.includes('T'),
-                              start: value,
+                              start: new Date(dayjs(value).utc().format()),
                             };
                           }
                           case 'dtend': {
                             return {
                               ...previous,
-                              end: value,
+                              end: new Date(dayjs(value).utc().format()),
                             };
                           }
                           case 'summary': {
@@ -161,59 +94,45 @@ const IcalReader = () => {
                               title: value,
                             };
                           }
-                          case 'rrule': {
-                            const rrule: {
-                              byday?: keyof typeof RecurDay | Array<keyof typeof RecurDay>,
-                              until?: string,
-                              freq: 'DAILY' | 'WEEKLY' | 'YEARLY',
-                            } = value;
-
-                            // Current implementation only supports daily, weekly recurring events
-                            if (!['DAILY', 'WEEKLY'].includes(rrule.freq)) {
-                              return previous;
-                            }
-
-                            const rules: { daysOfWeek?: RecurDay[], endRecur?: string } = {
-                              endRecur: rrule.until,
+                          case 'description': {
+                            return {
+                              ...previous,
+                              description: value,
                             };
-
-                            if (rrule.byday) {
-                              if (Array.isArray(rrule.byday)) {
-                                rules.daysOfWeek = rrule.byday.map((day) => RecurDay[day]);
-                              } else {
-                                rules.daysOfWeek = [RecurDay[rrule.byday]];
-                              }
-                            }
+                          }
+                          case 'location': {
+                            console.log(value);
+                            return {
+                              ...previous,
+                              location: value,
+                            };
+                          }
+                          case 'rrule': {
+                            const { freq, byday, ...rrule } = value;
 
                             return {
                               ...previous,
-                              ...rules,
-                              extendedProps: {
-                                ...previous.extendedProps,
-                                recurring: true,
-                              }
+                              rrule: {
+                                ...rrule,
+                                ...(freq && { freq: Frequency[value.freq] }),
+                                ...(byday
+                                  && {
+                                    byweekday: value
+                                      .byday
+                                      .map((day: WeekdayStr) => Weekday.fromStr(day))
+                                  }),
+                              },
                             };
                           }
                           default: {
                             return previous;
                           }
                         }
-                      }, {
-                        extendedProps: { calendarId: calendarName, recurring: false },
-                      } as FullCalendarEvent);
+                      }, {} as FullEvent);
 
-                    if (fullCalendarEvent.extendedProps.recurring) {
-                      fullCalendarEvent.startRecur = fullCalendarEvent.start;
-
-                      if (!fullCalendarEvent.allDay) {
-                        [, fullCalendarEvent.startTime] = fullCalendarEvent.start.split('T');
-                        [, fullCalendarEvent.endTime] = fullCalendarEvent.end.split('T');
-                      }
-                    }
-
-                    return [fullCalendarEvent.id, fullCalendarEvent];
+                    return [fullEvent.id, fullEvent];
                   })
-                  .filter(([, event]: [string, FullCalendarEvent]) => (
+                  .filter(([, event]: [string, FullEvent]) => (
                     event.id && event.title && event.start && event.end
                   ));
 
