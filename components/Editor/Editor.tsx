@@ -1,79 +1,77 @@
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
+import { DecoupledEditor } from '@ckeditor/ckeditor5-editor-decoupled';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import {
+  useEffect,
+  useState
+} from 'react';
 import styled from 'styled-components';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
-import { TRANSFORMERS } from '@lexical/markdown';
-import {
-  HeadingNode,
-  QuoteNode
-} from '@lexical/rich-text';
-import {
-  TableCellNode,
-  TableNode,
-  TableRowNode
-} from '@lexical/table';
-import {
-  ListItemNode,
-  ListNode
-} from '@lexical/list';
-import {
-  CodeHighlightNode,
-  CodeNode
-} from '@lexical/code';
-import {
-  AutoLinkNode,
-  LinkNode
-} from '@lexical/link';
-import { EditorThemeClasses } from 'lexical';
-
-const theme: EditorThemeClasses = {
-  // Theme styling goes here
-  // ...
-};
-
-// Catch any errors that occur during Lexical updates and log them
-// or throw them as needed. If you don't throw them, Lexical will
-// try to recover gracefully without losing user data.
-const onError = (error: Error) => {
-  console.error(error);
-};
+import { colors } from '../../styles/global';
 
 const StyledDiv = styled.div`
-  color: white;
+  background-color: ${colors.secondaryBackground};
+  box-shadow: 0 0 5px hsla(0, 0%, 0%, .3);
+  height: calc(100svh - 4.6rem);
+  overflow: auto;
+  
+  .ck-toolbar {
+    position: sticky !important;
+    top: 0;
+  }
+  
+  .ck-editor__editable {
+    /* Set the dimensions of the "page". */
+    max-width: 15.8cm;
+    min-height: 21cm;
+
+    /* Keep the "page" off the boundaries of the container. */
+    padding: 1cm 2cm 2cm;
+
+    border: 1px hsl( 0,0%,82.7% ) solid;
+    background: white;
+
+    /* The "page" should cast a slight shadow (3D illusion). */
+    box-shadow: 0 0 5px hsla( 0,0%,0%,.1 );
+
+    /* Center the "page". */
+    margin: 0 auto;
+    margin-bottom: 1rem;
+  }
 `;
 
 const Editor = () => {
-  const initialConfig = {
-    namespace: 'MyEditor',
-    theme,
-    onError,
-    nodes: [
-      HeadingNode,
-      ListNode,
-      ListItemNode,
-      QuoteNode,
-      CodeNode,
-      CodeHighlightNode,
-      TableNode,
-      TableCellNode,
-      TableRowNode,
-      AutoLinkNode,
-      LinkNode
-    ],
-  };
+  const [[CkEditor, DocumentEditor], setEditors] = useState<[
+    typeof CKEditor | null,
+    typeof DecoupledEditor | null,
+  ]>([null, null]);
+
+  useEffect(() => {
+    (async () => {
+      setEditors([
+        (await import('@ckeditor/ckeditor5-react')).CKEditor,
+        (await import('@ckeditor/ckeditor5-build-decoupled-document')).default
+      ]);
+    })();
+  }, []);
 
   return (
     <StyledDiv>
-      <LexicalComposer initialConfig={initialConfig}>
-        <RichTextPlugin
-          contentEditable={<ContentEditable />}
-          placeholder={<div>Enter some text...</div>}
-          ErrorBoundary={LexicalErrorBoundary}
+      {DocumentEditor && CkEditor && (
+        <CkEditor
+          editor={DocumentEditor}
+          data="Document"
+          onReady={(readyEditor) => {
+            const editable = readyEditor?.ui?.getEditableElement();
+            const toolbarElement = readyEditor?.ui?.view?.toolbar?.element;
+
+            if (editable && toolbarElement) {
+              editable.parentElement?.insertBefore(
+                toolbarElement,
+                editable
+              );
+            }
+          }}
         />
-        <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-      </LexicalComposer>
+      )}
     </StyledDiv>
   );
 };

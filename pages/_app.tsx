@@ -13,6 +13,7 @@ import 'styles/globals.css';
 
 const fullHeightPaths = [
   '/calendar',
+  '/library',
 ];
 
 export default function App({ Component, pageProps }: AppProps<{ initialSession: Session }>) {

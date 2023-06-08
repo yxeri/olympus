@@ -72,6 +72,7 @@ const Logo = styled(Link)`
   display: grid;
   width: fit-content;
   height: fit-content;
+  max-height: 100%;
   z-index: 2;
   
   img {

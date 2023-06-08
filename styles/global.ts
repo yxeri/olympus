@@ -2,6 +2,7 @@ export const colors = {
   primaryBackground: '#3d3b35',
   primaryTransBackground: 'rgba(61,59,53,0.85)',
   primaryColor: '#3a3a3a',
+  secondaryBackground: '#56534b',
   selectedBackground: '#b0ad9d',
   clickableBackground: '#f6f2dc',
   componentBackground: '#ccc7b5',
