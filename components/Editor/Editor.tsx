@@ -45,7 +45,7 @@ const Editor = () => {
     (async () => {
       setEditors([
         (await import('@ckeditor/ckeditor5-react')).CKEditor,
-        (await import('@ckeditor/ckeditor5-build-decoupled-document')).default
+        (await import('@ckeditor/ckeditor5-build-decoupled-document')).default,
       ]);
     })();
   }, []);
