@@ -48,10 +48,10 @@ const StyledPhoto = styled.div`
   }
 `;
 
-const StyledListItem = styled(ListItem)`
+const StyledListItem = styled(ListItem)<{ status: Status }>`
   display: grid;
-  border: 2px solid ${({ status }: { status: Status }) => colors[status]};
-  box-shadow: 0 0 3px 1px ${({ status }: { status: Status }) => colors[status]};
+  border: 2px solid ${({ status }) => colors[status]};
+  box-shadow: 0 0 3px 1px ${({ status }) => colors[status]};
   background-color: ${colors.componentBackground};
   max-width: ${sizes.mediumMax};
   padding: .2rem;
@@ -70,8 +70,8 @@ const StyledTrigger = styled(Trigger)`
     "rank status society photo";
 `;
 
-export const StatusDiv = styled(StyledDiv)`
-  text-shadow: 0 0 2px ${({ status }: { status: Status }) => colors[status]};  
+export const StatusDiv = styled(StyledDiv)<{ status: Status }>`
+  text-shadow: 0 0 2px ${({ status }) => colors[status]};  
 `;
 
 const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {

@@ -20,11 +20,11 @@ import {
   StyledDiv,
 } from './PersonListItem';
 
-const StyledTrigger = styled(Trigger)`
+const StyledTrigger = styled(Trigger)<{ status: Status }>`
   width: 100%;
   display: grid;
-  border: 2px solid ${({ status }: { status: Status }) => colors[status]};
-  box-shadow: 0 0 3px 1px ${({ status }: { status: Status }) => colors[status]};
+  border: 2px solid ${({ status }) => colors[status]};
+  box-shadow: 0 0 3px 1px ${({ status }) => colors[status]};
   background-color: ${colors.componentBackground};
   grid-template-areas:
     "photo photo photo"

@@ -5,10 +5,7 @@ import {
   Title,
 } from '@radix-ui/react-toast';
 import React, { ReactNode } from 'react';
-import styled, {
-  css,
-  FlattenSimpleInterpolation
-} from 'styled-components';
+import styled, { css, } from 'styled-components';
 
 type ToastBase = {
   title?: ReactNode | string;
@@ -28,7 +25,7 @@ type ToastWithoutAction = ToastBase & {
 
 type ToastProps = ToastWithAction | ToastWithoutAction;
 
-const toastVariants: (type: ToastBase['type']) => FlattenSimpleInterpolation = (type) => {
+const toastVariants: (type: ToastBase['type']) => any = (type) => {
   switch (type) {
     case 'success': {
       return css``;
@@ -56,7 +53,7 @@ const Toast: React.FC<ToastProps> = ({
   <StyledRoot toastType={type}>
     {title && <Title>{title}</Title>}
     {description && <Description>{description}</Description>}
-    {action && <Action altText={actionAltText}>{action}</Action>}
+    {action && <Action altText={actionAltText ?? action}>{action}</Action>}
   </StyledRoot>
 );
 
