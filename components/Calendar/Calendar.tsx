@@ -43,6 +43,10 @@ const StyledDiv = styled.div`
     background-color: ${colors.clickableBackground};
   }
   
+  .rbc-time-header-gutter {
+    width: 46.4453px;
+  }
+  
   .rbc-calendar, .rbc-header, .rbc-events-container, .rbc-time-header-content, .rbc-time-header, .rbc-time-content, .rbc-timeslot-group, .rbc-day-bg {
     border-color: ${colors.primaryColor};
   }
