@@ -29,10 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new ApiError(404, 'Person doesn\'t exist');
     }
 
-    if (person.mail) {
-      throw new ApiError(403, 'Person already exists');
-    }
-
     const supabaseClient = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',

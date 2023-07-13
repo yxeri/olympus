@@ -6,7 +6,6 @@ import {
 import { CldUploadWidget } from 'next-cloudinary';
 import styled from 'styled-components';
 import { colors } from 'styles/global';
-import Auth from '../components/Auth/Auth';
 
 const StyledDiv = styled.div`
   display: grid;
@@ -18,7 +17,6 @@ const StyledDiv = styled.div`
 export default function Settings() {
   return (
     <StyledDiv className="main-container">
-      <Auth />
       <CsvReader />
       <CsvDownloader />
       <IcalReader />

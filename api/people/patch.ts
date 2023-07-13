@@ -1,3 +1,4 @@
+import { getAuthPerson } from '@api/helpers';
 import {
   Id,
   IdName
@@ -20,6 +21,7 @@ import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
+import { ApiError } from 'next/dist/server/api-utils';
 
 type ResponseSuccess = {
   modified: number,
@@ -39,7 +41,6 @@ export const updatePerson: (
   id,
   update,
 ) => {
-  console.log(update);
   const peopleCollection = await collection<Person>('people');
 
   return peopleCollection.updateOne(id, update);
@@ -66,6 +67,15 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
           update: Partial<Person>,
          }`
       );
+    }
+
+    const authPerson = await getAuthPerson({ req, res });
+
+    if (
+      (people.length > 1 && !authPerson?.auth?.people?.admin)
+      || ((people[0].name !== authPerson.name || people[0].family !== authPerson.family)
+        && people[0]._id?.toString() !== authPerson._id?.toString())) {
+      throw new ApiError(403, 'Not allowed');
     }
 
     const operations: AnyBulkWriteOperation<Person>[] = [];

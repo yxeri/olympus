@@ -6,10 +6,14 @@ import Navigation from 'components/Navigation/Navigation';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import {
+  Slide,
+  ToastContainer
+} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RecoilRoot } from 'recoil';
 import 'styles/globals.css';
+import Auth from '../components/Auth/Auth';
 import SessionHandler from '../components/SessionHandler/SessionHandler';
 
 const fullHeightPaths = [
@@ -30,6 +34,7 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
         <SessionHandler supabaseClient={supabaseClient} />
         <Navigation slim={fullHeightPaths.includes(pathname)} />
         <ToastContainer
+          transition={Slide}
           position="top-right"
           theme="dark"
         />
@@ -37,6 +42,7 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
           <Component {...pageProps} />
         </main>
         {!fullHeightPaths.includes(pathname) && <Footer />}
+        <Auth />
       </RecoilRoot>
     </SessionContextProvider>
   );

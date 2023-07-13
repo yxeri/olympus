@@ -13,7 +13,7 @@ export type Year = keyof typeof YearObject;
 export const PersonTypeObject = { Discipli: '', Questi: '' };
 export type PersonType = keyof typeof PersonTypeObject;
 
-export const PersonObject: Omit<Person, '_id'> = {
+export const PersonObject: Person = {
   rank: 1,
   family: '',
   name: '',
@@ -38,6 +38,7 @@ export type Person = {
   score: number,
   mail?: string,
   profile: Record<string, any>,
+  auth?: Record<string, Record<'user' | 'mod' | 'admin', boolean>>
 };
 
 export const statusCollection: { [key in Status]: string } = {

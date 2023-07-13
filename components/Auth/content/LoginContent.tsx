@@ -102,6 +102,7 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
         return;
       }
     }
+
     try {
       const data = await fetch('/api/auth/login', {
         method: 'POST',

@@ -9,7 +9,6 @@ const StyledDiv = styled.footer`
   bottom: 0;
   color: ${colors.brightColor};
   padding: 1rem;
-  margin-top: .5rem;
   text-align: center;
   display: grid;
   justify-content: center;
@@ -37,6 +36,7 @@ const TextDiv = styled.div`
 `;
 
 const BottomMessage = styled.div`
+  background-color: ${colors.primaryTransBackground};
   box-sizing: border-box;
   color: ${colors.brightColor};
   padding-bottom: 1rem;

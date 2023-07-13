@@ -26,6 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new ApiError(403, 'Person already exists');
     }
 
+    if (password.length < 6) {
+      throw new ApiError(400, 'Password needs to be at least 6 characters long');
+    }
+
     const iv = crypto.randomBytes(16);
     const key = crypto.scryptSync(process.env.SECRET ?? '', 'salt', 32);
     const cipher = crypto.createCipheriv(
@@ -54,6 +58,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       },
     });
+
+    console.log(signupData);
 
     if ((signupData.data.user?.identities?.length ?? 0) === 0) {
       res.status(404).json({ error: 'No person found' });

@@ -14,8 +14,15 @@ const SessionHandler: React.FC<SessionHandlerProps> = ({ supabaseClient }) => {
     supabaseClient.auth.getSession().then(({ data }) => {
       const userData = data.session?.user.user_metadata[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
 
+      if (!data.session) {
+        return null;
+      }
+
       setSession(data.session);
-      toast.info(`Welcome, ${userData}`, {
+      toast.info(`Välkommen, ${userData.name} ${userData.family}`, {
+        style: {
+          textTransform: 'capitalize',
+        },
         autoClose: 1000,
         toastId: data.session?.user.id,
         pauseOnFocusLoss: false,
@@ -23,6 +30,8 @@ const SessionHandler: React.FC<SessionHandlerProps> = ({ supabaseClient }) => {
         closeButton: false,
         hideProgressBar: true,
       });
+
+      return true;
     });
 
     const {

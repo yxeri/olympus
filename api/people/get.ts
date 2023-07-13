@@ -29,3 +29,9 @@ export const findPerson: (id: Id) => Promise<Person | null> = async (id) => {
 
   return peopleCollection.findOne(id, { projection: { email: 0 } });
 };
+
+export const findPersonByAuth: (authId: string) => Promise<Person | null> = async (authId) => {
+  const peopleCollection = await collection<Person>('people');
+
+  return peopleCollection.findOne({ authId }, { projection: { email: 0 } });
+};

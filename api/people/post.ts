@@ -1,3 +1,4 @@
+import { getAuthPerson } from '@api/helpers';
 import {
   Id,
   ResponseError
@@ -39,6 +40,12 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
       throw new ApiError(400, 'Expected People[]');
     }
 
+    const authPerson = await getAuthPerson({ req, res });
+
+    if (!authPerson?.auth?.people?.admin) {
+      throw new ApiError(403, 'Not allowed');
+    }
+
     const filteredIds: string[] = [];
     const filteredPeople: Person[] = people.reduce((filtered, person) => {
       if (validatePerson(person)[0]) {
@@ -55,8 +62,6 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
 
       return filtered;
     }, []);
-
-    console.log(filteredPeople);
 
     const updatedIds: Id[] = [];
     const {
