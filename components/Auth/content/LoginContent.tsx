@@ -52,8 +52,8 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
   const supabaseClient = useSupabaseClient();
   const [state, setState] = useState<AuthState>('LOGIN');
   const { getDictionaryValue } = useDictionary();
-  const firstInput = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const firstInput = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const onSubmit: SubmitHandler<FormValues> = async ({
     name, family, password, email, emailRepeat
@@ -71,43 +71,35 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
               email,
               name,
               family,
+              password,
             })
           },
-        )
-          .then((response) => response.json());
+        );
 
-        if (data.error) {
-          throw new Error(data.error);
-        }
-
-        const signupData = await supabaseClient.auth.signUp({
-          password,
-          email,
-          options: {
-            data: {
-              [process.env.NEXT_PUBLIC_INSTANCE_NAME ?? '']: {
-                name: data.name.toLowerCase(),
-                family: data.family.toLowerCase()
-              },
-            },
-          },
-        });
-
-        if (signupData?.error) {
-          toast.error(signupData.error.message);
+        if (data.status === 404) {
+          toast.error(getDictionaryValue('auth', 'doesNotExistError'));
 
           return;
         }
 
-        if ((signupData.data.user?.identities?.length ?? 0) === 0) {
+        if (data.status === 403) {
           toast.error(getDictionaryValue('auth', 'existsError'));
 
           return;
         }
 
+        if (!data.ok) {
+          throw new Error((await data.json()).error);
+        }
+
         toast.success(getDictionaryValue('auth', 'registerSuccess'));
+
+        return;
       } catch (error: any) {
+        console.log(error);
         toast.error(error.message, { className: 'test' });
+
+        return;
       }
     }
     try {
@@ -169,6 +161,7 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
           {(state === 'REGISTER' || state === 'OTP') && (
           <Input
             required
+            type="password"
             ref={passwordRef}
             name="password"
             placeholder={getDictionaryValue('auth', 'password')}
@@ -180,7 +173,7 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
             <Input
               required
               type="email"
-              name="e-mail"
+              name="email"
               placeholder={getDictionaryValue('auth', 'mail')}
               aria-label={getDictionaryValue('auth', 'mail')}
             />

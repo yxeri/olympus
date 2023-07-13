@@ -1,5 +1,6 @@
 import { findPerson } from '@api/people/get';
 import { updatePerson } from '@api/people/patch';
+import { createClient } from '@supabase/supabase-js';
 import { Buffer } from 'buffer';
 import * as crypto from 'crypto';
 import {
@@ -11,7 +12,9 @@ import * as process from 'process';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { email, name, family } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    const {
+      email, name, family, password
+    } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
 
     const person = await findPerson({ name: name.toLowerCase(), family: family.toLowerCase() });
 
@@ -19,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new ApiError(404, 'Person doesn\'t exist');
     }
 
-    if (person.mail) {
+    if (person.mail || person.authId) {
       throw new ApiError(403, 'Person already exists');
     }
 
@@ -34,11 +37,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       cipher.update(Buffer.from(email, 'utf-8')),
       cipher.final(),
     ]).toString('hex')}$|$${iv.toString('hex')}$|$${cipher.getAuthTag().toString('hex')}`;
+    const supabaseClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+    );
+
+    const signupData = await supabaseClient.auth.signUp({
+      password,
+      email,
+      options: {
+        data: {
+          [process.env.NEXT_PUBLIC_INSTANCE_NAME ?? '']: {
+            name: name.toLowerCase(),
+            family: family.toLowerCase()
+          },
+        },
+      },
+    });
+
+    if ((signupData.data.user?.identities?.length ?? 0) === 0) {
+      res.status(404).json({ error: 'No person found' });
+    }
 
     const updateResult = await updatePerson({
       name: name.toLowerCase(),
       family: family.toLowerCase()
-    }, { $set: { mail: encryptedMail } });
+    }, { $set: { mail: encryptedMail, authId: signupData.data.user?.id } });
 
     if (updateResult.modifiedCount < 1) {
       throw new ApiError(500, 'Failed to update Person');
@@ -48,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       family: family.toLowerCase(),
     });
   } catch (error: any) {
-    res.status(error?.status ?? 500).json({
+    res.status(error?.statusCode ?? 500).json({
       error: error.message,
     });
   }

@@ -59,6 +59,10 @@ const dictionary = {
       [Locale.SV]: 'Användaren existerar redan',
       [Locale.EN]: 'User already exists',
     },
+    doesNotExistError: {
+      [Locale.SV]: 'Personen existerar inte',
+      [Locale.EN]: 'Person does not exist',
+    },
   },
 };
 const defaultLocale: Locale = Locale.EN;

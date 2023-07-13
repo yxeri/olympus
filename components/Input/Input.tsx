@@ -38,7 +38,8 @@ const StyledInput = styled(Control)`
   border: ${borders.standard};
 `;
 
-const FocusPlaceholder = styled.div`
+const FocusPlaceholder = styled(Label)<{ hasFocus?: boolean }>`
+  display: ${({ hasFocus }) => (hasFocus ? 'inherit' : 'none')};
   position: absolute;
   top: -1.1rem;
   left: .3rem;
@@ -73,14 +74,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     <Container>
       <StyledField name={name}>
         {label && <Label>{label}</Label>}
-        {!label
-          && focused
-          && otherProps.placeholder
-          && <FocusPlaceholder>{otherProps.placeholder}</FocusPlaceholder>}
+        {otherProps.placeholder
+          && <FocusPlaceholder hasFocus={focused}>{otherProps.placeholder}</FocusPlaceholder>}
         <StyledInput
           {...otherProps}
           {...registerProps}
-          ref={(e) => {
+          ref={(e: any) => {
             formRef(e);
 
             if (typeof ref === 'function') {

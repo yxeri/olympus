@@ -26,6 +26,7 @@ export const PersonObject: Omit<Person, '_id'> = {
 };
 
 export type Person = {
+  authId?: string;
   _id?: ObjectId | string,
   rank: number,
   family: string,

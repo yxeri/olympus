@@ -2,6 +2,7 @@ import SearchIcon from 'assets/search.svg';
 import XIcon from 'assets/x.svg';
 import { searchStringAtom } from 'atoms/filter';
 import {
+  ChangeEvent,
   useCallback,
   useState
 } from 'react';
@@ -67,7 +68,7 @@ const Search = () => {
         value={value}
         aria-label="Search"
         defaultValue={searchString}
-        onChange={({ currentTarget }) => {
+        onChange={({ currentTarget }: ChangeEvent<HTMLInputElement>) => {
           updateSearchString(currentTarget.value);
           setValue(currentTarget.value);
         }}
