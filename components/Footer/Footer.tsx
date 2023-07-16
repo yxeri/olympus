@@ -47,7 +47,7 @@ const BottomMessage = styled.div`
   grid-auto-flow: column;
   justify-content: center;
   grid-gap: .1rem;
-  
+
   div {
     margin-top: .3rem;
   }

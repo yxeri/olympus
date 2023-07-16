@@ -1,7 +1,7 @@
 import {
   Person,
   PersonObject
-} from '@data';
+} from '../../types/data';
 import usePeople from './usePeople';
 
 type UpdatePerson = (update: Partial<typeof PersonObject>) => void;

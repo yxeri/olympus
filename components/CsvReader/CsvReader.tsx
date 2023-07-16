@@ -1,20 +1,25 @@
-import {
-  Person,
-  PersonObject
-} from '@data';
-import { usePeople } from '@hooks/people';
 import React from 'react';
 import {
   formatFileSize,
   useCSVReader,
 } from 'react-papaparse';
 import { toast } from 'react-toastify';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import {
   borders,
   colors
 } from 'styles/global';
 import { validatePerson } from 'utils/validatePerson';
+import { sessionAtom } from '../../atoms/session';
+import {
+  usePeople,
+  usePerson
+} from '../../hooks/people';
+import {
+  Person,
+  PersonObject
+} from '../../types/data';
 import Container from '../Container/Container';
 
 const StyledDiv = styled.div`
@@ -49,9 +54,21 @@ const FileView: React.FC<any> = ({
 const CsvReader = () => {
   const { insert } = usePeople();
   const { CSVReader } = useCSVReader();
+  const session = useRecoilValue(sessionAtom);
+  const userMeta = session?.user.user_metadata?.[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
+  const [authPerson] = usePerson(userMeta?.name, userMeta?.family);
+
+  if (!authPerson?.auth?.people?.admin) {
+    return null;
+  }
 
   return (
-    <Container style={{ color: colors.brightColor, borderBottom: `1px solid ${colors.selectedBrightColor}`, paddingBottom: '1rem' }}>
+    <Container style={{
+      color: colors.brightColor,
+      borderBottom: `1px solid ${colors.selectedBrightColor}`,
+      paddingBottom: '1rem'
+    }}
+    >
       <p style={{ fontWeight: 'bold ' }}>Upload list of people</p>
       <p>It has to be a csv file. You can export as csv from Google Sheets/Excel/Numbers</p>
       <CSVReader
@@ -67,7 +84,7 @@ const CsvReader = () => {
             return null;
           }
 
-          const columns: string[] = results.data.slice(0, 1)?.[0];
+          const columns: string[] = results.data.slice(0, 1)?.[0] ?? [];
           const rows: string[][] = results.data.slice(1);
           const { profile, score, ...personObject } = PersonObject;
 

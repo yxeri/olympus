@@ -1,5 +1,3 @@
-import { findPerson } from '@api/people/get';
-import { updatePerson } from '@api/people/patch';
 import { createClient } from '@supabase/supabase-js';
 import { Buffer } from 'buffer';
 import * as crypto from 'crypto';
@@ -9,6 +7,8 @@ import {
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 import * as process from 'process';
+import { findPerson } from '../../../api/people/get';
+import { updatePerson } from '../../../api/people/patch';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

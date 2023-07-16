@@ -1,12 +1,12 @@
 import {
-  Calendar,
-  FullEvent
-} from '@data';
-import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
 import { collection } from '../../lib/db/tools';
+import {
+  Calendar,
+  FullEvent
+} from '../../types/data';
 
 export const getCalendars: () => Promise<Calendar[]> = async () => {
   const calendarCollection = await collection<FullEvent>('calendars');

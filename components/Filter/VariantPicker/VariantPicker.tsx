@@ -1,8 +1,8 @@
-import GridIcon from '@assets/grid.svg';
-import ListIcon from '@assets/list.svg';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import GridIcon from '../../../assets/grid.svg';
+import ListIcon from '../../../assets/list.svg';
 import {
   listVariantAtom,
   PersonListVariant
@@ -15,7 +15,7 @@ const StyledRoot = styled(ToggleGroup.Root)`
 `;
 
 const StyledItem = styled(ToggleGroup.Item)<{ variant?: 'left' | 'right' }>`
-  cursor: pointer; 
+  cursor: pointer;
   ${({ variant }) => {
     if (variant === 'left') {
       return `

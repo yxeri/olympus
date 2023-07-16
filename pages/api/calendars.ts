@@ -1,11 +1,11 @@
 import {
-  get,
-  post
-} from '@api/calendars';
-import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
+import {
+  get,
+  post
+} from '../../api/calendars';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {

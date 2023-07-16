@@ -6,7 +6,7 @@ import {
   get,
   patch,
   post
-} from '@api/people';
+} from '../../../api/people';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {

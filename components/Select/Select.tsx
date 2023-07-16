@@ -55,6 +55,7 @@ const SelectTrigger = styled(Trigger)`
   height: 100%;
   width: 100%;
   font: inherit;
+
   &[data-state="open"] {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -105,7 +106,7 @@ const SelectViewport = styled(Viewport)`
   padding: .4rem;
 `;
 
-const Select = <T,>({
+const Select = <T, >({
   placeholder,
   items,
   groups,

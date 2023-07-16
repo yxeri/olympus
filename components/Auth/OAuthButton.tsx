@@ -1,7 +1,7 @@
-import { Button } from '@components';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Provider } from '@supabase/gotrue-js';
 import React, { ReactNode } from 'react';
+import Button from '../Button/Button';
 
 type OAuthButtonProps = {
   content: ReactNode,

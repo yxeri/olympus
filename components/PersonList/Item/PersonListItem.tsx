@@ -1,23 +1,19 @@
-import {
-  AdvancedImage,
-  lazyload
-} from '@cloudinary/react';
-import { CloudinaryImage } from '@cloudinary/url-gen';
-import {
-  Person,
-  Status,
-  statusCollection,
-  Year,
-} from '@data';
 import Award from 'assets/award.svg';
 import ListItem from 'components/List/ListItem';
 import Modal, { Trigger } from 'components/Modal/Modal';
+import { CldImage } from 'next-cloudinary';
 import React from 'react';
 import styled from 'styled-components';
 import {
   colors,
   sizes,
 } from 'styles/global';
+import {
+  Person,
+  Status,
+  statusCollection,
+  Year
+} from '../../../types/data';
 
 export type PersonListItemProps = {
   person: Person,
@@ -42,7 +38,7 @@ const StyledPhoto = styled.div`
   grid-area: photo;
   display: grid;
   min-height: 50px;
-  
+
   img {
     max-width: 100%;
   }
@@ -60,6 +56,10 @@ const StyledListItem = styled(ListItem)<{ status: Status }>`
 `;
 
 const StyledTrigger = styled(Trigger)`
+  background-color: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   align-items: center;
   grid-column-gap: .7rem;
@@ -71,17 +71,13 @@ const StyledTrigger = styled(Trigger)`
 `;
 
 export const StatusDiv = styled(StyledDiv)<{ status: Status }>`
-  text-shadow: 0 0 2px ${({ status }) => colors[status]};  
+  text-shadow: 0 0 2px ${({ status }) => colors[status]};
 `;
 
 const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
   const {
     year, family, name, status, society, rank, score,
   } = person;
-
-  const image = new CloudinaryImage(`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`, {
-    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  }).addTransformation('t_thumb-person');
 
   const listItem = (
     <StyledTrigger aria-label={`${name} ${family}, ${statusCollection[(status as Status)]}, ${society}`}>
@@ -104,7 +100,14 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
         {society}
       </StyledDiv>
       <StyledPhoto>
-        <AdvancedImage cldImg={image} plugins={[lazyload()]} alt={`${name} ${family}`} />
+        <CldImage
+          alt={`${name} ${family}`}
+          format="webp"
+          src={`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`}
+          height={50}
+          width={50}
+          transformations={['thumb-person']}
+        />
       </StyledPhoto>
     </StyledTrigger>
   );
@@ -123,8 +126,11 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
             aria-label={`rank ${score}`}
             style={{
               display: 'grid',
-              cursor: 'pointer',
               justifyItems: 'center',
+              backgroundColor: 'transparent',
+              border: 'none',
+              margin: 0,
+              padding: 0,
             }}
           >
             <Award style={{ alignSelf: 'center' }} width="14" height="14" />

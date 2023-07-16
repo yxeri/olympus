@@ -1,11 +1,11 @@
-import { getAuthPerson } from '@api/helpers';
-import { Calendar } from '@data';
 import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 import { collection } from '../../lib/db/tools';
+import { Calendar } from '../../types/data';
+import { getAuthPerson } from '../helpers';
 
 export default async function post(req: NextApiRequest, res: NextApiResponse) {
   try {

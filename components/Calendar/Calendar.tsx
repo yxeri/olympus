@@ -1,8 +1,3 @@
-import { FullEvent } from '@data';
-import useCalendars from '@hooks/calendars/useCalendars';
-import ArrowLeftIcon from 'assets/arrow-left.svg';
-import ArrowRightIcon from 'assets/arrow-right.svg';
-import CalendarIcon from 'assets/calendar.svg';
 import dayjs from 'dayjs';
 import svLocale from 'dayjs/locale/sv';
 import dayjsUtc from 'dayjs/plugin/utc';
@@ -18,9 +13,14 @@ import 'react-big-calendar/lib/sass/styles.scss';
 import { useRecoilValue } from 'recoil';
 import { RRule } from 'rrule';
 import styled from 'styled-components';
+import ArrowLeftIcon from '../../assets/arrow-left.svg';
+import ArrowRightIcon from '../../assets/arrow-right.svg';
+import CalendarIcon from '../../assets/calendar.svg';
 import { selectedCalendarsAtom } from '../../atoms/calendar';
+import useCalendars from '../../hooks/calendars/useCalendars';
 
 import { colors } from '../../styles/global';
+import { FullEvent } from '../../types/data';
 import Button from '../Button/Button';
 
 const StyledDiv = styled.div`
@@ -29,39 +29,39 @@ const StyledDiv = styled.div`
     border-color: ${colors.primaryColor};
     border-radius: 4px;
   }
-  
+
   .rbc-calendar {
     height: calc(100svh - 4.1rem);
     box-sizing: border-box;
     padding: .5rem;
     width: 100%;
   }
-  
+
   .rbc-today {
     background-color: ${colors.selected};
   }
-  
+
   .rbc-time-gutter, .rbc-time-header-cell {
     background-color: ${colors.clickableBackground};
   }
-  
+
   .rbc-time-header-gutter {
     width: 46.4453px;
   }
-  
+
   .rbc-calendar, .rbc-header, .rbc-events-container, .rbc-time-header-content, .rbc-time-header, .rbc-time-content, .rbc-timeslot-group, .rbc-day-bg {
     border-color: ${colors.primaryColor};
   }
-  
+
   .rbc-time-slot {
     border-color: ${colors.active};
   }
-  
+
   .rbc-event {
     background-color: ${colors.brightColor};
     color: ${colors.primaryColor};
     border: 1px solid;
-    box-shadow: 0 0 5px 0 rgba(0,0,0,0.5);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
   }
 `;
 
@@ -71,7 +71,7 @@ const ToolbarButton = styled(Button)`
   border-bottom: none;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  
+
   svg {
     width: 1rem;
     height: 1rem;

@@ -1,5 +1,3 @@
-import { Button } from '@components';
-import { useDictionary } from '@hooks/useDictionary';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import ArrowLeftIcon from 'assets/arrow-left.svg';
 import React, {
@@ -10,7 +8,9 @@ import React, {
 import { SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import { useDictionary } from '../../../hooks/useDictionary';
 import { sizes } from '../../../styles/global';
+import Button from '../../Button/Button';
 import Form from '../../Form/Form';
 import Input from '../../Input/Input';
 
@@ -45,7 +45,7 @@ const ButtonContainer = styled.div`
   padding-top: 1rem;
   border-top: 1px solid;
   grid-gap: inherit;
-  
+
 `;
 
 const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
@@ -140,9 +140,9 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
   return (
     <>
       {state !== 'LOGIN' && (
-      <StyledBack onClick={() => setState('LOGIN')}>
-        <ArrowLeftIcon width={sizes.largeIcon} height={sizes.largeIcon} />
-      </StyledBack>
+        <StyledBack onClick={() => setState('LOGIN')}>
+          <ArrowLeftIcon width={sizes.largeIcon} height={sizes.largeIcon} />
+        </StyledBack>
       )}
       <div>
         <Form onSubmit={onSubmit}>
@@ -160,39 +160,39 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
             aria-label={getDictionaryValue('common', 'family')}
           />
           {(state === 'REGISTER' || state === 'OTP') && (
-          <Input
-            required
-            type="password"
-            ref={passwordRef}
-            name="password"
-            placeholder={getDictionaryValue('auth', 'password')}
-            aria-label={getDictionaryValue('auth', 'password')}
-          />
+            <Input
+              required
+              type="password"
+              ref={passwordRef}
+              name="password"
+              placeholder={getDictionaryValue('auth', 'password')}
+              aria-label={getDictionaryValue('auth', 'password')}
+            />
           )}
           {state === 'REGISTER' && (
-          <>
-            <Input
-              required
-              type="email"
-              name="email"
-              placeholder={getDictionaryValue('auth', 'mail')}
-              aria-label={getDictionaryValue('auth', 'mail')}
-            />
-            <Input
-              required
-              name="emailRepeat"
-              placeholder={getDictionaryValue('auth', 'repeatMail')}
-              aria-label={getDictionaryValue('auth', 'repeatMail')}
-            />
-            <ButtonContainer>
-              <Button
-                type="submit"
-                aria-label={getDictionaryValue('auth', 'createUser')}
-              >
-                {getDictionaryValue('auth', 'createUser')}
-              </Button>
-            </ButtonContainer>
-          </>
+            <>
+              <Input
+                required
+                type="email"
+                name="email"
+                placeholder={getDictionaryValue('auth', 'mail')}
+                aria-label={getDictionaryValue('auth', 'mail')}
+              />
+              <Input
+                required
+                name="emailRepeat"
+                placeholder={getDictionaryValue('auth', 'repeatMail')}
+                aria-label={getDictionaryValue('auth', 'repeatMail')}
+              />
+              <ButtonContainer>
+                <Button
+                  type="submit"
+                  aria-label={getDictionaryValue('auth', 'createUser')}
+                >
+                  {getDictionaryValue('auth', 'createUser')}
+                </Button>
+              </ButtonContainer>
+            </>
           )}
           {state === 'OTP' && (
             <ButtonContainer>
@@ -205,27 +205,27 @@ const LoginContent: React.FC<BaseProps> = ({ setAuthState }) => {
             </ButtonContainer>
           )}
           {state === 'LOGIN' && (
-          <ButtonContainer>
-            <Button
-              type="button"
-              onClick={() => setState('OTP')}
-              aria-label={getDictionaryValue('auth', 'login')}
-            >
-              {getDictionaryValue('auth', 'login')}
-            </Button>
-            <Button
-              type="submit"
-            >
-              {getDictionaryValue('auth', 'otp')}
-            </Button>
-            <Button
-              type="button"
-              onClick={() => setState('REGISTER')}
-              aria-label={getDictionaryValue('auth', 'createUser')}
-            >
-              {getDictionaryValue('auth', 'createUser')}
-            </Button>
-          </ButtonContainer>
+            <ButtonContainer>
+              <Button
+                type="button"
+                onClick={() => setState('OTP')}
+                aria-label={getDictionaryValue('auth', 'login')}
+              >
+                {getDictionaryValue('auth', 'login')}
+              </Button>
+              <Button
+                type="submit"
+              >
+                {getDictionaryValue('auth', 'otp')}
+              </Button>
+              <Button
+                type="button"
+                onClick={() => setState('REGISTER')}
+                aria-label={getDictionaryValue('auth', 'createUser')}
+              >
+                {getDictionaryValue('auth', 'createUser')}
+              </Button>
+            </ButtonContainer>
           )}
         </Form>
       </div>

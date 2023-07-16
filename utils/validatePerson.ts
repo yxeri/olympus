@@ -3,7 +3,7 @@ import {
   PersonTypeObject,
   StatusObject,
   YearObject
-} from '@data';
+} from '../types/data';
 
 export const validatePerson = (person: any): [boolean, string[]] => {
   const errors = [];

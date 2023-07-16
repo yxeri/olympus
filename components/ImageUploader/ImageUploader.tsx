@@ -1,7 +1,7 @@
-import { usePerson } from '@hooks/people';
 import { CldUploadWidget } from 'next-cloudinary';
 import { useRecoilValue } from 'recoil';
 import { sessionAtom } from '../../atoms/session';
+import { usePerson } from '../../hooks/people';
 import { colors } from '../../styles/global';
 import Container from '../Container/Container';
 
@@ -15,7 +15,12 @@ const ImageUploader = () => {
   }
 
   return (
-    <Container style={{ color: colors.brightColor, borderBottom: `1px solid ${colors.selectedBrightColor}`, paddingBottom: '1rem' }}>
+    <Container style={{
+      color: colors.brightColor,
+      borderBottom: `1px solid ${colors.selectedBrightColor}`,
+      paddingBottom: '1rem'
+    }}
+    >
       <p style={{ fontWeight: 'bold' }}>Upload portraits</p>
       <p>
         {
@@ -58,9 +63,10 @@ const ImageUploader = () => {
         }}
         signatureEndpoint="/api/cloudinarySignature"
         uploadPreset="people"
-        onUpload={() => {}}
+        onUpload={() => {
+        }}
       >
-        {({ open }: { open: () => void }) => {
+        {({ open }) => {
           const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
             open();

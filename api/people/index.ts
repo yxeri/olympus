@@ -1,6 +1,6 @@
-import get from '@api/people/get';
-import patch from '@api/people/patch';
-import post from '@api/people/post';
+import get from './get';
+import patch from './patch';
+import post from './post';
 
 export {
   get,

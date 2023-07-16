@@ -1,12 +1,3 @@
-import { getAuthPerson } from '@api/helpers';
-import {
-  Id,
-  IdName
-} from '@api/people/types';
-import {
-  Person,
-  PersonObject
-} from '@data';
 import {
   collection,
   createSet
@@ -22,6 +13,15 @@ import {
   NextApiResponse
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
+import {
+  Person,
+  PersonObject
+} from '../../types/data';
+import { getAuthPerson } from '../helpers';
+import {
+  Id,
+  IdName
+} from './types';
 
 type ResponseSuccess = {
   modified: number,

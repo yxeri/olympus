@@ -1,17 +1,17 @@
-import { getCalendars } from '@api/calendars/get';
-import { Calendar as CalendarType } from '@data';
-import { url } from '@hooks/calendars/useCalendars';
 import CalendarComponent from 'components/Calendar/Calendar';
 import { GetStaticProps } from 'next';
 import { SWRConfig } from 'swr';
+import { getCalendars } from '../api/calendars/get';
+import { url } from '../hooks/calendars/useCalendars';
+import { Calendar } from '../types/data';
 
 type StaticProps = {
   fallback: {
-    [url]: { calendars?: CalendarType[] },
+    [url]: { calendars?: Calendar[] },
   },
 };
 
-export default function Calendar({ fallback }: StaticProps) {
+export default function CalendarPage({ fallback }: StaticProps) {
   return (
     <div className="calendar-container">
       <SWRConfig value={{ fallback }}>

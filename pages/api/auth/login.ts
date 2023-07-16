@@ -1,6 +1,3 @@
-//
-
-import { findPerson } from '@api/people/get';
 import { createClient } from '@supabase/supabase-js';
 import * as crypto from 'crypto';
 import {
@@ -9,6 +6,7 @@ import {
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 import * as process from 'process';
+import { findPerson } from '../../../api/people/get';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

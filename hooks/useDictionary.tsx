@@ -79,8 +79,8 @@ export const useDictionary = () => ({
   dictionary: (dictionary as Dictionary),
   getDictionaryValue: <G, >(
     group: G & keyof Dictionary,
-    field: keyof Dictionary[typeof group],
+    field: string,
     locale: Locale = defaultLocale,
   ): string | undefined => (dictionary as Dictionary)?.[group]?.[field]?.[locale]
-  ?? (dictionary as Dictionary)?.[group]?.[field]?.[defaultLocale],
+    ?? (dictionary as Dictionary)?.[group]?.[field]?.[defaultLocale],
 });

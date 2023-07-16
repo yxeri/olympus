@@ -1,18 +1,13 @@
-import {
-  AdvancedImage,
-  lazyload,
-  placeholder
-} from '@cloudinary/react';
-import { CloudinaryImage } from '@cloudinary/url-gen';
-import {
-  Status,
-  statusCollection,
-} from '@data';
 import ListItem from 'components/List/ListItem';
 import Modal, { Trigger } from 'components/Modal/Modal';
+import { CldImage } from 'next-cloudinary';
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'styles/global';
+import {
+  Status,
+  statusCollection
+} from '../../../types/data';
 import {
   PersonListItemProps,
   romanNumbers,
@@ -39,9 +34,9 @@ const StyledTrigger = styled(Trigger)<{ status: Status }>`
 const StyledPhoto = styled.div`
   grid-area: photo;
   display: grid;
-  height: 176px;
-  
+
   img {
+    object-fit: cover;
     max-width: 100%;
   }
 `;
@@ -55,20 +50,24 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
     society,
   } = person;
 
-  const image = new CloudinaryImage(`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`, {
-    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  }).addTransformation('t_profile');
-
   const listItem = (
-    <ListItem>
+    <ListItem style={{ backgroundColor: colors.componentBackground }}>
       <StyledTrigger
         aria-label={`${name} ${family}, ${statusCollection[(status as Status)]}, ${society}`}
         status={status}
         style={{ cursor: 'pointer' }}
       >
         <StyledPhoto>
-          <AdvancedImage cldImg={image} plugins={[lazyload(), placeholder()]} alt={`${name} ${family}`} />
+          <CldImage
+            alt={`${name} ${family}`}
+            format="webp"
+            src={`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`}
+            height={186}
+            width={186}
+            transformations={['profile']}
+          />
         </StyledPhoto>
+
         <StyledDiv style={{
           gridArea: 'name',
           justifySelf: 'flex-start',

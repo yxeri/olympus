@@ -60,17 +60,13 @@ const DialogClose = styled(Close)`
 `;
 
 export const Trigger = styled(RadixTrigger)`
-  margin: unset;
-  padding: unset;
   font: inherit;
-  background: unset;
-  border: unset;
-  color: inherit;
+  cursor: pointer;
 `;
 
 const Title = styled(RadixTitle)`
   margin: 0 auto;
-  
+
 `;
 
 type ModalProps = {

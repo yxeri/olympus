@@ -1,5 +1,5 @@
-import get from '@api/calendars/get';
-import post from '@api/calendars/post';
+import get from './get';
+import post from './post';
 
 export {
   get,

@@ -1,12 +1,3 @@
-import { getAuthPerson } from '@api/helpers';
-import {
-  Id,
-  ResponseError
-} from '@api/people/types';
-import {
-  Person,
-  PersonObject
-} from '@data';
 import {
   collection,
   createSet
@@ -23,6 +14,15 @@ import {
 import { ApiError } from 'next/dist/server/api-utils';
 
 import { validatePerson } from 'utils/validatePerson';
+import {
+  Person,
+  PersonObject
+} from '../../types/data';
+import { getAuthPerson } from '../helpers';
+import {
+  Id,
+  ResponseError
+} from './types';
 
 type ResponseSuccess = {
   updatedIndexes: Id[],

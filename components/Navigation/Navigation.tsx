@@ -74,7 +74,7 @@ const Logo = styled(Link)`
   height: fit-content;
   max-height: 100%;
   z-index: 2;
-  
+
   img {
     box-sizing: border-box;
     padding: .4rem;
@@ -84,6 +84,7 @@ const Logo = styled(Link)`
 const StyledLink = styled(Link)`
   margin: 0 .2rem;
   position: relative;
+
   ::before {
     content: '';
     position: absolute;

@@ -16,11 +16,11 @@ const StyledForm = styled(Root)`
   grid-gap: .5rem;
 `;
 
-type FormProps<T,> = Omit<RadixFormProps, 'onSubmit'> & {
+type FormProps<T, > = Omit<RadixFormProps, 'onSubmit'> & {
   onSubmit: SubmitHandler<T & FieldValues>;
 };
 
-const Form = <T,>({ onSubmit, children }: FormProps<T>) => {
+const Form = <T, >({ onSubmit, children }: FormProps<T>) => {
   const formMethods = useForm<T & FieldValues>();
 
   return (

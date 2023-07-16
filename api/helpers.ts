@@ -1,10 +1,10 @@
-import { findPersonByAuth } from '@api/people/get';
 import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
+import { findPersonByAuth } from './people/get';
 
 export const getAuthPerson = async ({
   req, res,

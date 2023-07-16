@@ -1,10 +1,10 @@
-import { Id } from '@api/people/types';
-import { Person } from '@data';
 import { collection } from 'lib/db/tools';
 import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
+import { Person } from '../../types/data';
+import { Id } from './types';
 
 export const getPeople: () => Promise<Person[]> = async () => {
   const peopleCollection = await collection<Person>('people');

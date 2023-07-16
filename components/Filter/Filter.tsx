@@ -1,9 +1,9 @@
 import * as Popover from '@radix-ui/react-popover';
 import FilterIcon from 'assets/filter.svg';
 import XIcon from 'assets/x.svg';
-import Search from 'components/Search/Search';
 import styled from 'styled-components';
 import { sizes } from 'styles/global';
+import Search from '../Search/Search';
 import SortBy from './SortBy/SortBy';
 import VariantPicker from './VariantPicker/VariantPicker';
 

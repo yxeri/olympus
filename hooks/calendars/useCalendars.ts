@@ -1,6 +1,6 @@
-import { Calendar } from '@data';
 import { toast } from 'react-toastify';
 import useSwr, { SWRResponse } from 'swr';
+import { Calendar } from '../../types/data';
 
 type InsertCalendar = (calendar: Calendar) => void;
 type UseCalendarsReturn = Omit<SWRResponse, 'data'> & {

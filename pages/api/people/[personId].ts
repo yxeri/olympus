@@ -1,9 +1,9 @@
-import { findPerson } from '@api/people/get';
 import { ObjectId } from 'mongodb';
 import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
+import { findPerson } from '../../../api/people/get';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

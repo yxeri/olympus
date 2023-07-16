@@ -1,14 +1,13 @@
-import KeyIcon from '@assets/key.svg';
-import { Modal } from '@components';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import KeyIcon from '../../assets/key.svg';
 import { sessionAtom } from '../../atoms/session';
 import {
   colors,
   sizes
 } from '../../styles/global';
 import Container from '../Container/Container';
-import { Trigger } from '../Modal/Modal';
+import Modal, { Trigger } from '../Modal/Modal';
 import LoginContent from './content/LoginContent';
 import { AuthState } from './types';
 
@@ -26,17 +25,24 @@ const StyledTrigger = () => (
     width: sizes.mediumMax,
     maxWidth: '100%',
     color: colors.brightColor,
+    zIndex: 2,
   }}
   >
-    <Trigger>
+    <Trigger style={{
+      color: colors.brightColor,
+      border: `1px solid ${colors.brightColor}`,
+      borderRadius: '25%',
+      backgroundColor: colors.primaryBackground,
+      padding: '.25rem',
+      margin: 0,
+      display: 'grid',
+    }}
+    >
       <KeyIcon style={{
-        justifySelf: 'flex-end',
-        padding: '.5rem',
         strokeWidth: 1.5,
         width: sizes.hugeIcon,
         height: sizes.hugeIcon,
-        borderRadius: '25%',
-        backgroundColor: colors.primaryBackground,
+
       }}
       />
     </Trigger>

@@ -21,11 +21,12 @@ const StyledField = styled(Field)`
   display: grid;
   outline: none;
   background-color: white;
+
   [data-invalid="true"] {
     border-color: ${colors.errorBorder};
     background-color: ${colors.error};
   }
-  
+
   &[data-invalid="true"] {
     border-color: ${colors.errorBorder};
     background-color: ${colors.error};

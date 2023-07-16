@@ -1,9 +1,9 @@
+import { toast } from 'react-toastify';
+import useSwr, { SWRResponse } from 'swr';
 import {
   Person,
   PersonObject
-} from '@data';
-import { toast } from 'react-toastify';
-import useSwr, { SWRResponse } from 'swr';
+} from '../../types/data';
 
 type UpdatePeople = (ids: string[], update: Partial<typeof PersonObject>) => void;
 type InsertPeople = (people: Array<typeof PersonObject>) => void;

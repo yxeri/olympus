@@ -1,5 +1,3 @@
-import { Person } from '@data';
-import { usePeople } from '@hooks/people';
 import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -10,12 +8,13 @@ import {
   searchStringAtom,
   sortByAtom
 } from '../../atoms/filter';
+import { usePeople } from '../../hooks/people';
+import { Person } from '../../types/data';
 import List from '../List/List';
 import PersonListGridItem from './Item/PersonListGridItem';
 import PersonListItem from './Item/PersonListItem';
 
-type PersonListProps = {
-};
+type PersonListProps = {};
 
 const StyledList = styled(List)`
   grid-column-gap: ${sizes.largeGap};
@@ -61,11 +60,11 @@ const PersonList: React.FC<PersonListProps> = () => {
       return aName > bName ? 1 : -1;
     }
 
-    if (a[sortBy] === b[sortBy]) {
+    if ((a[sortBy] && b[sortBy]) && a[sortBy] === b[sortBy]) {
       return 0;
     }
 
-    return a[sortBy] > b[sortBy] ? 1 : -1;
+    return (a[sortBy] && b[sortBy]) && a[sortBy] > b[sortBy] ? 1 : -1;
   });
 
   return (
