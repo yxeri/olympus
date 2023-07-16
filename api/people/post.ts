@@ -36,7 +36,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
     const dbCollection = await collection<Person>('people');
     const { people } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
 
-    if (!Array.isArray(people)) {
+    if (!Array.isArray(people) || people.length < 1) {
       throw new ApiError(400, 'Expected People[]');
     }
 
@@ -64,10 +64,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
     }, []);
 
     const updatedIds: Id[] = [];
-    const {
-      insertedIds,
-      existIndexes,
-    } = await dbCollection
+    const result = await dbCollection
       .insertMany(filteredPeople.map((person) => ({
         _id: person._id
           ? new ObjectId(person._id)
@@ -75,8 +72,8 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
         ...person,
         profile: person.profile ?? {},
       })), { ordered: false })
-      .then((result) => ({
-        insertedIds: Object.values(result.insertedIds),
+      .then((insertResult) => ({
+        insertedIds: Object.values(insertResult?.insertedIds),
         existIndexes: ([] as number[]),
       }))
       .catch((operation: MongoBulkWriteError) => {
@@ -90,7 +87,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
           }, [])
           : [];
         const inserted = (Object
-          .values(operation.result.insertedIds)
+          .values(operation.result?.insertedIds ?? {})
           .filter((id) => !existIds.includes(id)) as string[]);
 
         return {
@@ -99,12 +96,12 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
         };
       });
 
-    if (existIndexes.length > 0) {
+    if (result?.existIndexes && result.existIndexes.length > 0) {
       const operations: AnyBulkWriteOperation<Person>[] = [];
 
       filteredPeople
         .reduce<[string | undefined, Person][]>((existingPeople, person, index) => {
-        if (existIndexes.includes(index)) {
+        if (result.existIndexes.includes(index)) {
           existingPeople.push([filteredIds[index], person]);
         }
 
@@ -135,7 +132,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
 
     res.status(200).json({
       updatedIndexes: updatedIds,
-      insertedIds: insertedIds.map((id) => id.toString()),
+      insertedIds: result?.insertedIds?.map((id) => id.toString()),
     });
   } catch (error: any) {
     console.log(error);

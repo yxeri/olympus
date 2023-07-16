@@ -79,7 +79,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
     year, family, name, status, society, rank, score,
   } = person;
 
-  const image = new CloudinaryImage(`olympus/people/${name}-${family}`, {
+  const image = new CloudinaryImage(`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`, {
     cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   }).addTransformation('t_thumb-person');
 

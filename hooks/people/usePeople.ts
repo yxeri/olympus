@@ -2,6 +2,7 @@ import {
   Person,
   PersonObject
 } from '@data';
+import { toast } from 'react-toastify';
 import useSwr, { SWRResponse } from 'swr';
 
 type UpdatePeople = (ids: string[], update: Partial<typeof PersonObject>) => void;
@@ -25,11 +26,19 @@ export default function usePeople(): UsePeopleReturn {
   const updatePeople: UpdatePeople = (ids, update) => fetch(url, {
     method: 'PATCH',
     body: JSON.stringify({ ids, update }),
-  }).then(() => swr.mutate());
+  }).then(() => {
+    toast.success('Update complete!');
+
+    return swr.mutate();
+  }).catch(() => toast.error('Something went wrong'));
   const insertPeople: InsertPeople = (people) => fetch(url, {
     method: 'POST',
     body: JSON.stringify({ people }),
-  }).then(() => swr.mutate());
+  }).then(() => {
+    toast.success('Upload complete!');
+
+    return swr.mutate();
+  }).catch(() => toast.error('Something went wrong'));
 
   return {
     ...swr,

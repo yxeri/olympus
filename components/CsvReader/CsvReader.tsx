@@ -8,12 +8,14 @@ import {
   formatFileSize,
   useCSVReader,
 } from 'react-papaparse';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import {
   borders,
   colors
 } from 'styles/global';
 import { validatePerson } from 'utils/validatePerson';
+import Container from '../Container/Container';
 
 const StyledDiv = styled.div`
   border: ${borders.standard};
@@ -49,77 +51,87 @@ const CsvReader = () => {
   const { CSVReader } = useCSVReader();
 
   return (
-    <CSVReader
-      config={{ dynamicTyping: true }}
-      onUploadAccepted={(results: { data: string[][] }) => {
-        console.log('---------------------------');
-        console.log(results);
-        console.log('---------------------------');
+    <Container style={{ color: colors.brightColor, borderBottom: `1px solid ${colors.selectedBrightColor}`, paddingBottom: '1rem' }}>
+      <p style={{ fontWeight: 'bold ' }}>Upload list of people</p>
+      <p>It has to be a csv file. You can export as csv from Google Sheets/Excel/Numbers</p>
+      <CSVReader
+        config={{ dynamicTyping: true }}
+        onUploadAccepted={(results: { data: string[][] }) => {
+          console.log('---------------------------');
+          console.log(results);
+          console.log('---------------------------');
 
-        if (!results.data || results.data.length < 1) {
-          console.log('missing data');
+          if (!results.data || results.data.length < 1) {
+            toast.error('Missing data');
 
-          return null;
-        }
-
-        const columns: string[] = results.data.slice(0, 1)?.[0];
-        const rows: string[][] = results.data.slice(1, -1);
-        const { profile, score, ...personObject } = PersonObject;
-
-        if (!Object.keys(personObject).every((key) => {
-          const includes = columns.includes(key);
-
-          if (!includes) {
-            console.log(`Missing ${key} in columns`);
+            return null;
           }
 
-          return includes;
-        })) {
-          return null;
-        }
+          const columns: string[] = results.data.slice(0, 1)?.[0];
+          const rows: string[][] = results.data.slice(1);
+          const { profile, score, ...personObject } = PersonObject;
 
-        const parsedPeople: Person[] = rows.reduce<Person[]>((people, row, currentIndex) => {
-          const object = Object
-            .fromEntries(row.map((value, index) => [columns[index], value]));
-          const person = {
-            ...object,
-            score: object.score ?? -1,
-            profile: object.profile ?? {},
-          };
+          if (!Object.keys(personObject).every((key) => {
+            const includes = columns.includes(key);
 
-          const [isValidPerson, errors] = validatePerson(person);
+            if (!includes) {
+              toast.error(`Missing ${key} in columns`);
+            }
 
-          if (isValidPerson) {
-            people.push(person as unknown as Person);
-          } else {
-            [`Row ${currentIndex + 2}:`, ...errors].forEach((msg) => console.log(msg));
+            return includes;
+          })) {
+            return null;
           }
 
-          return people;
-        }, []);
+          const rowErrors: string[] = [];
 
-        insert(parsedPeople);
+          const parsedPeople: Person[] = rows.reduce<Person[]>((people, row, currentIndex) => {
+            const object = Object
+              .fromEntries(row.map((value, index) => [columns[index], value]));
+            const person = {
+              ...object,
+              score: object.score ?? -1,
+              profile: object.profile ?? {},
+            };
 
-        return true;
-      }}
-      onDragOver={(event: DragEvent) => {
-        event.preventDefault();
-      }}
-      onDragLeave={(event: DragEvent) => {
-        event.preventDefault();
-      }}
-    >
-      {(props: any) => (
-        <StyledDiv
-          {...props.getRootProps()}
-          style={{ color: 'white' }}
-        >
-          {props.acceptedFile ? <FileView {...props} /> : (
-            'Släpp en csv-fil eller klicka för att ladda upp'
-          )}
-        </StyledDiv>
-      )}
-    </CSVReader>
+            const [isValidPerson] = validatePerson(person);
+
+            if (isValidPerson) {
+              people.push(person as unknown as Person);
+            } else {
+              rowErrors.push(`${currentIndex + 2}`);
+            }
+
+            return people;
+          }, []);
+
+          if (rowErrors.length > 0) {
+            toast.error(`Rows with errors: ${rowErrors.join(', ')}`, { autoClose: false });
+          }
+
+          insert(parsedPeople);
+
+          return true;
+        }}
+        onDragOver={(event: DragEvent) => {
+          event.preventDefault();
+        }}
+        onDragLeave={(event: DragEvent) => {
+          event.preventDefault();
+        }}
+      >
+        {(props: any) => (
+          <StyledDiv
+            {...props.getRootProps()}
+            style={{ color: 'white' }}
+          >
+            {props.acceptedFile ? <FileView {...props} /> : (
+              'Släpp en csv-fil eller klicka för att ladda upp'
+            )}
+          </StyledDiv>
+        )}
+      </CSVReader>
+    </Container>
   );
 };
 

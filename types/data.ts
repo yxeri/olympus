@@ -1,4 +1,7 @@
 import { ObjectId } from 'mongodb';
+import { ReactNode } from 'react';
+import { Event } from 'react-big-calendar';
+import { Options } from 'rrule';
 
 export const SocietyObject = { Bacchus: '', Bellona: '', Pheme: '' };
 export type Society = keyof typeof SocietyObject;
@@ -17,7 +20,6 @@ export const PersonObject: Person = {
   rank: 1,
   family: '',
   name: '',
-  society: 'Bacchus',
   status: 'a',
   year: 0,
   type: 'Discipli',
@@ -31,7 +33,7 @@ export type Person = {
   rank: number,
   family: string,
   name: string,
-  society: Society,
+  society?: Society,
   status: Status,
   year: Year,
   type: PersonType,
@@ -48,4 +50,21 @@ export const statusCollection: { [key in Status]: string } = {
   d: 'δ',
   e: 'ε',
   '?': '?',
+};
+
+export type FullEvent = Event & {
+  start: Date;
+  end: Date;
+  title: ReactNode;
+  id: string;
+  description?: string;
+  location?: string;
+  rrule?: Partial<Options>;
+};
+
+export type Calendar = {
+  _id?: ObjectId | string,
+  name: string;
+  color?: string;
+  events: FullEvent[];
 };

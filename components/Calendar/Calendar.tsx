@@ -1,7 +1,8 @@
+import { FullEvent } from '@data';
+import useCalendars from '@hooks/calendars/useCalendars';
 import ArrowLeftIcon from 'assets/arrow-left.svg';
 import ArrowRightIcon from 'assets/arrow-right.svg';
 import CalendarIcon from 'assets/calendar.svg';
-import { calendarEventsAtom } from 'atoms/calendar';
 import dayjs from 'dayjs';
 import svLocale from 'dayjs/locale/sv';
 import dayjsUtc from 'dayjs/plugin/utc';
@@ -17,6 +18,7 @@ import 'react-big-calendar/lib/sass/styles.scss';
 import { useRecoilValue } from 'recoil';
 import { RRule } from 'rrule';
 import styled from 'styled-components';
+import { selectedCalendarsAtom } from '../../atoms/calendar';
 
 import { colors } from '../../styles/global';
 import Button from '../Button/Button';
@@ -115,35 +117,52 @@ dayjs.locale('sv', svLocale);
 const localizer = dayjsLocalizer(dayjs);
 
 const Toolbar: React.FC<ToolbarProps> = ({
-  label, onNavigate, onView, ...otherProps
-}) => {
-  console.log('toolbar', otherProps);
-
-  return (
-    <ToolbarContainer>
-      <NavContainer>
-        <ToolbarButton onClick={() => onNavigate('PREV')} aria-label="Previous"><ArrowLeftIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => onNavigate('TODAY')} aria-label="Today"><CalendarIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => onNavigate('NEXT')} aria-label="Next"><ArrowRightIcon /></ToolbarButton>
-      </NavContainer>
-      <DateSpan>{label}</DateSpan>
-      <NavContainer>
-        <ToolbarButton onClick={() => onView('week')} aria-label="Week"><CalendarIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => onView('day')} aria-label="Day"><CalendarIcon /></ToolbarButton>
-        <ToolbarButton onClick={() => onView('agenda')} aria-label="Agenda"><CalendarIcon /></ToolbarButton>
-      </NavContainer>
-    </ToolbarContainer>
-  );
-};
+  label, onNavigate, onView
+}) => (
+  <ToolbarContainer>
+    <NavContainer>
+      <ToolbarButton onClick={() => onNavigate('PREV')} aria-label="Previous"><ArrowLeftIcon /></ToolbarButton>
+      <ToolbarButton onClick={() => onNavigate('TODAY')} aria-label="Today"><CalendarIcon /></ToolbarButton>
+      <ToolbarButton onClick={() => onNavigate('NEXT')} aria-label="Next"><ArrowRightIcon /></ToolbarButton>
+    </NavContainer>
+    <DateSpan>{label}</DateSpan>
+    <NavContainer>
+      <ToolbarButton onClick={() => onView('week')} aria-label="Week"><CalendarIcon /></ToolbarButton>
+      <ToolbarButton onClick={() => onView('day')} aria-label="Day"><CalendarIcon /></ToolbarButton>
+      <ToolbarButton onClick={() => onView('agenda')} aria-label="Agenda"><CalendarIcon /></ToolbarButton>
+    </NavContainer>
+  </ToolbarContainer>
+);
 
 const Calendar = () => {
-  const icalSource = useRecoilValue(calendarEventsAtom);
+  const { calendars } = useCalendars();
+  const selectedCalendars = useRecoilValue(selectedCalendarsAtom);
   const [span, setSpan] = useState({
     start: new Date(dayjs().utc().weekday(0).format()),
     end: new Date(dayjs().utc().weekday(6).format()),
   });
-  const events = [...icalSource.values()].map((fullEvent) => {
+  const events = (
+    selectedCalendars.length === 0
+      ? calendars.map((calendar) => calendar.events.map((event: FullEvent) => ({
+        ...event,
+        calendar: calendar.name,
+      }))).flat()
+      : calendars
+        .filter((calendar) => selectedCalendars.includes(calendar.name))
+        .map((calendar) => calendar.events.map((event: FullEvent) => ({
+          ...event,
+          calendar: calendar.name,
+        }) ?? [])).flat()
+  )?.map((fullEvent) => {
+    if (!fullEvent) {
+      return [];
+    }
+
     const { rrule, ...event } = fullEvent;
+    // eslint-disable-next-line no-param-reassign
+    event.start = new Date(event.start);
+    // eslint-disable-next-line no-param-reassign
+    event.end = new Date(event.end);
 
     if (rrule) {
       const rule = new RRule({ dtstart: event.start, ...rrule });

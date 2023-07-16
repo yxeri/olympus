@@ -1,7 +1,6 @@
 import {
   PersonObject,
   PersonTypeObject,
-  SocietyObject,
   StatusObject,
   YearObject
 } from '@data';
@@ -14,10 +13,6 @@ export const validatePerson = (person: any): [boolean, string[]] => {
       errors.push(`missing ${key}`);
     }
   });
-
-  if (!Object.keys(SocietyObject).includes(person.society)) {
-    errors.push(`valid societies are: ${Object.keys(SocietyObject)}`);
-  }
 
   if (!Object.keys(StatusObject).includes(person.status)) {
     errors.push(`valid status are: ${Object.keys(StatusObject)}`);

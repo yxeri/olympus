@@ -1,21 +1,17 @@
-import {
-  calendarEventsAtom,
-  calendarsAtom,
-  FullEvent
-} from 'atoms/calendar';
+import { FullEvent } from '@data';
+import useCalendars from '@hooks/calendars/useCalendars';
 import dayjs from 'dayjs';
 import dayjsUtc from 'dayjs/plugin/utc';
 // @ts-ignore
 import iCal from 'ical.js';
-import {
-  useRecoilState,
-  useSetRecoilState
-} from 'recoil';
+import { useRef } from 'react';
 import {
   Frequency,
   Weekday,
   WeekdayStr
 } from 'rrule';
+import { colors } from '../../styles/global';
+import Container from '../Container/Container';
 
 dayjs.extend(dayjsUtc);
 
@@ -31,12 +27,14 @@ type JsonEvent = [
 ];
 
 const IcalReader = () => {
-  const setCalendarEvents = useSetRecoilState(calendarEventsAtom);
-  const [calendars, setCalendars] = useRecoilState(calendarsAtom);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { insert } = useCalendars();
 
   return (
-    <div>
+    <Container style={{ color: colors.brightColor, borderBottom: `1px solid ${colors.selectedBrightColor}`, paddingBottom: '1rem' }}>
+      <p style={{ fontWeight: 'bold ' }}>Upload calendar</p>
       <input
+        ref={inputRef}
         type="file"
         accept="text/calendar"
         onChange={(changeEvent) => {
@@ -101,7 +99,6 @@ const IcalReader = () => {
                             };
                           }
                           case 'location': {
-                            console.log(value);
                             return {
                               ...previous,
                               location: value,
@@ -136,19 +133,21 @@ const IcalReader = () => {
                     event.id && event.title && event.start && event.end
                   ));
 
-                const calendarMap = new Map(calendars);
+                insert({
+                  name: calendarName,
+                  events: parsedEvents.map(([, event]) => event),
+                });
 
-                calendarMap.set(calendarName, { name: calendarName });
-
-                setCalendars(calendarMap);
-                setCalendarEvents(new Map(parsedEvents));
+                if (inputRef.current) {
+                  inputRef.current.value = '';
+                }
               }
             });
             reader.readAsText(changeEvent.target.files[0], 'UTF-8');
           }
         }}
       />
-    </div>
+    </Container>
   );
 };
 

@@ -55,7 +55,7 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
     society,
   } = person;
 
-  const image = new CloudinaryImage(`olympus/people/${name}-${family}`, {
+  const image = new CloudinaryImage(`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`, {
     cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   }).addTransformation('t_profile');
 

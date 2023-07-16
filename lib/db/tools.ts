@@ -1,7 +1,7 @@
 import { Document } from 'mongodb';
 import clientPromise from './mongodb';
 
-export type Collection = 'people' | 'profiles';
+export type Collection = 'people' | 'profiles' | 'calendars';
 
 export async function collection<T extends Document>(collectionName: Collection) {
   const dbClient = await clientPromise;
