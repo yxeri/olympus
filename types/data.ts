@@ -60,6 +60,7 @@ export type FullEvent = Event & {
   description?: string;
   location?: string;
   rrule?: Partial<Options>;
+  calendar?: string;
 };
 
 export type Calendar = {

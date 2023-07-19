@@ -42,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
           <Component {...pageProps} />
         </main>
         {!fullHeightPaths.includes(pathname) && <Footer />}
-        <Auth />
+        <Auth float={fullHeightPaths.includes(pathname)} />
       </RecoilRoot>
     </SessionContextProvider>
   );

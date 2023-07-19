@@ -21,7 +21,8 @@ export default function usePeople(): UsePeopleReturn {
     ...swr
   } = useSwr(
     url,
-    (urlKey) => fetch(urlKey).then((res) => res.json())
+    (urlKey) => fetch(urlKey).then((res) => res.json()),
+    { keepPreviousData: true, }
   );
   const updatePeople: UpdatePeople = (ids, update) => fetch(url, {
     method: 'PATCH',

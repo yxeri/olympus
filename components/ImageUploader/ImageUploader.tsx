@@ -1,11 +1,22 @@
 import { CldUploadWidget } from 'next-cloudinary';
+import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import { sessionAtom } from '../../atoms/session';
 import { usePerson } from '../../hooks/people';
 import { colors } from '../../styles/global';
 import Container from '../Container/Container';
 
-const ImageUploader = () => {
+type ImageUploaderProps = {
+  title?: string;
+  text?: ReactNode;
+  maxFiles?: number;
+};
+
+const ImageUploader: React.FC<ImageUploaderProps> = ({
+  title,
+  text,
+  maxFiles,
+}) => {
   const session = useRecoilValue(sessionAtom);
   const userMeta = session?.user.user_metadata?.[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
   const [person] = usePerson(userMeta?.name, userMeta?.family);
@@ -16,27 +27,23 @@ const ImageUploader = () => {
 
   return (
     <Container style={{
-      color: colors.brightColor,
-      borderBottom: `1px solid ${colors.selectedBrightColor}`,
-      paddingBottom: '1rem'
+      overflow: 'hidden',
     }}
     >
-      <p style={{ fontWeight: 'bold' }}>Upload portraits</p>
-      <p>
-        {
-          `Each file should have the name of the person
-          with a dash (-) in between the name and family name.
-          `
-        }
-      </p>
-      <p>
-        {
-          `Don't remove any whitespaces or special characters.
-          Examples: kahina-soteira.png (Kahina Soteira) or Tyr'ahnee-Phonoi.jpg (Tyr'ahnee Phonoi).`
-        }
-      </p>
+      {title && <h3>{title}</h3>}
+      {text
+        && (
+        <Container>
+          {text}
+        </Container>
+        )}
       <CldUploadWidget
         options={{
+          maxFiles,
+          publicId: maxFiles === 1
+            ? `${person?.name?.replaceAll(/[^\w\d]/g, '_')}-${person?.family?.replaceAll(/[^\w\d]/g, '_')}`
+            : undefined,
+          multiple: maxFiles !== 1,
           styles: {
             palette: {
               inactiveTabIcon: colors.selectedBrightColor,

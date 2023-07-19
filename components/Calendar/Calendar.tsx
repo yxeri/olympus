@@ -1,3 +1,4 @@
+import { Checkbox } from '@radix-ui/react-checkbox';
 import dayjs from 'dayjs';
 import svLocale from 'dayjs/locale/sv';
 import dayjsUtc from 'dayjs/plugin/utc';
@@ -10,9 +11,14 @@ import {
 } from 'react-big-calendar';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.scss';
 import 'react-big-calendar/lib/sass/styles.scss';
-import { useRecoilValue } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValue
+} from 'recoil';
 import { RRule } from 'rrule';
 import styled from 'styled-components';
+import FilterIcon from '../../assets/filter.svg';
+import ListIcon from '../../assets/list.svg';
 import ArrowLeftIcon from '../../assets/arrow-left.svg';
 import ArrowRightIcon from '../../assets/arrow-right.svg';
 import CalendarIcon from '../../assets/calendar.svg';
@@ -22,6 +28,10 @@ import useCalendars from '../../hooks/calendars/useCalendars';
 import { colors } from '../../styles/global';
 import { FullEvent } from '../../types/data';
 import Button from '../Button/Button';
+import Container from '../Container/Container';
+import List from '../List/List';
+import ListItem from '../List/ListItem';
+import Modal, { Trigger } from '../Modal/Modal';
 
 const StyledDiv = styled.div`
   .rbc-time-view, .rbc-month-view, .rbc-time-view, .rbc-agenda-view {
@@ -63,6 +73,11 @@ const StyledDiv = styled.div`
     border: 1px solid;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
   }
+  
+  .rbc-agenda-empty {
+    margin-left: 1rem;
+    margin-top: 1rem;
+  }
 `;
 
 const ToolbarButton = styled(Button)`
@@ -71,6 +86,9 @@ const ToolbarButton = styled(Button)`
   border-bottom: none;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+  min-width: 2.1rem;
+  text-align: center;
+  cursor: pointer;
 
   svg {
     width: 1rem;
@@ -91,7 +109,8 @@ const NavContainer = styled.div`
   display: grid;
   grid-auto-flow: column;
   align-items: center;
-  grid-gap: .5rem;
+  grid-gap: 1rem;
+  font-size: .9rem;
 `;
 
 const DateSpan = styled.span`
@@ -109,6 +128,25 @@ const DateSpan = styled.span`
   padding: .1rem;
 `;
 
+const StyledCheckbox = styled(Checkbox)`
+  height: 1rem;
+  width: 1rem;
+  padding: .1rem;
+  margin-right: .5rem;
+  position: relative;
+  border: 1px solid;
+  background-color: ${colors.componentBackground};
+  border-radius: 15%;
+  &[data-state="checked"] {
+    background-color: ${colors.primaryColor};
+  }
+`;
+
+const StyledLabel = styled.label`
+  display: flex;
+  align-items: center;
+`;
+
 dayjs.extend(dayjsWeekday);
 dayjs.extend(dayjsUtc);
 
@@ -117,22 +155,83 @@ dayjs.locale('sv', svLocale);
 const localizer = dayjsLocalizer(dayjs);
 
 const Toolbar: React.FC<ToolbarProps> = ({
-  label, onNavigate, onView
-}) => (
-  <ToolbarContainer>
-    <NavContainer>
-      <ToolbarButton onClick={() => onNavigate('PREV')} aria-label="Previous"><ArrowLeftIcon /></ToolbarButton>
-      <ToolbarButton onClick={() => onNavigate('TODAY')} aria-label="Today"><CalendarIcon /></ToolbarButton>
-      <ToolbarButton onClick={() => onNavigate('NEXT')} aria-label="Next"><ArrowRightIcon /></ToolbarButton>
-    </NavContainer>
-    <DateSpan>{label}</DateSpan>
-    <NavContainer>
-      <ToolbarButton onClick={() => onView('week')} aria-label="Week"><CalendarIcon /></ToolbarButton>
-      <ToolbarButton onClick={() => onView('day')} aria-label="Day"><CalendarIcon /></ToolbarButton>
-      <ToolbarButton onClick={() => onView('agenda')} aria-label="Agenda"><CalendarIcon /></ToolbarButton>
-    </NavContainer>
-  </ToolbarContainer>
-);
+  label,
+  onNavigate,
+  onView
+
+}) => {
+  const { calendars } = useCalendars();
+  const [selected, setSelected] = useRecoilState(selectedCalendarsAtom);
+
+  return (
+    <ToolbarContainer>
+      <NavContainer>
+        <Modal
+          trigger={(
+            <Trigger asChild>
+              <ToolbarButton>
+                <FilterIcon />
+              </ToolbarButton>
+            </Trigger>
+)}
+          content={(
+            <Container>
+              <List style={{ gap: '.5rem' }}>
+                <ListItem>
+                  <StyledLabel htmlFor="all">
+                    <StyledCheckbox id="all" name="all" checked={selected.includes('all')} onCheckedChange={() => setSelected(['all'])} />
+                    All
+                  </StyledLabel>
+                </ListItem>
+                {calendars.map((calendar) => (
+                  <ListItem>
+                    <StyledLabel htmlFor={calendar.name}>
+                      <StyledCheckbox
+                        id={calendar.name}
+                        name={calendar.name}
+                        checked={selected.includes(calendar.name)}
+                        onCheckedChange={(checkedState) => {
+                          if (!checkedState) {
+                            const filteredSelected = [...selected.filter(
+                              (name) => name !== calendar.name
+                            )];
+
+                            if (filteredSelected.length < 1) {
+                              setSelected(['all']);
+                            } else {
+                              setSelected(filteredSelected);
+                            }
+                          } else if (selected[0] === 'all') {
+                            setSelected([calendar.name]);
+                          } else {
+                            setSelected([...selected, calendar.name]);
+                          }
+                        }}
+                      />
+                      {calendar.name}
+                    </StyledLabel>
+                  </ListItem>
+                ))}
+              </List>
+            </Container>
+)}
+          title="Calendars"
+        />
+        <ToolbarButton onClick={() => onNavigate('PREV')} aria-label="Previous"><ArrowLeftIcon /></ToolbarButton>
+        <ToolbarButton onClick={() => onNavigate('TODAY')} aria-label="Today"><CalendarIcon /></ToolbarButton>
+        <ToolbarButton onClick={() => onNavigate('NEXT')} aria-label="Next"><ArrowRightIcon /></ToolbarButton>
+      </NavContainer>
+      <DateSpan>{label}</DateSpan>
+      <NavContainer>
+        <ToolbarButton onClick={() => onView('week')} aria-label="Week">
+          7
+        </ToolbarButton>
+        <ToolbarButton onClick={() => onView('day')} aria-label="Day">1</ToolbarButton>
+        <ToolbarButton onClick={() => onView('agenda')} aria-label="Agenda"><ListIcon /></ToolbarButton>
+      </NavContainer>
+    </ToolbarContainer>
+  );
+};
 
 const Calendar = () => {
   const { calendars } = useCalendars();
@@ -142,7 +241,7 @@ const Calendar = () => {
     end: new Date(dayjs().utc().weekday(6).format()),
   });
   const events = (
-    selectedCalendars.length === 0
+    selectedCalendars.length === 0 || selectedCalendars[0] === 'all'
       ? calendars.map((calendar) => calendar.events.map((event: FullEvent) => ({
         ...event,
         calendar: calendar.name,
@@ -190,6 +289,13 @@ const Calendar = () => {
     <StyledDiv>
       <BigCalendar
         selectable
+        eventPropGetter={
+        (event: FullEvent) => ({
+          style: {
+            backgroundColor: calendars.find((calendar) => calendar.name === event.calendar)?.color,
+          }
+        })
+}
         components={{
           toolbar: Toolbar,
         }}

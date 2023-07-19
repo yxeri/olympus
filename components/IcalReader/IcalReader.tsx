@@ -9,10 +9,10 @@ import {
   Weekday,
   WeekdayStr
 } from 'rrule';
+import randomColor from 'randomcolor';
 import { sessionAtom } from '../../atoms/session';
 import useCalendars from '../../hooks/calendars/useCalendars';
 import { usePerson } from '../../hooks/people';
-import { colors } from '../../styles/global';
 import { FullEvent } from '../../types/data';
 import Container from '../Container/Container';
 
@@ -42,12 +42,10 @@ const IcalReader = () => {
 
   return (
     <Container style={{
-      color: colors.brightColor,
-      borderBottom: `1px solid ${colors.selectedBrightColor}`,
-      paddingBottom: '1rem'
+      overflow: 'hidden',
     }}
     >
-      <p style={{ fontWeight: 'bold ' }}>Upload calendar</p>
+      <h3>Upload calendar</h3>
       <input
         ref={inputRef}
         type="file"
@@ -151,6 +149,7 @@ const IcalReader = () => {
                 insert({
                   name: calendarName,
                   events: parsedEvents.map(([, event]) => event),
+                  color: randomColor({ luminosity: 'light' }),
                 });
 
                 if (inputRef.current) {

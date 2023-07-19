@@ -11,14 +11,14 @@ import Modal, { Trigger } from '../Modal/Modal';
 import LoginContent from './content/LoginContent';
 import { AuthState } from './types';
 
-const StyledTrigger = () => (
+const StyledTrigger = ({ float }: { float?: boolean }) => (
   <Container style={{
     boxSizing: 'border-box',
     display: 'grid',
     justifyItems: 'flex-end',
     paddingRight: sizes.largeGap,
-    position: 'sticky',
-    bottom: '2rem',
+    position: float ? 'fixed' : 'sticky',
+    bottom: float ? '1rem' : '2rem',
     marginTop: '.5rem',
     marginRight: 'auto',
     marginLeft: 'auto',
@@ -26,6 +26,7 @@ const StyledTrigger = () => (
     maxWidth: '100%',
     color: colors.brightColor,
     zIndex: 2,
+    right: 0,
   }}
   >
     <Trigger style={{
@@ -49,7 +50,7 @@ const StyledTrigger = () => (
   </Container>
 );
 
-const Auth = () => {
+const Auth = ({ float }: { float?: boolean }) => {
   const [authState, setAuthState] = useState<AuthState>('LOGIN');
   const session = useRecoilValue(sessionAtom);
 
@@ -72,7 +73,7 @@ const Auth = () => {
   return (
     <Modal
       onOpenChange={(open) => open && setAuthState('LOGIN')}
-      trigger={<StyledTrigger />}
+      trigger={<StyledTrigger float={float} />}
       title={title}
       content={<LoginContent setAuthState={setAuthState} />}
     />

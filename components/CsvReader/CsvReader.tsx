@@ -64,12 +64,10 @@ const CsvReader = () => {
 
   return (
     <Container style={{
-      color: colors.brightColor,
-      borderBottom: `1px solid ${colors.selectedBrightColor}`,
-      paddingBottom: '1rem'
+      overflow: 'hidden',
     }}
     >
-      <p style={{ fontWeight: 'bold ' }}>Upload list of people</p>
+      <h3>Upload list of people</h3>
       <p>It has to be a csv file. You can export as csv from Google Sheets/Excel/Numbers</p>
       <CSVReader
         config={{ dynamicTyping: true }}

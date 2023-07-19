@@ -27,7 +27,7 @@ const DialogOverlay = styled(Overlay)`
   position: fixed;
   inset: 0;
   animation: ${fadeIn} 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 3;
+  z-index: 10;
 `;
 
 const DialogContent = styled(Content)`
@@ -42,7 +42,7 @@ const DialogContent = styled(Content)`
   padding: 1rem 1.5rem 1.5rem 1.5rem;
   background-color: #ccc7b5;
   box-shadow: hsl(206 22% 7% / 35%) 0 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
-  z-index: 3;
+  z-index: 10;
   display: grid;
   grid-gap: 1rem;
 `;

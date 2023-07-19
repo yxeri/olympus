@@ -101,6 +101,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       </StyledDiv>
       <StyledPhoto>
         <CldImage
+          loading="lazy"
           alt={`${name} ${family}`}
           format="webp"
           src={`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`}

@@ -6,6 +6,10 @@ html, body {
     --toastify-toast-width: fit-content;
 }
 
+h2 {
+    border-bottom: 1px solid;
+}
+
 .main-container, .calendar-container, .editor-container {
     box-sizing: border-box;
     margin: 0 auto;

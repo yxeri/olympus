@@ -4,6 +4,26 @@ export enum Locale {
 }
 
 const dictionary = {
+  settings: {
+    uploadPortrait: {
+      [Locale.SV]: 'Ladda upp självporträtt',
+      [Locale.EN]: 'Upload your portrait',
+    },
+    uploadImages: {
+      [Locale.SV]: 'Ladda upp porträtt',
+      [Locale.EN]: 'Upload portraits',
+    },
+    uploadImagesText: {
+      [Locale.EN]: 'Each file should have the name of the person with a dash (-) in between the name and family name.',
+      [Locale.SV]: 'Varje fil ska ha namnet av personen med en bindestreck (-) mellan namn och familjenamn.',
+    },
+    uploadImagesExample: {
+      [Locale.EN]: 'Don\'t remove any whitespaces or special characters from the name. Examples: kahina-soteira.png'
+      + ' (Kahina Soteira) or Tyr\'ahnee-Phonoi.jpg (Tyr\'ahnee Phonoi).',
+      [Locale.SV]: 'Ta inte bort några blanksteg eller specialtecken från namnet. Exempel: kahina-soteira.png'
+      + ' (Kahina Soteira) eller Tyr\'ahnee-Phonoi.jpg (Tyr\'ahnee Phonoi).',
+    }
+  },
   common: {
     name: {
       [Locale.SV]: 'Namn',
@@ -79,7 +99,7 @@ export const useDictionary = () => ({
   dictionary: (dictionary as Dictionary),
   getDictionaryValue: <G, >(
     group: G & keyof Dictionary,
-    field: string,
+    field: keyof Dictionary[G & keyof Dictionary],
     locale: Locale = defaultLocale,
   ): string | undefined => (dictionary as Dictionary)?.[group]?.[field]?.[locale]
     ?? (dictionary as Dictionary)?.[group]?.[field]?.[defaultLocale],

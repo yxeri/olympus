@@ -1,6 +1,5 @@
 import { useCSVDownloader } from 'react-papaparse';
 import { usePeople } from '../../hooks/people';
-import { colors } from '../../styles/global';
 import Container from '../Container/Container';
 
 const CsvDownloader = () => {
@@ -9,12 +8,10 @@ const CsvDownloader = () => {
 
   return (
     <Container style={{
-      color: colors.brightColor,
-      borderBottom: `1px solid ${colors.selectedBrightColor}`,
-      paddingBottom: '1rem'
+      overflow: 'hidden',
     }}
     >
-      <p style={{ fontWeight: 'bold ' }}>Download list of people</p>
+      <h3>Download list of people</h3>
       <CSVDownloader
         bom
         type={Type.Button}

@@ -16,7 +16,10 @@ export default function useCalendars(): UseCalendarsReturn {
     ...swr
   } = useSwr(
     url,
-    (urlKey) => fetch(urlKey).then((res) => res.json())
+    (urlKey) => fetch(urlKey).then((res) => res.json()),
+    {
+      keepPreviousData: true,
+    }
   );
   const insertCalendar: InsertCalendar = (calendar) => fetch(url, {
     method: 'POST',

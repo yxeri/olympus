@@ -59,6 +59,7 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
       >
         <StyledPhoto>
           <CldImage
+            loading="lazy"
             alt={`${name} ${family}`}
             format="webp"
             src={`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`}
