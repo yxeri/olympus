@@ -1,17 +1,19 @@
 import CalendarComponent from 'components/Calendar/Calendar';
-import { GetStaticProps } from 'next';
+import {
+  GetServerSideProps,
+} from 'next';
 import { SWRConfig } from 'swr';
 import { getCalendars } from '../api/calendars/get';
 import { url } from '../hooks/calendars/useCalendars';
 import { Calendar } from '../types/data';
 
-type StaticProps = {
+type ServerSideProps = {
   fallback: {
     [url]: { calendars?: Calendar[] },
   },
 };
 
-export default function CalendarPage({ fallback }: StaticProps) {
+export default function CalendarPage({ fallback }: ServerSideProps) {
   return (
     <div className="calendar-container">
       <SWRConfig value={{ fallback }}>
@@ -21,7 +23,7 @@ export default function CalendarPage({ fallback }: StaticProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps<StaticProps> = async () => {
+export const getServerSideProps: GetServerSideProps<ServerSideProps> = async () => {
   const calendars = await getCalendars();
 
   return {

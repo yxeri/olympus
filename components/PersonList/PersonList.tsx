@@ -64,7 +64,7 @@ const PersonList: React.FC<PersonListProps> = () => {
       return 0;
     }
 
-    return (a[sortBy] && b[sortBy]) && a[sortBy] > b[sortBy] ? 1 : -1;
+    return (a[sortBy] && b[sortBy]) && (a[sortBy] as string) > (b[sortBy] as string) ? 1 : -1;
   });
 
   return (
