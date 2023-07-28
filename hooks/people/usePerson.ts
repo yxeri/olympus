@@ -8,8 +8,8 @@ type UpdatePerson = (update: Partial<typeof PersonObject>) => void;
 
 export default function usePerson(id: string, family?: string): [Person | undefined, UpdatePerson] {
   const { people, mutate } = usePeople();
-  const person = people
-    .find(({
+  const personIndex = people
+    .findIndex(({
       name,
       _id: personId,
       family: personFamily
@@ -22,5 +22,9 @@ export default function usePerson(id: string, family?: string): [Person | undefi
     body: JSON.stringify({ update, ids: [id] }),
   }).then(() => mutate());
 
-  return [person, updatePerson];
+  return [
+    personIndex > -1
+      ? { ...people[personIndex], rank: personIndex + 1 }
+      : undefined,
+    updatePerson];
 }

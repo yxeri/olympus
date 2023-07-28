@@ -17,7 +17,6 @@ export const PersonTypeObject = { Discipli: '', Questi: '' };
 export type PersonType = keyof typeof PersonTypeObject;
 
 export const PersonObject: Person = {
-  rank: 1,
   family: '',
   name: '',
   status: 'a',
@@ -30,7 +29,7 @@ export const PersonObject: Person = {
 export type Person = {
   authId?: string;
   _id?: ObjectId | string,
-  rank: number,
+  rank?: number,
   family: string,
   name: string,
   society?: Society,

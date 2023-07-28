@@ -43,7 +43,8 @@ export default function usePeople(): UsePeopleReturn {
 
   return {
     ...swr,
-    people: data?.people ?? [],
+    people: data?.people?.sort((a: Person, b: Person) => a.score < b.score)
+      .map((person: Person, index: number) => ({ ...person, rank: index + 1 })) ?? [],
     update: updatePeople,
     insert: insertPeople,
   };
