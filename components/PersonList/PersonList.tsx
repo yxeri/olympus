@@ -24,7 +24,8 @@ const StyledList = styled(List)`
 
 const getFilteredItems = ({
   list,
-  searchString, listVariant
+  searchString,
+  listVariant
 }: {
   list: Person[],
   searchString?: string,

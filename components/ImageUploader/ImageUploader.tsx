@@ -1,8 +1,7 @@
 import { CldUploadWidget } from 'next-cloudinary';
+import * as process from 'process';
 import React, { ReactNode } from 'react';
-import { useRecoilValue } from 'recoil';
-import { sessionAtom } from '../../atoms/session';
-import { usePerson } from '../../hooks/people';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 import { colors } from '../../styles/global';
 import Container from '../Container/Container';
 
@@ -10,18 +9,18 @@ type ImageUploaderProps = {
   title?: string;
   text?: ReactNode;
   maxFiles?: number;
+  requireAdmin?: boolean;
 };
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({
   title,
   text,
   maxFiles,
+  requireAdmin,
 }) => {
-  const session = useRecoilValue(sessionAtom);
-  const userMeta = session?.user.user_metadata?.[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
-  const [person] = usePerson(userMeta?.name, userMeta?.family);
+  const { person: authPerson } = useAuthPerson();
 
-  if (!person?.auth?.images?.admin) {
+  if ((requireAdmin && !authPerson?.auth?.images?.admin) || !authPerson) {
     return null;
   }
 
@@ -41,7 +40,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         options={{
           maxFiles,
           publicId: maxFiles === 1
-            ? `${person?.name?.replaceAll(/[^\w\d]/g, '_')}-${person?.family?.replaceAll(/[^\w\d]/g, '_')}`
+            ? `${authPerson?.name?.replaceAll(/[^\w\d]/g, '_')}-${authPerson?.family?.replaceAll(/[^\w\d]/g, '_')}`
             : undefined,
           multiple: maxFiles !== 1,
           styles: {
@@ -69,7 +68,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           sources: ['local', 'url', 'camera'],
         }}
         signatureEndpoint="/api/cloudinarySignature"
-        uploadPreset="people"
+        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev_people' : 'people'}
         onUpload={() => {
         }}
       >

@@ -4,18 +4,16 @@ import {
   useCSVReader,
 } from 'react-papaparse';
 import { toast } from 'react-toastify';
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import {
   borders,
   colors
 } from 'styles/global';
 import { validatePerson } from 'utils/validatePerson';
-import { sessionAtom } from '../../atoms/session';
 import {
   usePeople,
-  usePerson
 } from '../../hooks/people';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 import {
   Person,
   PersonObject
@@ -54,9 +52,7 @@ const FileView: React.FC<any> = ({
 const CsvReader = () => {
   const { insert } = usePeople();
   const { CSVReader } = useCSVReader();
-  const session = useRecoilValue(sessionAtom);
-  const userMeta = session?.user.user_metadata?.[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
-  const [authPerson] = usePerson(userMeta?.name, userMeta?.family);
+  const { person: authPerson } = useAuthPerson();
 
   if (!authPerson?.auth?.people?.admin) {
     return null;

@@ -51,7 +51,7 @@ const StyledDiv = styled.div`
     background-color: ${colors.selected};
   }
 
-  .rbc-time-gutter, .rbc-time-header-cell {
+  .rbc-time-gutter, .rbc-time-header-cell, .rbc-agenda-date-cell {
     background-color: ${colors.clickableBackground};
   }
 
@@ -77,6 +77,21 @@ const StyledDiv = styled.div`
   .rbc-agenda-empty {
     margin-left: 1rem;
     margin-top: 1rem;
+  }
+  
+  .rbc-agenda-table {
+    position: sticky;
+    top: 0;
+    background-color: ${colors.componentBackground};
+    z-index: 2;
+  }
+  
+  .rbc-agenda-content {
+    z-index: 1;
+  }
+  
+  .rbc-agenda-view .rbc-header {
+    padding: 5px 10px !important;
   }
 `;
 

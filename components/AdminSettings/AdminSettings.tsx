@@ -1,6 +1,4 @@
-import { useRecoilValue } from 'recoil';
-import { sessionAtom } from '../../atoms/session';
-import { usePerson } from '../../hooks/people';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 import { useDictionary } from '../../hooks/useDictionary';
 import { colors } from '../../styles/global';
 import Container from '../Container/Container';
@@ -11,9 +9,7 @@ import ImageUploader from '../ImageUploader/ImageUploader';
 
 const AdminSettings = () => {
   const { getDictionaryValue } = useDictionary();
-  const session = useRecoilValue(sessionAtom);
-  const userMeta = session?.user.user_metadata?.[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
-  const [authPerson] = usePerson(userMeta?.name, userMeta?.family);
+  const { person: authPerson } = useAuthPerson();
 
   if (!Object.keys(authPerson?.auth ?? {}).some((key) => authPerson?.auth?.[key]?.admin)) {
     return null;
@@ -26,6 +22,7 @@ const AdminSettings = () => {
       <CsvDownloader />
       <IcalReader />
       <ImageUploader
+        requireAdmin
         title={getDictionaryValue('settings', 'uploadImages')}
         text={(
           <>
