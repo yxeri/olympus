@@ -22,7 +22,8 @@ h2 {
 }
 
 .calendar-container {
-    padding: 0;
+    box-sizing: border-box;
+    padding: 0 .5rem;
     max-width: 1200px;
     display: grid;
 }

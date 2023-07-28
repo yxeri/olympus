@@ -43,7 +43,6 @@ const StyledDiv = styled.div`
   .rbc-calendar {
     height: calc(100svh - 4.1rem);
     box-sizing: border-box;
-    padding: .5rem;
     width: 100%;
   }
 
@@ -61,6 +60,10 @@ const StyledDiv = styled.div`
 
   .rbc-calendar, .rbc-header, .rbc-events-container, .rbc-time-header-content, .rbc-time-header, .rbc-time-content, .rbc-timeslot-group, .rbc-day-bg {
     border-color: ${colors.primaryColor};
+  }
+
+  .rbc-day-slot .rbc-events-container {
+    margin-right: 0;
   }
 
   .rbc-time-slot {
@@ -115,16 +118,15 @@ const ToolbarContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  grid-gap: 2rem;
   position: relative;
-  padding: 0 1rem;
+  padding: 0 .5rem;
 `;
 
 const NavContainer = styled.div`
   display: grid;
   grid-auto-flow: column;
   align-items: center;
-  grid-gap: 1rem;
+  grid-gap: .7rem;
   font-size: .9rem;
 `;
 
@@ -303,7 +305,8 @@ const Calendar = () => {
   return (
     <StyledDiv>
       <BigCalendar
-        selectable
+        min={new Date(1972, 0, 1, 7)}
+        step={15}
         eventPropGetter={
         (event: FullEvent) => ({
           style: {
