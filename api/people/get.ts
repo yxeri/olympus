@@ -9,7 +9,9 @@ import { Id } from './types';
 export const getPeople: () => Promise<Person[]> = async () => {
   const peopleCollection = await collection<Person>('people');
 
-  return peopleCollection.find<Person>({}).project<Person>({ email: 0 }).toArray();
+  return peopleCollection
+    .find<Person>({})
+    .project<Person>({ email: 0, authId: 0, auth: 0 }).toArray();
 };
 
 export default async function get(req: NextApiRequest, res: NextApiResponse) {
@@ -27,7 +29,7 @@ export default async function get(req: NextApiRequest, res: NextApiResponse) {
 export const findPerson: (id: Id) => Promise<Person | null> = async (id) => {
   const peopleCollection = await collection<Person>('people');
 
-  return peopleCollection.findOne(id, { projection: { email: 0 } });
+  return peopleCollection.findOne(id, { projection: { email: 0, authId: 0, auth: 0 } });
 };
 
 export const findPersonByAuth: (authId: string) => Promise<Person | null> = async (authId) => {

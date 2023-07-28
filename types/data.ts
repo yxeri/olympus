@@ -40,7 +40,8 @@ export type Person = {
   score: number,
   mail?: string,
   profile: Record<string, any>,
-  auth?: Record<string, Record<'user' | 'mod' | 'admin', boolean>>
+  auth?: Record<string, Record<'user' | 'mod' | 'admin', boolean>>,
+  imgVersion?: string | number,
 };
 
 export const statusCollection: { [key in Status]: string } = {

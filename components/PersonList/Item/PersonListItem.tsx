@@ -49,7 +49,6 @@ const StyledListItem = styled(ListItem)<{ status: Status }>`
   border: 2px solid ${({ status }) => colors[status]};
   box-shadow: 0 0 3px 1px ${({ status }) => colors[status]};
   background-color: ${colors.componentBackground};
-  max-width: ${sizes.mediumMax};
   padding: .2rem;
   grid-column-gap: .7rem;
   grid-template-columns: 1fr 1.6rem;
@@ -76,7 +75,14 @@ export const StatusDiv = styled(StyledDiv)<{ status: Status }>`
 
 const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
   const {
-    year, family, name, status, society, rank, score,
+    year,
+    family,
+    name,
+    status,
+    society,
+    rank,
+    score,
+    imgVersion,
   } = person;
 
   const listItem = (
@@ -101,10 +107,11 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       </StyledDiv>
       <StyledPhoto>
         <CldImage
+          version={imgVersion}
           loading="lazy"
           alt={`${name} ${family}`}
           format="webp"
-          src={`olympus/people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`}
+          src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev/' : ''}people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`}
           height={50}
           width={50}
           transformations={['thumb-person']}

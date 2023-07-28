@@ -3,16 +3,14 @@ import dayjsUtc from 'dayjs/plugin/utc';
 // @ts-ignore
 import iCal from 'ical.js';
 import { useRef } from 'react';
-import { useRecoilValue } from 'recoil';
 import {
   Frequency,
   Weekday,
   WeekdayStr
 } from 'rrule';
 import randomColor from 'randomcolor';
-import { sessionAtom } from '../../atoms/session';
 import useCalendars from '../../hooks/calendars/useCalendars';
-import { usePerson } from '../../hooks/people';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 import { FullEvent } from '../../types/data';
 import Container from '../Container/Container';
 
@@ -32,11 +30,9 @@ type JsonEvent = [
 const IcalReader = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { insert } = useCalendars();
-  const session = useRecoilValue(sessionAtom);
-  const userMeta = session?.user.user_metadata?.[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
-  const [person] = usePerson(userMeta?.name, userMeta?.family);
+  const { person: authPerson } = useAuthPerson();
 
-  if (!person?.auth?.calendars?.admin) {
+  if (!authPerson?.auth?.calendars?.admin) {
     return null;
   }
 
