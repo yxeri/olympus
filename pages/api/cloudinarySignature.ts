@@ -5,9 +5,8 @@ import {
 } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { paramsToSign } = JSON.parse(req.body);
-
   try {
+    const { paramsToSign } = JSON.parse(req.body);
     const signature = cloudinary.utils.api_sign_request(
       paramsToSign,
       process.env.CLOUDINARY_API_SECRET ?? '',
