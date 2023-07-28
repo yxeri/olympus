@@ -48,6 +48,7 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
     name,
     status,
     society,
+    imgVersion,
   } = person;
 
   const listItem = (
@@ -59,6 +60,7 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
       >
         <StyledPhoto>
           <CldImage
+            version={imgVersion}
             loading="lazy"
             alt={`${name} ${family}`}
             format="webp"
