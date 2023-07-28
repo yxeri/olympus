@@ -318,6 +318,15 @@ const Calendar = () => {
         defaultView="week"
         onRangeChange={(range) => {
           if (Array.isArray(range)) {
+            if (range.length === 1) {
+              const tomorrow = new Date(range[0]);
+              tomorrow.setDate(tomorrow.getDate() + 1);
+
+              setSpan({ start: range[0], end: tomorrow });
+
+              return;
+            }
+
             setSpan({ start: range[0], end: range[range.length - 1] });
 
             return;
