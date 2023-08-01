@@ -12,7 +12,7 @@ export const StatusObject = {
 };
 export type Status = keyof typeof StatusObject;
 export const YearObject = {
-  0: '', 1: '', 2: '', 3: '', 4: '', 99: '', '-1': '',
+  0: '', 1: '', 2: '', 3: '', 4: '', 99: '', 100: '',
 };
 export type Year = keyof typeof YearObject;
 export const PersonTypeObject = { Discipli: '', Questi: '', Soter: '' };

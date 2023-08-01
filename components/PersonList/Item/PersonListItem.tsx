@@ -26,7 +26,7 @@ export const romanNumbers: { [key in Year]: string } = {
   3: 'III',
   4: 'IV',
   99: 'Q',
-  '-1': 'S',
+  100: 'S',
 };
 
 export const StyledDiv = styled.div`

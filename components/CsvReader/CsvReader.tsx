@@ -104,9 +104,9 @@ const CsvReader = () => {
             const person = {
               ...object,
               isInactive: !!object.isInactive,
-              year: object.type === 'Questi' ? 99 : object.year ?? -1,
+              year: object.type === 'Questi' ? 99 : object.year ?? 100,
               society: object.society ?? '',
-              score: object.score ?? 0,
+              score: object.score ?? -9999,
               profile: object.profile ?? {},
             };
 
