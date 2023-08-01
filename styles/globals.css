@@ -41,22 +41,4 @@ h2 {
     header, footer {
         display: none !important;
     }
-
-    .editor-container {
-        padding: 0 !important;
-    }
-
-    .inner-editor-container {
-        display: contents !important;
-    }
-
-    .ck-editor__editable {
-        padding: 0 !important;
-        box-shadow: none !important;
-        border: none !important;
-    }
-
-    .ck-toolbar {
-        display: none !important;
-    }
 }

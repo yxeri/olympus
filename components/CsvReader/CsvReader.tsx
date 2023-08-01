@@ -80,7 +80,9 @@ const CsvReader = () => {
 
           const columns: string[] = results.data.slice(0, 1)?.[0] ?? [];
           const rows: string[][] = results.data.slice(1);
-          const { profile, score, ...personObject } = PersonObject;
+          const {
+            profile, score, status, society, year, ...personObject
+          } = PersonObject;
 
           if (!Object.keys(personObject).every((key) => {
             const includes = columns.includes(key);
@@ -101,11 +103,16 @@ const CsvReader = () => {
               .fromEntries(row.map((value, index) => [columns[index], value]));
             const person = {
               ...object,
-              score: object.score ?? -1,
+              isInactive: !!object.isInactive,
+              year: object.type === 'Questi' ? 99 : object.year ?? -1,
+              society: object.society ?? '',
+              score: object.score ?? 0,
               profile: object.profile ?? {},
             };
 
-            const [isValidPerson] = validatePerson(person);
+            const [isValidPerson, errors] = validatePerson(person);
+
+            console.log(errors);
 
             if (isValidPerson) {
               people.push(person as unknown as Person);

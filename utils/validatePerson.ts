@@ -1,6 +1,7 @@
 import {
   PersonObject,
   PersonTypeObject,
+  SocietyObject,
   StatusObject,
   YearObject
 } from '../types/data';
@@ -18,12 +19,18 @@ export const validatePerson = (person: any): [boolean, string[]] => {
     errors.push(`valid status are: ${Object.keys(StatusObject)}`);
   }
 
-  if (!Object.keys(YearObject).includes(person.year.toString())) {
+  console.log(person);
+
+  if (person.year && !Object.keys(YearObject).includes(person.year.toString())) {
     errors.push(`valid years are: ${Object.keys(YearObject)}`);
   }
 
   if (!Object.keys(PersonTypeObject).includes(person.type)) {
     errors.push(`valid types are: ${Object.keys(PersonTypeObject)}`);
+  }
+
+  if (person.society && !Object.keys(SocietyObject).includes(person.society)) {
+    errors.push(`valid societies are: ${Object.keys(SocietyObject)}`);
   }
 
   return [errors.length === 0, errors];

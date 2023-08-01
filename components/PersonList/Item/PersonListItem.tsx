@@ -26,6 +26,7 @@ export const romanNumbers: { [key in Year]: string } = {
   3: 'III',
   4: 'IV',
   99: 'Q',
+  '-1': 'S',
 };
 
 export const StyledDiv = styled.div`
@@ -46,8 +47,8 @@ const StyledPhoto = styled.div`
 
 const StyledListItem = styled(ListItem)<{ status: Status }>`
   display: grid;
-  border: 2px solid ${({ status }) => colors[status]};
-  box-shadow: 0 0 3px 1px ${({ status }) => colors[status]};
+  border: 2px solid ${({ status }) => colors[status] ?? 'transparent'};
+  box-shadow: 0 0 3px 1px ${({ status }) => colors[status] ?? 'transparent'};
   background-color: ${colors.componentBackground};
   padding: .2rem;
   grid-column-gap: .7rem;
@@ -102,7 +103,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       <StyledDiv style={{ gridArea: 'name', textTransform: 'capitalize' }}>
         {`${name} ${family.toUpperCase()}`}
       </StyledDiv>
-      <StyledDiv style={{ gridArea: 'society' }}>
+      <StyledDiv style={{ gridArea: 'society', minHeight: '1rem' }}>
         {society}
       </StyledDiv>
       <StyledPhoto>

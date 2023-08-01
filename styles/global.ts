@@ -19,7 +19,7 @@ export const colors = {
   g: 'transparent',
   d: 'transparent',
   e: 'transparent',
-  '?': 'transparent',
+  '': 'transparent',
 };
 
 export const sizes = {

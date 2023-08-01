@@ -18,16 +18,16 @@ import {
 const StyledTrigger = styled(Trigger)<{ status: Status }>`
   width: 100%;
   display: grid;
-  border: 2px solid ${({ status }) => colors[status]};
-  box-shadow: 0 0 3px 1px ${({ status }) => colors[status]};
+  border: 2px solid ${({ status }) => colors[status] ?? 'transparent'};
+  box-shadow: 0 0 3px 1px ${({ status }) => colors[status] ?? 'transparent'};
   background-color: ${colors.componentBackground};
   grid-template-areas:
     "photo photo photo"
-    "name year status"
+    "name status status"
     "family society society";
   position: relative;
   padding: .2rem;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto 3.5rem;
   grid-gap: .2rem;
 `;
 
@@ -87,20 +87,22 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
         >
           {family}
         </StyledDiv>
-        <StyledDiv style={{
-          gridArea: 'year', justifySelf: 'center',
-        }}
-        >
-          {romanNumbers[year]}
-        </StyledDiv>
-        <StatusDiv
-          status={status}
-          style={{
-            gridArea: 'status', justifySelf: 'center',
+        <StyledDiv style={{ gridArea: 'status', gridAutoFlow: 'column' }}>
+          <StyledDiv style={{
+            justifySelf: 'center',
           }}
-        >
-          {statusCollection[(status as Status)]}
-        </StatusDiv>
+          >
+            {romanNumbers[year]}
+          </StyledDiv>
+          <StatusDiv
+            status={status}
+            style={{
+              justifySelf: 'center',
+            }}
+          >
+            {statusCollection[(status as Status)]}
+          </StatusDiv>
+        </StyledDiv>
         <StyledDiv
           style={{
             width: '100%',

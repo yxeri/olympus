@@ -3,20 +3,23 @@ import { ReactNode } from 'react';
 import { Event } from 'react-big-calendar';
 import { Options } from 'rrule';
 
-export const SocietyObject = { Bacchus: '', Bellona: '', Pheme: '' };
+export const SocietyObject = {
+  Bacchus: '', Bellona: '', Pheme: '',
+};
 export type Society = keyof typeof SocietyObject;
 export const StatusObject = {
-  a: '', b: '', g: '', d: '', e: '', '?': ''
+  a: '', b: '', g: '', d: '', e: '',
 };
 export type Status = keyof typeof StatusObject;
 export const YearObject = {
-  0: '', 1: '', 2: '', 3: '', 4: '', 99: ''
+  0: '', 1: '', 2: '', 3: '', 4: '', 99: '', '-1': '',
 };
 export type Year = keyof typeof YearObject;
-export const PersonTypeObject = { Discipli: '', Questi: '' };
+export const PersonTypeObject = { Discipli: '', Questi: '', Soter: '' };
 export type PersonType = keyof typeof PersonTypeObject;
 
 export const PersonObject: Person = {
+  society: 'Bacchus',
   family: '',
   name: '',
   status: 'a',
@@ -41,6 +44,7 @@ export type Person = {
   profile: Record<string, any>,
   auth?: Record<string, Record<'user' | 'mod' | 'admin', boolean>>,
   imgVersion?: string | number,
+  isInactive?: boolean;
 };
 
 export const statusCollection: { [key in Status]: string } = {
@@ -49,7 +53,6 @@ export const statusCollection: { [key in Status]: string } = {
   g: 'γ',
   d: 'δ',
   e: 'ε',
-  '?': '?',
 };
 
 export type FullEvent = Event & {
