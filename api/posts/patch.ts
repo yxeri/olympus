@@ -41,10 +41,10 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse) {
       _id: new ObjectId(thread._id.toString()),
     });
 
-    if (existingThread?.forumId.toString() !== thread.forumId.toString()) {
+    if (existingThread?.threadId.toString() !== thread.forumId.toString()) {
       threadUpdate.forumId = new ObjectId(threadUpdate.forumId.toString());
 
-      const oldForum = await findForum({ _id: new ObjectId(existingThread?.forumId.toString()) });
+      const oldForum = await findForum({ _id: new ObjectId(existingThread?.threadId.toString()) });
 
       if (!oldForum) {
         throw new ApiError(404, 'Not found');
