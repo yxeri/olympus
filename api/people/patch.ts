@@ -73,8 +73,8 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
 
     if (
       (people.length > 1 && !authPerson?.auth?.people?.admin)
-      || ((people[0].name !== authPerson.name || people[0].family !== authPerson.family)
-        && people[0]._id?.toString() !== authPerson._id?.toString())) {
+      || ((people[0].name !== authPerson?.name || people[0].family !== authPerson?.family)
+        && people[0]._id?.toString() !== authPerson?._id?.toString())) {
       throw new ApiError(403, 'Not allowed');
     }
 

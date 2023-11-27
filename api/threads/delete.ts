@@ -23,8 +23,8 @@ export default async function remove(req: NextApiRequest, res: NextApiResponse) 
       throw new ApiError(404, 'Not found');
     }
 
-    if (!authPerson.auth?.forums.admin
-      && authPerson._id?.toString() !== existingForum?.owner?.toString()) {
+    if (!authPerson?.auth?.forums.admin
+      && authPerson?._id?.toString() !== existingForum?.owner?.toString()) {
       throw new ApiError(403, 'Not allowed');
     }
 
