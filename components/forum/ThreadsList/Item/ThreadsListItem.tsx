@@ -20,9 +20,9 @@ import {
   Thread,
 } from '../../../../types/data';
 import Button from '../../../Button/Button';
-import CreatePost from '../../CreatePost/CreatePost';
 import { getTimeSince } from '../../helpers';
 import PostsList from '../../PostsList/PostsList';
+import PostNavigationContainer from './PostNavigationContainer';
 
 export type ThreadsListItemProps = {
   thread: Thread,
@@ -67,22 +67,6 @@ const StyledCollapsibleRoot = styled(CollapsibleRoot)`
 const NavigationContainer = styled.div`
   display: flex;
   grid-gap: .5rem;
-`;
-
-const PostNavigationContainer = styled.div`
-  box-sizing: border-box;
-  position: sticky;
-  margin-top: .4rem;
-  margin-bottom: -.4rem;
-  margin-left: -.4rem;
-  padding: .4rem;
-  bottom: 1.6rem;
-  background-color: ${colors.darkerComponentBackground};
-  border-top: .5px solid;
-  width: calc(100% + .8rem);
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  box-shadow: 0px -.5px 5px 0px;
 `;
 
 const TextContainer = styled.div`
@@ -183,9 +167,7 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
           {id && forumId && (
             <>
               <PostsList threadId={id.toString()} forumId={forumId.toString()} />
-              <PostNavigationContainer>
-                <CreatePost forumId={forumId.toString()} threadId={id.toString()} label="Write a comment..." />
-              </PostNavigationContainer>
+              <PostNavigationContainer forumId={forumId} id={id} />
             </>
           )}
         </StyledCollapsibleContent>

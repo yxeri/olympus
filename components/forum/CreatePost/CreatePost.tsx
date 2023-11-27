@@ -14,37 +14,13 @@ import { useDictionary } from '../../../hooks/useDictionary';
 import { colors } from '../../../styles/global';
 import {
   Forum,
-  Person,
   Post
 } from '../../../types/data';
 import Button from '../../Button/Button';
 import Input from '../../Input/Input';
 import Modal from '../../Modal/Modal';
 import Form from '../../Form/Form';
-
-const hasAccessToForum = ({
-  forum,
-  authPerson,
-}: { forum: Forum, authPerson: Person }) => {
-  const isPublic = (forum?.postAccess?.length === 0
-    && forum.groupAccess?.length === 0
-    && forum.readAccess?.length === 0);
-  const hasGroupAccess = forum?.groupAccess
-    ?.some(([fieldName, value]) => authPerson[fieldName] === value);
-  const hasReadAccess = [
-    forum?.owner.toString(),
-    ...((forum?.readAccess) ?? [])
-  ].includes(authPerson._id?.toString() ?? '');
-  const hasPostAccess = [
-    forum?.owner.toString(),
-    ...((forum?.postAccess) ?? [])
-  ].includes(authPerson._id?.toString() ?? '');
-
-  return {
-    post: isPublic || hasGroupAccess || hasPostAccess,
-    read: isPublic || hasGroupAccess || hasReadAccess,
-  };
-};
+import { hasAccessToForum } from '../helpers';
 
 const StyledTrigger = styled(RadixTrigger)`
   background: none;
@@ -57,6 +33,7 @@ const StyledTrigger = styled(RadixTrigger)`
   cursor: pointer;
   display: grid;
   place-items: center;
+  height: fit-content;
 `;
 
 type FormValues = Post;

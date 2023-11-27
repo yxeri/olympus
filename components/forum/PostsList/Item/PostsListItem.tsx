@@ -5,9 +5,12 @@ import {
   colors,
 } from 'styles/global';
 import ReplyIcon from 'assets/reply.svg';
+import ThumbsDownIcon from '../../../../assets/thumbs-down.svg';
+import ThumbsUpIcon from '../../../../assets/thumbs-up.svg';
 import {
   Post,
 } from '../../../../types/data';
+import Button from '../../../Button/Button';
 import CreatePost from '../../CreatePost/CreatePost';
 import { getTimeSince } from '../../helpers';
 
@@ -23,6 +26,7 @@ const StyledDiv = styled.div`
   border: .5px solid;
   max-width: 100%;
   width: fit-content;
+  min-width: 7rem;
 `;
 
 const StyledListItem = styled(ListItem)`
@@ -35,9 +39,11 @@ const Container = styled.div`
 
 const NavigationContainer = styled.div`
   display: flex;
-  grid-gap: .5rem;
+  grid-gap: 1rem;
   font-size: .9rem;
   margin-left: .4rem;
+  margin-top: .2rem;
+  height: fit-content;
 `;
 
 const SubPostContainer = styled.div`
@@ -45,9 +51,15 @@ const SubPostContainer = styled.div`
   margin-top: .4rem;
 `;
 
+const CleanButton = styled(Button)`
+  background: none;
+  border: none;
+  padding: 0;
+  height: fit-content;
+`;
+
 const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
   const {
-    title,
     content,
     subPosts,
     threadId,
@@ -63,6 +75,12 @@ const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
         </StyledDiv>
         <NavigationContainer>
           {getTimeSince({ date: new Date(createdAt) })}
+          <CleanButton>
+            <ThumbsUpIcon width={14} height={14} />
+          </CleanButton>
+          <CleanButton>
+            <ThumbsDownIcon width={14} height={14} />
+          </CleanButton>
         </NavigationContainer>
       </SubPostContainer>
     ));
@@ -70,12 +88,17 @@ const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
   return (
     <StyledListItem>
       <StyledDiv>
-        {title && title}
         {`${content}`}
       </StyledDiv>
       <Container>
         <NavigationContainer>
           {getTimeSince({ date: new Date(createdAt) })}
+          <CleanButton>
+            <ThumbsUpIcon width={14} height={14} />
+          </CleanButton>
+          <CleanButton>
+            <ThumbsDownIcon width={14} height={14} />
+          </CleanButton>
           <CreatePost
             forumId={forumId}
             threadId={threadId.toString()}

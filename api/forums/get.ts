@@ -14,7 +14,7 @@ export const hasAccessToForum = ({
   authPerson,
   hasPostAccess,
 }: { forum: Forum, authPerson?: Person, hasPostAccess?: boolean }) => (
-  forum?.postAccess?.length === 0
+  (!hasPostAccess || forum?.postAccess?.length === 0)
     && forum.groupAccess?.length === 0
     && forum.readAccess?.length === 0)
   || [
