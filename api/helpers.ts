@@ -15,7 +15,7 @@ export const getAuthPerson = async ({
   const user = await client.auth.getUser();
 
   if (!user.data.user?.id) {
-    throw new ApiError(500, 'Something went wrong');
+    return undefined;
   }
 
   const authPerson = await findPersonByAuth(user.data.user.id);

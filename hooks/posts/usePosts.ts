@@ -65,6 +65,8 @@ export default function usePosts({ threadId }: { threadId?: string } = {}): UseP
     }
   };
 
+  console.log('posts', data);
+
   return {
     ...swr,
     posts: data?.map((page) => page?.posts).flat() ?? [],

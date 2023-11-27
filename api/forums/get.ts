@@ -13,15 +13,18 @@ export const hasAccessToForum = ({
   forum,
   authPerson,
   hasPostAccess,
-}: { forum: Forum, authPerson: Person, hasPostAccess?: boolean }) => (
+}: { forum: Forum, authPerson?: Person, hasPostAccess?: boolean }) => (
   forum?.postAccess?.length === 0
     && forum.groupAccess?.length === 0
     && forum.readAccess?.length === 0)
   || [
     forum?.owner.toString(),
     ...((hasPostAccess ? forum?.postAccess : forum?.readAccess) ?? [])
-  ].includes(authPerson._id?.toString() ?? '')
-  || forum?.groupAccess?.some(([fieldName, value]) => authPerson[fieldName] === value);
+  ].includes(authPerson?._id?.toString() ?? '')
+  || (
+    authPerson
+    && forum?.groupAccess?.some(([fieldName, value]) => authPerson[fieldName] === value)
+  );
 
 export const findForum: (id: { _id: ObjectId }) => Promise<Forum | null> = async (id) => {
   const forumCollection = await collection<Forum>('forums');

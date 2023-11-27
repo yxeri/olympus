@@ -22,7 +22,7 @@ export const findThread: ({
   authPerson,
 }: {
   _id: ObjectId,
-  authPerson: Person,
+  authPerson?: Person,
 }) => Promise<Thread | null> = async ({ _id, authPerson }) => {
   const threadCollection = await collection<Thread>('threads');
   const thread = await threadCollection.findOne({ _id });
@@ -51,7 +51,7 @@ export const getThreads: ({
 }: {
   page?: number
   forumId?: ObjectId,
-  authPerson: Person,
+  authPerson?: Person,
 }) => Promise<Thread[]> = async ({ forumId, authPerson, page = 0 }) => {
   const threadCollection = await collection<Thread>('threads');
   const forumIds = [];
@@ -62,7 +62,11 @@ export const getThreads: ({
     let forum = await findForum({ _id: forumId });
 
     if (!forum) {
-      if (authPerson._id?.toString() !== forumId.toString()) {
+      if (!authPerson) {
+        throw new ApiError(403, 'Not allowed');
+      }
+
+      if (authPerson?._id?.toString() !== forumId.toString()) {
         throw new ApiError(404, 'Not found');
       }
 
@@ -87,23 +91,30 @@ export const getThreads: ({
     }
   } else {
     const forumCollection = await collection<Forum>('forums');
-    const forums = (await forumCollection.find({
-      $or: [{
-        groupAccess: { $size: 0 },
-        readAccess: { $size: 0 },
-      }, {
-        groupAccess: { $not: { $size: 0 } },
-      }, {
+    const orFilter: Array<{ [key in keyof Partial<Forum>]: {} }> = [{
+      groupAccess: { $size: 0 },
+      readAccess: { $size: 0 },
+    }, {
+      groupAccess: { $not: { $size: 0 } },
+    }];
+
+    if (authPerson) {
+      orFilter.push({
         owner: new ObjectId(authPerson._id?.toString())
       }, {
         readAccess: new ObjectId(authPerson._id?.toString()),
-      }],
+      });
+    }
+
+    const forums = (await forumCollection.find({
+      $or: orFilter,
     }, {
       projection: {
         _id: 1,
         owner: 1,
         readAccess: 1,
         groupAccess: 1,
+        postAccess: 1,
       },
     })
       .toArray())

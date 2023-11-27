@@ -21,7 +21,7 @@ export const findPost: ({
   authPerson,
 }: {
   _id: ObjectId,
-  authPerson: Person,
+  authPerson?: Person,
 }) => Promise<Post | null> = async ({ _id, authPerson }) => {
   const postCollection = await collection<Post>('posts');
   const post = await postCollection.findOne({ _id });
@@ -56,15 +56,13 @@ export const getPosts: ({
 }: {
   page?: number
   threadId?: ObjectId,
-  authPerson: Person,
+  authPerson?: Person,
 }) => Promise<Post[]> = async ({
   authPerson,
   threadId,
   page = 0
 }) => {
   const postCollection = await collection<Post>('posts');
-
-  console.log(threadId);
 
   if (threadId) {
     await findThread({ _id: threadId, authPerson });
@@ -87,8 +85,6 @@ export default async function get(req: NextApiRequest, res: NextApiResponse) {
       : 0;
 
     const authPerson = await getAuthPerson({ req, res });
-
-    console.log(query);
 
     if (query.postId) {
       res.status(200).json({

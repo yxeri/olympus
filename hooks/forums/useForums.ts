@@ -50,6 +50,8 @@ export default function useForums({ type = 'forum' }: { type?: Forum['type'] } =
     }
   };
 
+  console.log('forums', data);
+
   return {
     ...swr,
     forums: data?.forums ?? [],

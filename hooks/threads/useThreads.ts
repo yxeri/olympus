@@ -65,7 +65,7 @@ export default function useThreads({ forumId }: { forumId?: string } = {}): UseT
     }
   };
 
-  console.log(data);
+  console.log('threads', data);
 
   return {
     ...swr,

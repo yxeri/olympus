@@ -33,8 +33,6 @@ export default async function get(req: NextApiRequest, res: NextApiResponse) {
   try {
     const body = req.body || {};
 
-    console.log('getting person');
-
     const { person }: {
       person: Id,
     } = typeof body === 'object' ? body : JSON.parse(body);
