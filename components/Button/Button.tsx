@@ -20,6 +20,7 @@ const StyledButton = styled.button<{ isSelected?: boolean }>`
   border-radius: ${sizes.corner};
   border: ${borders.standard};
   align-content: center;
+  cursor: pointer;
 `;
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((

@@ -59,8 +59,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    console.log(signupData);
-
     if ((signupData.data.user?.identities?.length ?? 0) === 0) {
       res.status(404).json({ error: 'No person found' });
     }

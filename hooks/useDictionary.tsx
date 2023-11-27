@@ -33,6 +33,14 @@ const dictionary = {
       [Locale.SV]: 'Familj',
       [Locale.EN]: 'Family',
     },
+    title: {
+      [Locale.SV]: 'Titel',
+      [Locale.EN]: 'Title',
+    },
+    content: {
+      [Locale.SV]: 'Innehåll',
+      [Locale.EN]: 'Content',
+    },
   },
   auth: {
     password: {

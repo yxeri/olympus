@@ -1,9 +1,12 @@
+import * as console from 'console';
 import { collection } from 'lib/db/tools';
 import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
-import { Person } from '../../types/data';
+import {
+  Person,
+} from '../../types/data';
 import { Id } from './types';
 
 export const getPeople: () => Promise<Person[]> = async () => {
@@ -13,18 +16,6 @@ export const getPeople: () => Promise<Person[]> = async () => {
     .find<Person>({})
     .project<Person>({ email: 0, authId: 0, auth: 0 }).toArray();
 };
-
-export default async function get(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    res.status(200).json({
-      people: await getPeople(),
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      error: error.message,
-    });
-  }
-}
 
 export const findPerson: (id: Id) => Promise<Person | null> = async (id) => {
   const peopleCollection = await collection<Person>('people');
@@ -37,3 +28,32 @@ export const findPersonByAuth: (authId: string) => Promise<Person | null> = asyn
 
   return peopleCollection.findOne({ authId }, { projection: { email: 0 } });
 };
+
+export default async function get(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const body = req.body || {};
+
+    console.log('getting person');
+
+    const { person }: {
+      person: Id,
+    } = typeof body === 'object' ? body : JSON.parse(body);
+
+    if (person) {
+      res.status(200).json({
+        person: await findPerson(person),
+      });
+
+      return;
+    }
+
+    res.status(200).json({
+      people: await getPeople(),
+    });
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+}

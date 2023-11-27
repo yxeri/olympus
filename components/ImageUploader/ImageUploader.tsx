@@ -69,7 +69,14 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         }}
         signatureEndpoint="/api/cloudinarySignature"
         uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev_people' : 'people'}
-        onUpload={() => {
+        onUpload={(...all) => {
+          console.log(all);
+        }}
+        onPublicId={(...all) => {
+          console.log(all);
+        }}
+        onSuccess={(...all) => {
+          console.log(all);
         }}
       >
         {({ open }) => {

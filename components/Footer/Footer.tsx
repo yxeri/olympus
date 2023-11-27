@@ -15,6 +15,7 @@ const StyledDiv = styled.footer`
   grid-auto-flow: column;
   align-items: flex-end;
   z-index: 2;
+  pointer-events: none;
 `;
 
 const LineDiv = styled.div`
@@ -33,6 +34,7 @@ const TextDiv = styled.div`
   z-index: 2;
   padding: 0 .4rem;
   text-shadow: 0px -1px 4px ${colors.primaryBackground};
+  pointer-events: none;
 `;
 
 const BottomMessage = styled.div`
@@ -47,6 +49,7 @@ const BottomMessage = styled.div`
   grid-auto-flow: column;
   justify-content: center;
   grid-gap: .1rem;
+  pointer-events: none;
 
   div {
     margin-top: .3rem;

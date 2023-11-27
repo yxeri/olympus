@@ -88,8 +88,13 @@ const Modal: React.FC<ModalProps> = ({
   content,
   onOpenChange,
   defaultOpen,
+  open,
 }) => (
-  <Root defaultOpen={defaultOpen} onOpenChange={(newOpen) => onOpenChange && onOpenChange(newOpen)}>
+  <Root
+    open={open}
+    defaultOpen={defaultOpen}
+    onOpenChange={(newOpen) => onOpenChange && onOpenChange(newOpen)}
+  >
     {trigger}
     <Portal>
       <DialogOverlay />

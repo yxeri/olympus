@@ -104,7 +104,7 @@ const Navigation: React.FC<NavigationProps> = ({ slim }) => (
         <ContainerDiv>
           <JustifiedDiv justify="flex-end">
             <li style={{ display: 'contents' }}>
-              <StyledLink href="/messages" aria-label="Messages">
+              <StyledLink href="/feeds" aria-label="Feeds">
                 <MessageIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
               </StyledLink>
             </li>
