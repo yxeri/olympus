@@ -49,7 +49,7 @@ const Content = ({
   postId?: string,
   onSuccess: () => void,
 }) => {
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<Set<string>>(new Set());
   const { insert } = usePosts({ threadId });
   const { getDictionaryValue } = useDictionary();
   const onSubmit: SubmitHandler<FormValues> = async ({
@@ -110,7 +110,7 @@ const Content = ({
         uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev_media' : 'media'}
         onUpload={({ info }) => {
           if (info && typeof info === 'object') {
-            setImages([...images, (info as { public_id: string }).public_id]);
+            setImages(new Set([...Array.from(images), (info as { public_id: string }).public_id]));
           }
         }}
       >

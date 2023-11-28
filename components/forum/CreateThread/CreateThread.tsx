@@ -38,7 +38,7 @@ type FormValues = Thread;
 const Trigger = ({ label }: { label?: ReactNode }) => (<StyledTrigger>{label ?? 'Create thread'}</StyledTrigger>);
 
 const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => void }) => {
-  const [images, setImages] = useState<string[]>([]);
+  const [media, setMedia] = useState<Set<Thread['media'][0]>>(new Set());
   const { insert } = useThreads();
   const { getDictionaryValue } = useDictionary();
   const { person } = useAuthPerson();
@@ -50,6 +50,7 @@ const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => vo
       await insert({
         title,
         content,
+        media: Array.from(media),
         forumId: forumId ?? person._id,
       });
 
@@ -99,7 +100,12 @@ const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => vo
         uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev_media' : 'media'}
         onUpload={({ info }) => {
           if (info && typeof info === 'object') {
-            setImages([...images, (info as { public_id: string }).public_id]);
+            const newMedia = {
+              path: (info as { public_id: string }).public_id,
+              type: (info as { resource_type: 'image' | 'video' }).resource_type,
+            };
+
+            setMedia(new Set([...Array.from(media), newMedia]));
           }
         }}
       >

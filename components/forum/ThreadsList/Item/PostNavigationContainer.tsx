@@ -30,7 +30,7 @@ const PostNavigationContainer = ({
   forumId: ObjectId | string,
   id: Object | string,
 }) => {
-  const { forums } = useForums({ type: 'forum' });
+  const { forums } = useForums();
   const { person } = useAuthPerson();
 
   if (forumId) {

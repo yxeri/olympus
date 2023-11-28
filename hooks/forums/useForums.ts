@@ -12,12 +12,12 @@ type UseForumsReturn = Omit<SWRResponse, 'data'> & {
 
 export const url = '/api/forums';
 
-export default function useForums({ type = 'forum' }: { type?: Forum['type'] } = {}): UseForumsReturn {
+export default function useForums({ type }: { type?: Forum['type'] } = {}): UseForumsReturn {
   const {
     data,
     ...swr
   } = useSwr(
-    `${url}?type=${type}`,
+    `${url}${type ? `?type=${type}` : ''}`,
     (urlKey: string) => fetch(urlKey).then((res) => {
       if (res.ok) {
         return res.json();
@@ -49,8 +49,6 @@ export default function useForums({ type = 'forum' }: { type?: Forum['type'] } =
       throw error;
     }
   };
-
-  console.log('forums', data);
 
   return {
     ...swr,

@@ -81,7 +81,7 @@ export type Post = {
   threadId: ObjectId | string;
   title?: string;
   content: string;
-  images: string[];
+  media: Array<{ type: 'video' | 'image', path: string }>;
   subPosts: Array<Omit<Post, 'title' | 'subPosts'> & { postId: string }>;
 };
 
@@ -93,7 +93,7 @@ export type Thread = {
   lastModified: Date;
   title?: string;
   content: string;
-  images: string[];
+  media: Array<{ type: 'video' | 'image', path: string }>;
   locked: boolean;
   pinned: Array<ObjectId | string>;
 };

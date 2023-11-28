@@ -4,7 +4,10 @@ import {
   CollapsibleContent
 } from '@radix-ui/react-collapsible';
 import ListItem from 'components/List/ListItem';
-import { CldImage } from 'next-cloudinary';
+import {
+  CldImage,
+  CldVideoPlayer,
+} from 'next-cloudinary';
 import React from 'react';
 import styled from 'styled-components';
 import {
@@ -24,6 +27,8 @@ import { getTimeSince } from '../../helpers';
 import PostsList from '../../PostsList/PostsList';
 import PostNavigationContainer from './PostNavigationContainer';
 
+import 'next-cloudinary/dist/cld-video-player.css';
+
 export type ThreadsListItemProps = {
   thread: Thread,
 };
@@ -33,6 +38,15 @@ export const StyledDiv = styled.div`
   border-bottom: .5px solid;
   padding-bottom: .8rem;
   padding-top: .8rem;
+  
+  .video > div {
+    aspect-ratio: unset !important;
+    margin-bottom: .2rem;
+  }
+  
+  .video .vjs-time-control, .video .vjs-volume-panel, .video .vjs-spacer, .video .vjs-cloudinary-button {
+    display: none !important;
+  }
 `;
 
 const StyledListItem = styled(ListItem)`
@@ -89,6 +103,7 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
     forumId,
     owner,
     createdAt,
+    media = [],
   } = thread;
 
   const poster = people.find((person) => person._id?.toString() === owner.toString());
@@ -150,6 +165,80 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
       </CleanButton>
       <StyledDiv>
         {`${content}`}
+        {media.slice(0, 1).map(({ path, type }) => {
+          if (type === 'video') {
+            return (
+              <div className="video" style={{ marginTop: '.8rem' }}>
+                <CldVideoPlayer
+                  hideContextMenu
+                  floatingWhenNotVisible="right"
+                  height={600}
+                  width={600}
+                  src={path}
+                />
+              </div>
+            );
+          }
+
+          return (
+            <CldImage
+              style={{
+                maxWidth: '100%',
+                objectFit: 'contain',
+                height: 'fit-content',
+                marginBottom: '.2rem',
+                marginTop: '.8rem',
+              }}
+              loading="lazy"
+              alt={path}
+              format="webp"
+              src={path}
+              width={600}
+              height={600}
+              transformations={['thread-single']}
+            />
+          );
+        })}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridAutoFlow: 'row',
+          gridGap: '.2rem',
+        }}
+        >
+          {media.slice(1).map(({ path, type }) => {
+            if (type === 'video') {
+              return (
+                <div className="video">
+                  <CldVideoPlayer
+                    hideContextMenu
+                    floatingWhenNotVisible="right"
+                    height={200}
+                    width={200}
+                    src={path}
+                  />
+                </div>
+              );
+            }
+
+            return (
+              <CldImage
+                style={{
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  height: 'fit-content',
+                }}
+                loading="lazy"
+                alt={path}
+                format="webp"
+                src={path}
+                width={200}
+                height={200}
+                transformations={['thumb-thread']}
+              />
+            );
+          })}
+        </div>
       </StyledDiv>
       <StyledCollapsibleRoot defaultOpen={false}>
         <NavigationContainer>

@@ -59,10 +59,10 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
     const result = await dbCollection
       .insertOne({
         ...thread,
+        media: thread.media ?? [],
         forumId: new ObjectId(thread.forumId.toString()),
         locked: false,
         pinned: [],
-        images: [],
         posts: [],
         owner: authPerson._id,
         createdAt: new Date()
