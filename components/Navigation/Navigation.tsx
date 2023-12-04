@@ -18,11 +18,11 @@ type NavigationProps = {
   slim?: boolean;
 };
 
-const StyledHeader = styled.header<{ slim?: boolean }>`
+const StyledHeader = styled.header<{ $slim?: boolean }>`
   position: sticky;
   top: 0;
   z-index: 2;
-  margin-bottom: ${({ slim }) => (slim ? '.6rem' : '1.6rem')};
+  margin-bottom: ${({ $slim }) => ($slim ? '.6rem' : '1.6rem')};
 `;
 
 const StyledNav = styled.nav`
@@ -50,16 +50,16 @@ const ContainerDiv = styled.div`
   z-index: 2;
 `;
 
-const JustifiedDiv = styled.div<{ justify: 'flex-start' | 'flex-end' }>`
+const JustifiedDiv = styled.div<{ $justify: 'flex-start' | 'flex-end' }>`
   top: 0;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   grid-gap: ${sizes.largeGap};
   color: ${colors.brightColor};
-  justify-content: ${({ justify }) => justify};
+  justify-content: ${({ $justify }) => $justify};
   width: fit-content;
-  ${({ justify }) => justify === 'flex-end' && 'margin-left: auto'};
+  ${({ $justify }) => $justify === 'flex-end' && 'margin-left: auto'};
 `;
 
 const Logo = styled(Link)`
@@ -97,12 +97,12 @@ const StyledLink = styled(Link)`
 `;
 
 const Navigation: React.FC<NavigationProps> = ({ slim }) => (
-  <StyledHeader slim={slim}>
+  <StyledHeader $slim={slim}>
     <StyledNav>
       <ul style={{ display: 'contents' }}>
         <Line />
         <ContainerDiv>
-          <JustifiedDiv justify="flex-end">
+          <JustifiedDiv $justify="flex-end">
             <li style={{ display: 'contents' }}>
               <StyledLink href="/feeds" aria-label="Feeds">
                 <MessageIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
@@ -130,9 +130,9 @@ const Navigation: React.FC<NavigationProps> = ({ slim }) => (
               />
             </Logo>
           </li>
-          <JustifiedDiv justify="flex-start">
+          <JustifiedDiv $justify="flex-start">
             <li style={{ display: 'contents' }}>
-              <StyledLink href="/library" aria-label="Library">
+              <StyledLink href="/library" aria-label="Index">
                 <BookIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
               </StyledLink>
             </li>

@@ -66,9 +66,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
     const updatedIds: Id[] = [];
     const result = await dbCollection
       .insertMany(filteredPeople.map((person) => ({
-        _id: person._id
-          ? new ObjectId(person._id)
-          : undefined,
+        ...(person._id && { _id: new ObjectId(person._id) }),
         ...person,
         profile: person.profile ?? {},
       })), { ordered: false })
@@ -136,7 +134,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
     });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.status ?? 500).json({
+    res.status(error?.statusCode ?? 500).json({
       error: error.message,
     });
   }

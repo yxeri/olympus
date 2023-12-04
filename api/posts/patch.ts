@@ -22,11 +22,11 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const threadUpdate: any = {
-      title: thread.title,
-      content: thread.content,
-      images: thread.images,
-      locked: thread.locked,
-      pinned: thread.pinned,
+      ...(thread.title && { title: thread.title }),
+      ...(thread.content && { content: thread.content }),
+      ...(thread.images && { images: thread.images }),
+      ...(thread.locked && { locked: thread.locked }),
+      ...(thread.pinned && { pinned: thread.pinned }),
       lastModified: new Date(),
     };
 
@@ -76,7 +76,7 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.status ?? 500).json({
+    res.status(error?.statusCode ?? 500).json({
       error: error.message,
     });
   }

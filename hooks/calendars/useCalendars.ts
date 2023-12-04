@@ -13,6 +13,7 @@ export const url = '/api/calendars';
 export default function useCalendars(): UseCalendarsReturn {
   const {
     data,
+    mutate,
     ...swr
   } = useSwr(
     url,
@@ -27,12 +28,13 @@ export default function useCalendars(): UseCalendarsReturn {
   }).then(() => {
     toast.success('Upload complete!');
 
-    return swr.mutate();
+    mutate(url);
   }).catch(() => toast.error('Something went wrong'));
 
   return {
-    ...swr,
     calendars: data?.calendars ?? [],
     insert: insertCalendar,
+    mutate,
+    ...swr,
   };
 }

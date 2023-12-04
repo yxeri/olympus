@@ -1,6 +1,6 @@
 import Award from 'assets/award.svg';
 import ListItem from 'components/List/ListItem';
-import Modal, { Trigger } from 'components/Modal/Modal';
+import { Trigger } from 'components/Modal/Modal';
 import { CldImage } from 'next-cloudinary';
 import React from 'react';
 import styled from 'styled-components';
@@ -10,23 +10,14 @@ import {
 } from 'styles/global';
 import {
   Person,
+  romanNumbers,
   Status,
   statusCollection,
-  Year
 } from '../../../types/data';
+import PersonModal from '../../PersonModal/PersonModal';
 
 export type PersonListItemProps = {
   person: Person,
-};
-
-export const romanNumbers: { [key in Year]: string } = {
-  0: '0',
-  1: 'I',
-  2: 'II',
-  3: 'III',
-  4: 'IV',
-  99: 'Q',
-  100: 'S',
 };
 
 export const StyledDiv = styled.div`
@@ -45,10 +36,10 @@ const StyledPhoto = styled.div`
   }
 `;
 
-const StyledListItem = styled(ListItem)<{ status: Status }>`
+const StyledListItem = styled(ListItem)<{ $status: Status }>`
   display: grid;
-  border: 2px solid ${({ status }) => colors[status] ?? 'transparent'};
-  box-shadow: 0 0 3px 1px ${({ status }) => colors[status] ?? 'transparent'};
+  border: 2px solid ${({ $status }) => colors[$status] ?? 'transparent'};
+  box-shadow: 0 0 3px 1px ${({ $status }) => colors[$status] ?? 'transparent'};
   background-color: ${colors.componentBackground};
   padding: .2rem;
   grid-column-gap: .7rem;
@@ -70,8 +61,8 @@ const StyledTrigger = styled(Trigger)`
     "rank status society photo";
 `;
 
-export const StatusDiv = styled(StyledDiv)<{ status: Status }>`
-  text-shadow: 0 0 2px ${({ status }) => colors[status]};
+export const StatusDiv = styled(StyledDiv)<{ $status: Status }>`
+  text-shadow: 0 0 2px ${({ $status }) => colors[$status]};
 `;
 
 const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
@@ -84,6 +75,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
     rank,
     score,
     imgVersion,
+    _id: id,
   } = person;
 
   const listItem = (
@@ -95,7 +87,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
         {romanNumbers[year]}
       </StyledDiv>
       <StatusDiv
-        status={status}
+        $status={status}
         style={{ gridArea: 'status' }}
       >
         {statusCollection[status]}
@@ -122,14 +114,13 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
   );
 
   return (
-    <StyledListItem status={status}>
-      <Modal
+    <StyledListItem $status={status}>
+      <PersonModal
         trigger={listItem}
-        title={`${person.name} ${person.family.toUpperCase()}`}
-        description="Description"
-        content={<div>Content</div>}
+        personId={id ?? ''}
       />
-      <Modal
+      <PersonModal
+        personId={id ?? ''}
         trigger={(
           <Trigger
             aria-label={`rank ${score}`}
@@ -146,9 +137,6 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
             <span style={{ alignSelf: 'center' }}>{score}</span>
           </Trigger>
         )}
-        title={`${person.name} ${person.family.toUpperCase()}`}
-        description="Description"
-        content={<div>Content</div>}
       />
     </StyledListItem>
   );

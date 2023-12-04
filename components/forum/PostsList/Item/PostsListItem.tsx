@@ -5,14 +5,13 @@ import {
   colors,
 } from 'styles/global';
 import ReplyIcon from 'assets/reply.svg';
-import ThumbsDownIcon from '../../../../assets/thumbs-down.svg';
-import ThumbsUpIcon from '../../../../assets/thumbs-up.svg';
 import {
   Post,
 } from '../../../../types/data';
-import Button from '../../../Button/Button';
 import CreatePost from '../../CreatePost/CreatePost';
 import { getTimeSince } from '../../helpers';
+import PostLikeButtons from '../../LikeButtons/PostLikeButtons';
+import MediaContent from '../../MediaContent/MediaContent';
 
 export type PostsListItemProps = {
   post: Post,
@@ -51,13 +50,6 @@ const SubPostContainer = styled.div`
   margin-top: .4rem;
 `;
 
-const CleanButton = styled(Button)`
-  background: none;
-  border: none;
-  padding: 0;
-  height: fit-content;
-`;
-
 const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
   const {
     content,
@@ -65,6 +57,7 @@ const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
     threadId,
     _id: id,
     createdAt,
+    media,
   } = post;
 
   const subPostItems = subPosts
@@ -72,15 +65,11 @@ const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
       <SubPostContainer>
         <StyledDiv>
           {subPost.content}
+          <MediaContent media={subPost.media} />
         </StyledDiv>
         <NavigationContainer>
           {getTimeSince({ date: new Date(createdAt) })}
-          <CleanButton>
-            <ThumbsUpIcon width={14} height={14} />
-          </CleanButton>
-          <CleanButton>
-            <ThumbsDownIcon width={14} height={14} />
-          </CleanButton>
+          <PostLikeButtons postId={id?.toString() ?? ''} />
         </NavigationContainer>
       </SubPostContainer>
     ));
@@ -89,16 +78,12 @@ const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
     <StyledListItem>
       <StyledDiv>
         {`${content}`}
+        <MediaContent media={media} />
       </StyledDiv>
       <Container>
         <NavigationContainer>
           {getTimeSince({ date: new Date(createdAt) })}
-          <CleanButton>
-            <ThumbsUpIcon width={14} height={14} />
-          </CleanButton>
-          <CleanButton>
-            <ThumbsDownIcon width={14} height={14} />
-          </CleanButton>
+          <PostLikeButtons postId={id?.toString() ?? ''} />
           <CreatePost
             forumId={forumId}
             threadId={threadId.toString()}

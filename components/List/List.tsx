@@ -19,10 +19,10 @@ const variants = (variant?: ListVariants) => {
   `;
 };
 
-export default styled.ol<{ variant?: ListVariants }>`
+export default styled.ol<{ $variant?: ListVariants }>`
   list-style-type: none;
   margin: 0;
   padding: 0;
   display: grid;
-  ${({ variant }) => variants(variant)}
+  ${({ $variant }) => variants($variant)}
 `;

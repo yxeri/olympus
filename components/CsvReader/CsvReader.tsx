@@ -81,7 +81,16 @@ const CsvReader = () => {
           const columns: string[] = results.data.slice(0, 1)?.[0] ?? [];
           const rows: string[][] = results.data.slice(1);
           const {
-            profile, score, status, society, year, ...personObject
+            profile,
+            score,
+            status,
+            society,
+            year,
+            age,
+            pronouns,
+            province,
+            specialisation,
+            ...personObject
           } = PersonObject;
 
           if (!Object.keys(personObject).every((key) => {
@@ -103,6 +112,7 @@ const CsvReader = () => {
               .fromEntries(row.map((value, index) => [columns[index], value]));
             const person = {
               ...object,
+              pronouns: object.pronouns?.split('/'),
               isInactive: !!object.isInactive,
               year: object.type === 'Questi' ? 99 : object.year ?? 100,
               society: object.society ?? '',

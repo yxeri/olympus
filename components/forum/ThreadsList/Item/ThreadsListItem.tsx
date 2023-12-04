@@ -6,15 +6,12 @@ import {
 import ListItem from 'components/List/ListItem';
 import {
   CldImage,
-  CldVideoPlayer,
 } from 'next-cloudinary';
 import React from 'react';
 import styled from 'styled-components';
 import {
   colors,
 } from 'styles/global';
-import ThumbsUpIcon from 'assets/thumbs-up.svg';
-import ThumbsDownIcon from 'assets/thumbs-down.svg';
 import MessageIcon from 'assets/message-square.svg';
 import MoreIcon from 'assets/more-vertical.svg';
 import useForums from '../../../../hooks/forums/useForums';
@@ -23,11 +20,13 @@ import {
   Thread,
 } from '../../../../types/data';
 import Button from '../../../Button/Button';
+import { Trigger } from '../../../Modal/Modal';
+import PersonModal from '../../../PersonModal/PersonModal';
 import { getTimeSince } from '../../helpers';
+import ThreadLikeButtons from '../../LikeButtons/ThreadLikeButtons';
+import MediaContent from '../../MediaContent/MediaContent';
 import PostsList from '../../PostsList/PostsList';
 import PostNavigationContainer from './PostNavigationContainer';
-
-import 'next-cloudinary/dist/cld-video-player.css';
 
 export type ThreadsListItemProps = {
   thread: Thread,
@@ -38,15 +37,6 @@ export const StyledDiv = styled.div`
   border-bottom: .5px solid;
   padding-bottom: .8rem;
   padding-top: .8rem;
-  
-  .video > div {
-    aspect-ratio: unset !important;
-    margin-bottom: .2rem;
-  }
-  
-  .video .vjs-time-control, .video .vjs-volume-panel, .video .vjs-spacer, .video .vjs-cloudinary-button {
-    display: none !important;
-  }
 `;
 
 const StyledListItem = styled(ListItem)`
@@ -63,6 +53,35 @@ const StyledListItem = styled(ListItem)`
 const StyledCollapsibleContent = styled(CollapsibleContent)`
   border-top: .5px solid;
   padding-top: .8rem;
+  max-height: fit-content;
+
+  @keyframes slideDown {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      overflow: hidden;
+      height: var(--radix-collapsible-content-height);
+    }
+    to {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+  
+  &[data-state='open'] {
+    animation: slideDown 300ms ease-out;
+  }
+
+  &[data-state='closed'] {
+    animation: slideUp 300ms ease-out;
+  }
 `;
 
 const StyledCollapsibleTrigger = styled(CollapsibleTrigger)`
@@ -94,6 +113,14 @@ const CleanButton = styled(Button)`
   border: none;
 `;
 
+const StyledTrigger = styled(Trigger)`
+  font-size: inherit;
+  color: inherit;
+  background: inherit;
+  border: none;
+  padding: 0;
+`;
+
 const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
   const { people } = usePeople();
   const { forums } = useForums({ type: 'forum' });
@@ -110,11 +137,11 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
   const foundForum = forums.find((forum) => forum._id?.toString() === forumId.toString());
 
   if (!poster) {
-    return null;
+    return undefined;
   }
 
   return (
-    <StyledListItem>
+    <StyledListItem key={id?.toString() ?? ''}>
       <div style={{ maxWidth: 'calc(100% - 1.4rem)' }}>
         <CldImage
           style={{
@@ -137,15 +164,29 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
               {foundForum?.name}
             </TextContainer>
             <TextContainer style={{ fontSize: '.8rem' }}>
-              <span>{`${poster?.name} ${poster?.family}`}</span>
+              <PersonModal
+                personId={poster._id ?? ''}
+                trigger={(
+                  <StyledTrigger>
+                    <TextContainer>{`${poster?.name} ${poster?.family}`}</TextContainer>
+                  </StyledTrigger>
+                  )}
+              />
               <span>{getTimeSince({ date: new Date(createdAt) })}</span>
             </TextContainer>
           </>
         ) : (
           <>
-            <TextContainer>
-              {`${poster?.name} ${poster?.family}`}
-            </TextContainer>
+            <PersonModal
+              personId={poster._id ?? ''}
+              trigger={(
+                <StyledTrigger>
+                  <TextContainer>
+                    {`${poster?.name} ${poster?.family}`}
+                  </TextContainer>
+                </StyledTrigger>
+              )}
+            />
             <TextContainer style={{ fontSize: '.8rem' }}>
               {getTimeSince({ date: new Date(createdAt) })}
             </TextContainer>
@@ -165,89 +206,11 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
       </CleanButton>
       <StyledDiv>
         {`${content}`}
-        {media.slice(0, 1).map(({ path, type }) => {
-          if (type === 'video') {
-            return (
-              <div className="video" style={{ marginTop: '.8rem' }}>
-                <CldVideoPlayer
-                  hideContextMenu
-                  floatingWhenNotVisible="right"
-                  height={600}
-                  width={600}
-                  src={path}
-                />
-              </div>
-            );
-          }
-
-          return (
-            <CldImage
-              style={{
-                maxWidth: '100%',
-                objectFit: 'contain',
-                height: 'fit-content',
-                marginBottom: '.2rem',
-                marginTop: '.8rem',
-              }}
-              loading="lazy"
-              alt={path}
-              format="webp"
-              src={path}
-              width={600}
-              height={600}
-              transformations={['thread-single']}
-            />
-          );
-        })}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gridAutoFlow: 'row',
-          gridGap: '.2rem',
-        }}
-        >
-          {media.slice(1).map(({ path, type }) => {
-            if (type === 'video') {
-              return (
-                <div className="video">
-                  <CldVideoPlayer
-                    hideContextMenu
-                    floatingWhenNotVisible="right"
-                    height={200}
-                    width={200}
-                    src={path}
-                  />
-                </div>
-              );
-            }
-
-            return (
-              <CldImage
-                style={{
-                  maxWidth: '100%',
-                  objectFit: 'contain',
-                  height: 'fit-content',
-                }}
-                loading="lazy"
-                alt={path}
-                format="webp"
-                src={path}
-                width={200}
-                height={200}
-                transformations={['thumb-thread']}
-              />
-            );
-          })}
-        </div>
+        <MediaContent media={media} />
       </StyledDiv>
       <StyledCollapsibleRoot defaultOpen={false}>
         <NavigationContainer>
-          <CleanButton>
-            <ThumbsUpIcon width={14} height={14} />
-          </CleanButton>
-          <CleanButton>
-            <ThumbsDownIcon width={14} height={14} />
-          </CleanButton>
+          <ThreadLikeButtons threadId={id?.toString() ?? ''} />
           <StyledCollapsibleTrigger>
             <MessageIcon width={14} height={14} />
           </StyledCollapsibleTrigger>

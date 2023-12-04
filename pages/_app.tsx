@@ -19,9 +19,14 @@ import SessionHandler from '../components/SessionHandler/SessionHandler';
 import useCalendars from '../hooks/calendars/useCalendars';
 import { usePeople } from '../hooks/people';
 
-const fullHeightPaths = [
+const hideFooterPaths = [
   '/calendar',
-  '/library',
+];
+
+const slimHeaderPaths = [
+  '/calendar',
+  '/library/[docId]',
+  '/library/create',
 ];
 
 const localStorageProvider = () => {
@@ -56,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
       >
         <RecoilRoot>
           <SessionHandler supabaseClient={supabaseClient} />
-          <Navigation slim={fullHeightPaths.includes(pathname)} />
+          <Navigation slim={slimHeaderPaths.includes(pathname)} />
           <ToastContainer
             transition={Slide}
             position="top-right"
@@ -65,8 +70,8 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
           <main>
             <Component {...pageProps} />
           </main>
-          {!fullHeightPaths.includes(pathname) && <Footer />}
-          <Auth float={fullHeightPaths.includes(pathname)} />
+          {!hideFooterPaths.includes(pathname) && <Footer />}
+          <Auth float={hideFooterPaths.includes(pathname)} />
         </RecoilRoot>
       </SessionContextProvider>
     </SWRConfig>

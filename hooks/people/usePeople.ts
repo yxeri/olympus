@@ -18,6 +18,7 @@ export const url = '/api/people';
 export default function usePeople(): UsePeopleReturn {
   const {
     data,
+    mutate,
     ...swr
   } = useSwr(
     url,
@@ -30,7 +31,7 @@ export default function usePeople(): UsePeopleReturn {
   }).then(() => {
     toast.success('Update complete!');
 
-    return swr.mutate();
+    mutate();
   }).catch(() => toast.error('Something went wrong'));
   const insertPeople: InsertPeople = (people) => fetch(url, {
     method: 'POST',
@@ -38,14 +39,15 @@ export default function usePeople(): UsePeopleReturn {
   }).then(() => {
     toast.success('Upload complete!');
 
-    return swr.mutate();
+    mutate();
   }).catch(() => toast.error('Something went wrong'));
 
   return {
-    ...swr,
     people: data?.people?.sort((a: Person, b: Person) => a.score < b.score)
       .map((person: Person, index: number) => ({ ...person, rank: index + 1 })) ?? [],
     update: updatePeople,
     insert: insertPeople,
+    mutate,
+    ...swr,
   };
 }

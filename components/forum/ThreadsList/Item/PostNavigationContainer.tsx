@@ -14,7 +14,7 @@ const Container = styled.div`
   margin-bottom: -.4rem;
   margin-left: -.4rem;
   padding: .4rem;
-  bottom: 1.6rem;
+  bottom: 0;
   background-color: ${colors.darkerComponentBackground};
   border-top: .5px solid;
   width: calc(100% + .8rem);
@@ -32,6 +32,10 @@ const PostNavigationContainer = ({
 }) => {
   const { forums } = useForums();
   const { person } = useAuthPerson();
+
+  if (!person) {
+    return undefined;
+  }
 
   if (forumId) {
     const foundForum = forums.find((forum) => forum._id?.toString() === forumId);

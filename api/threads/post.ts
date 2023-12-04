@@ -59,6 +59,8 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
     const result = await dbCollection
       .insertOne({
         ...thread,
+        likes: [],
+        dislikes: [],
         media: thread.media ?? [],
         forumId: new ObjectId(thread.forumId.toString()),
         locked: false,
@@ -73,7 +75,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.status ?? 500).json({
+    res.status(error?.statusCode ?? 500).json({
       error: error.message,
     });
   }

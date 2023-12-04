@@ -14,10 +14,10 @@ const StyledRoot = styled(ToggleGroup.Root)`
   display: flex;
 `;
 
-const StyledItem = styled(ToggleGroup.Item)<{ variant?: 'left' | 'right' }>`
+const StyledItem = styled(ToggleGroup.Item)<{ $variant?: 'left' | 'right' }>`
   cursor: pointer;
-  ${({ variant }) => {
-    if (variant === 'left') {
+  ${({ $variant }) => {
+    if ($variant === 'left') {
       return `
         border-right: none;
         border-top-right-radius: 0;
@@ -25,7 +25,7 @@ const StyledItem = styled(ToggleGroup.Item)<{ variant?: 'left' | 'right' }>`
       `;
     }
 
-    if (variant === 'right') {
+    if ($variant === 'right') {
       return `
         border-left: none;
         border-top-left-radius: 0;
@@ -57,7 +57,7 @@ const VariantPicker = () => {
     >
       <StyledItem
         asChild
-        variant="left"
+        $variant="left"
         value="list"
         aria-label="List variant: list"
       >
@@ -67,7 +67,7 @@ const VariantPicker = () => {
       </StyledItem>
       <StyledItem
         asChild
-        variant="right"
+        $variant="right"
         value="grid"
         aria-label="List variant: grid"
       >

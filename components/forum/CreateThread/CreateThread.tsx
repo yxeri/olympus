@@ -1,41 +1,65 @@
 import { CldUploadWidget } from 'next-cloudinary';
 import process from 'process';
 import React, {
-  ReactNode,
   useState,
 } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import styled from 'styled-components';
 import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
+import PlusIcon from '../../../assets/plus-circle.svg';
 import useForums from '../../../hooks/forums/useForums';
 import useAuthPerson from '../../../hooks/people/useAuthPerson';
 import useThreads from '../../../hooks/threads/useThreads';
 import { useDictionary } from '../../../hooks/useDictionary';
-import { colors } from '../../../styles/global';
+import {
+  colors,
+  sizes,
+} from '../../../styles/global';
 import {
   Thread,
   Forum,
 } from '../../../types/data';
 import Button from '../../Button/Button';
+import Container from '../../Container/Container';
 import Input from '../../Input/Input';
 import Modal from '../../Modal/Modal';
 import Form from '../../Form/Form';
 import { hasAccessToForum } from '../helpers';
 
-const StyledTrigger = styled(RadixTrigger)`
-  display: grid;
-  place-items: center;
-  width: fit-content;
-  color: ${colors.brightColor};
-  background: inherit;
-  border: none;
-  cursor: pointer;
-  padding: .1rem;
-`;
+const StyledTrigger = () => (
+  <Container style={{
+    boxSizing: 'border-box',
+    display: 'grid',
+    justifyItems: 'flex-end',
+    paddingRight: sizes.largeGap,
+    position: 'sticky',
+    bottom: '2rem',
+    marginTop: '.5rem',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    width: sizes.mediumMax,
+    maxWidth: '100%',
+    color: colors.brightColor,
+    zIndex: 2,
+    right: 0,
+  }}
+  >
+    <RadixTrigger style={{
+      boxSizing: 'border-box',
+      color: colors.brightColor,
+      border: `1px solid ${colors.brightColor}`,
+      borderRadius: '50%',
+      backgroundColor: colors.primaryBackground,
+      padding: '.25rem',
+      margin: 0,
+      display: 'grid',
+    }}
+    >
+      <PlusIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+    </RadixTrigger>
+  </Container>
+);
 
 type FormValues = Thread;
-
-const Trigger = ({ label }: { label?: ReactNode }) => (<StyledTrigger>{label ?? 'Create thread'}</StyledTrigger>);
 
 const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => void }) => {
   const [media, setMedia] = useState<Set<Thread['media'][0]>>(new Set());
@@ -129,13 +153,18 @@ const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => vo
   );
 };
 
-const CreateThread = ({ type, forumId, label }: { type?: Forum['type'], forumId?: string, label?: ReactNode } = {}) => {
+const CreateThread = ({ type, forumId }: { type?: Forum['type'], forumId?: string } = {}) => {
   const [open, setOpen] = useState<boolean>();
   const { forums } = useForums({ type });
   const { person } = useAuthPerson();
+  let foundForum;
+
+  if (!person) {
+    return undefined;
+  }
 
   if (forumId) {
-    const foundForum = forums.find((forum) => forum._id?.toString() === forumId);
+    foundForum = forums.find((forum) => forum._id?.toString() === forumId);
 
     if (!foundForum || !hasAccessToForum({ forum: foundForum, authPerson: person }).post) {
       return null;
@@ -146,8 +175,8 @@ const CreateThread = ({ type, forumId, label }: { type?: Forum['type'], forumId?
     <Modal
       open={open}
       onOpenChange={(newOpen) => setOpen(newOpen)}
-      trigger={<Trigger label={label} />}
-      title="Create thread"
+      trigger={<StyledTrigger />}
+      title={foundForum?.name ?? `${person.name} ${person.family}`}
       content={<Content forumId={forumId} onSuccess={() => setOpen(false)} />}
     />
   );

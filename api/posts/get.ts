@@ -109,7 +109,7 @@ export default async function get(req: NextApiRequest, res: NextApiResponse) {
     throw new ApiError(400, 'Missing data');
   } catch (error: any) {
     console.log(error);
-    res.status(error?.status ?? 500).json({
+    res.status(error?.statusCode ?? 500).json({
       error: error.message,
     });
   }

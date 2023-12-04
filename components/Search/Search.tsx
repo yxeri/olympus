@@ -33,16 +33,16 @@ const StyledDiv = styled.div`
   height: 100%;
 `;
 
-const SearchImage = styled(SearchIcon)<{ isHidden: boolean }>`
+const SearchImage = styled(SearchIcon)<{ $isHidden: boolean }>`
   position: absolute;
   left: .3rem;
-  ${({ isHidden }) => isHidden && 'display: none;'}
+  ${({ $isHidden }) => $isHidden && 'display: none;'}
 `;
 
-const ClearImage = styled(XIcon)<{ isHidden: boolean }>`
+const ClearImage = styled(XIcon)<{ $isHidden: boolean }>`
   position: absolute;
   right: .3rem;
-  ${({ isHidden }) => isHidden && 'display: none;'}
+  ${({ $isHidden }) => $isHidden && 'display: none;'}
 `;
 
 const Search = () => {
@@ -59,7 +59,7 @@ const Search = () => {
   return (
     <StyledDiv>
       <SearchImage
-        isHidden={hasContent}
+        $isHidden={hasContent}
         alt="Search"
         width={sizes.largeIcon}
         height={sizes.largeIcon}
@@ -67,7 +67,6 @@ const Search = () => {
       <StyledInput
         value={value}
         aria-label="Search"
-        defaultValue={searchString}
         onChange={({ currentTarget }: ChangeEvent<HTMLInputElement>) => {
           updateSearchString(currentTarget.value);
           setValue(currentTarget.value);
@@ -80,7 +79,7 @@ const Search = () => {
           setSearchString('');
           setValue('');
         }}
-        isHidden={!searchString}
+        $isHidden={!searchString}
         src="/x.svg"
         alt="Clear"
         width={sizes.largeIcon}

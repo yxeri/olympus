@@ -11,15 +11,17 @@ const StyledList = styled(List)`
 `;
 
 const ThreadsList = ({ forumId }: { forumId?: string }) => {
-  const { threads } = useThreads({ forumId });
+  const { threads = [] } = useThreads({ forumId });
 
-  const ListItems = threads
+  const listItems = threads
     .filter((thread) => thread?._id)
     .map((thread) => <ThreadsListItem thread={thread} key={thread._id?.toString()} />);
 
+  console.log(listItems);
+
   return (
     <StyledList>
-      {ListItems}
+      {listItems}
     </StyledList>
   );
 };

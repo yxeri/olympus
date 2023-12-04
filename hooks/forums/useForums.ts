@@ -15,6 +15,7 @@ export const url = '/api/forums';
 export default function useForums({ type }: { type?: Forum['type'] } = {}): UseForumsReturn {
   const {
     data,
+    mutate,
     ...swr
   } = useSwr(
     `${url}${type ? `?type=${type}` : ''}`,
@@ -42,7 +43,7 @@ export default function useForums({ type }: { type?: Forum['type'] } = {}): UseF
 
       toast.success('Forum created!');
 
-      return await swr.mutate();
+      mutate();
     } catch (error) {
       toast.error('Something went wrong');
 
@@ -51,8 +52,9 @@ export default function useForums({ type }: { type?: Forum['type'] } = {}): UseF
   };
 
   return {
-    ...swr,
     forums: data?.forums ?? [],
     insert: insertForum,
+    mutate,
+    ...swr,
   };
 }

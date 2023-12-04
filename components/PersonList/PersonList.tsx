@@ -69,7 +69,7 @@ const PersonList: React.FC<PersonListProps> = () => {
   });
 
   return (
-    <StyledList variant={listVariant} aria-label="people">
+    <StyledList $variant={listVariant} aria-label="people">
       {getFilteredItems({ searchString, listVariant, list: sortedPeople })}
     </StyledList>
   );

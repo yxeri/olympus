@@ -36,7 +36,7 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse) {
       throw new ApiError(404, 'Not found');
     }
 
-    if (!authPerson.auth?.forums.admin && ![existingForum?.owner.toString()].includes(authPerson._id?.toString() ?? '')) {
+    if (!authPerson.auth?.forums?.admin && ![existingForum?.owner.toString()].includes(authPerson._id?.toString() ?? '')) {
       throw new ApiError(403, 'Not allowed');
     }
 
@@ -48,7 +48,7 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.status ?? 500).json({
+    res.status(error?.statusCode ?? 500).json({
       error: error.message,
     });
   }

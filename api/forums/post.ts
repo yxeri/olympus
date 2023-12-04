@@ -51,12 +51,12 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
       throw new ApiError(403, 'Not allowed');
     }
 
-    res.status(200).json(createForum({
+    res.status(200).json(await createForum({
       authPerson,
       forum,
     }));
   } catch (error: any) {
-    res.status(error?.status ?? 500).json({
+    res.status(error?.statusCode ?? 500).json({
       error: error.message,
     });
   }

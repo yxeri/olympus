@@ -1,21 +1,34 @@
 import { toast } from 'react-toastify';
-import { SWRResponse } from 'swr';
+import {
+  SWRResponse,
+} from 'swr';
 import useSWRInfinite from 'swr/infinite';
 import {
   Post,
 } from '../../types/data';
 
 type InsertPost = (post: Partial<Post> & { postId?: string }) => void;
+
 type UsePostsReturn = Omit<SWRResponse, 'data'> & {
+  likePost: LikePost,
   posts: Post[],
   insert: InsertPost,
 };
+
+type LikePost = ({
+  postId,
+  like,
+}: {
+  postId: NonNullable<Post['_id']>,
+  like: boolean,
+}) => void;
 
 export const url = '/api/posts';
 
 export default function usePosts({ threadId }: { threadId?: string } = {}): UsePostsReturn {
   const {
     data,
+    mutate,
     ...swr
   } = useSWRInfinite(
     (index, previousPageData) => {
@@ -41,9 +54,12 @@ export default function usePosts({ threadId }: { threadId?: string } = {}): UseP
       return jsonData;
     },
     {
+      revalidateAll: true,
+      parallel: true,
       keepPreviousData: true,
     }
   );
+
   const insertPost: InsertPost = async (post) => {
     try {
       const result = await fetch(url, {
@@ -57,7 +73,7 @@ export default function usePosts({ threadId }: { threadId?: string } = {}): UseP
 
       toast.success('Post created!');
 
-      return await swr.mutate();
+      mutate();
     } catch (error) {
       toast.error('Failed to create post');
 
@@ -65,9 +81,30 @@ export default function usePosts({ threadId }: { threadId?: string } = {}): UseP
     }
   };
 
+  const likePost: LikePost = async ({ postId, like }) => {
+    try {
+      const result = await fetch(url, {
+        method: 'PATCH',
+        body: JSON.stringify({ thread: { _id: postId }, like }),
+      });
+
+      if (!result.ok) {
+        throw new Error(result.status.toString());
+      }
+
+      mutate();
+    } catch (error) {
+      toast.error('Failed to create thread');
+
+      throw error;
+    }
+  };
+
   return {
-    ...swr,
+    likePost,
     posts: data?.map((page) => page?.posts).flat() ?? [],
     insert: insertPost,
+    mutate,
+    ...swr,
   };
 }

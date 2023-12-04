@@ -1,25 +1,26 @@
 import ListItem from 'components/List/ListItem';
-import Modal, { Trigger } from 'components/Modal/Modal';
+import { Trigger } from 'components/Modal/Modal';
 import { CldImage } from 'next-cloudinary';
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'styles/global';
 import {
+  romanNumbers,
   Status,
-  statusCollection
+  statusCollection,
 } from '../../../types/data';
+import PersonModal from '../../PersonModal/PersonModal';
 import {
   PersonListItemProps,
-  romanNumbers,
   StatusDiv,
   StyledDiv,
 } from './PersonListItem';
 
-const StyledTrigger = styled(Trigger)<{ status: Status }>`
+const StyledTrigger = styled(Trigger)<{ $status: Status }>`
   width: 100%;
   display: grid;
-  border: 2px solid ${({ status }) => colors[status] ?? 'transparent'};
-  box-shadow: 0 0 3px 1px ${({ status }) => colors[status] ?? 'transparent'};
+  border: 2px solid ${({ $status }) => colors[$status] ?? 'transparent'};
+  box-shadow: 0 0 3px 1px ${({ $status }) => colors[$status] ?? 'transparent'};
   background-color: ${colors.componentBackground};
   grid-template-areas:
     "photo photo photo"
@@ -49,13 +50,14 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
     status,
     society,
     imgVersion,
+    _id: id,
   } = person;
 
   const listItem = (
     <ListItem style={{ backgroundColor: colors.componentBackground }}>
       <StyledTrigger
         aria-label={`${name} ${family}, ${statusCollection[(status as Status)]}, ${society}`}
-        status={status}
+        $status={status}
         style={{ cursor: 'pointer' }}
       >
         <StyledPhoto>
@@ -95,7 +97,7 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
             {romanNumbers[year]}
           </StyledDiv>
           <StatusDiv
-            status={status}
+            $status={status}
             style={{
               justifySelf: 'center',
             }}
@@ -118,11 +120,9 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
   );
 
   return (
-    <Modal
+    <PersonModal
+      personId={id ?? ''}
       trigger={listItem}
-      title={`${person.name} ${person.family.toUpperCase()}`}
-      description="Description"
-      content={<div>Content</div>}
     />
   );
 };

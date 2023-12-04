@@ -14,9 +14,9 @@ export default function ForumPage() {
   return (
     <div className="main-container">
       <CreateForum />
-      <CreateThread type="forum" forumId={router.query.forumId as string} />
       <ForumsList type="forum" />
       <ThreadsList forumId={router.query.forumId as string} />
+      <CreateThread type="forum" forumId={router.query.forumId as string} />
     </div>
   );
 }

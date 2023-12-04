@@ -135,7 +135,7 @@ const DateSpan = styled.span`
   position: absolute;
   right: 0;
   left: 0;
-  top: -1.7rem;
+  top: -1.5rem;
   color: ${colors.brightColor};
   background-color: ${colors.primaryTransBackground};
   font-size: 1.1rem;

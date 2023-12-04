@@ -49,7 +49,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
       const result = await dbCollection
         .updateOne(
           { _id: new ObjectId(postData.postId.toString()) },
-          { $push: { subPosts: postData } },
+          { $push: { subPosts: { ...postData, _id: new ObjectId() } } },
         );
 
       res.status(200).json({
@@ -63,7 +63,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
       .insertOne({
         ...postData,
         threadId: new ObjectId(postData.threadId.toString()),
-        images: [],
+        media: postData.media ?? [],
         subPosts: [],
         owner: authPerson._id,
         createdAt: new Date()
@@ -74,7 +74,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.status ?? 500).json({
+    res.status(error?.statusCode ?? 500).json({
       error: error.message,
     });
   }

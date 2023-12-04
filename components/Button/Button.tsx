@@ -10,12 +10,12 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   isSelected?: boolean;
 };
 
-const StyledButton = styled.button<{ isSelected?: boolean }>`
+const StyledButton = styled.button<{ $isSelected?: boolean }>`
   color: inherit;
   font: inherit;
   text-align: left;
   display: grid;
-  background-color: ${({ isSelected }) => (isSelected ? colors.selectedBackground : colors.clickableBackground)};
+  background-color: ${({ $isSelected }) => ($isSelected ? colors.selectedBackground : colors.clickableBackground)};
   padding: .5rem;
   border-radius: ${sizes.corner};
   border: ${borders.standard};
@@ -31,7 +31,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((
     {...props}
     tabIndex={0}
     ref={ref}
-    isSelected={isSelected}
+    $isSelected={isSelected}
   />
 ));
 

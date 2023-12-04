@@ -21,6 +21,7 @@ iframe {
 }
 
 .main-container {
+    box-sizing: content-box;
     padding: 0 1rem;
     max-width: 800px;
     display: grid;

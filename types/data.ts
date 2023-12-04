@@ -1,3 +1,4 @@
+import { JSONContent } from '@tiptap/react';
 import { ObjectId } from 'mongodb';
 import { ReactNode } from 'react';
 import { Event } from 'react-big-calendar';
@@ -18,7 +19,7 @@ export type Year = keyof typeof YearObject;
 export const PersonTypeObject = { Discipli: '', Questi: '', Soter: '' };
 export type PersonType = keyof typeof PersonTypeObject;
 
-export const PersonObject: Person = {
+export const PersonObject: Omit<Person, '_id'> = {
   society: 'Bacchus',
   family: '',
   name: '',
@@ -31,7 +32,7 @@ export const PersonObject: Person = {
 
 export type Person = {
   authId?: string;
-  _id?: ObjectId | string,
+  _id: ObjectId | string,
   rank?: number,
   family: string,
   name: string,
@@ -40,11 +41,15 @@ export type Person = {
   year: Year,
   type: PersonType,
   score: number,
-  mail?: string,
   profile: Record<string, any>,
+  mail?: string,
   auth?: Record<string, Record<'user' | 'mod' | 'admin', boolean>>,
   imgVersion?: string | number,
   isInactive?: boolean;
+  pronouns?: string[];
+  province?: 'imperiet' | 'afrikanska samväldet' | 'förenade asien' | 'nya amerika';
+  specialisation?: string;
+  age?: number;
 };
 
 export const statusCollection: { [key in Status]: string } = {
@@ -53,6 +58,16 @@ export const statusCollection: { [key in Status]: string } = {
   g: 'γ',
   d: 'δ',
   e: 'ε',
+};
+
+export const romanNumbers: { [key in Year]: string } = {
+  0: '0',
+  1: 'I',
+  2: 'II',
+  3: 'III',
+  4: 'IV',
+  99: 'Q',
+  100: 'S',
 };
 
 export type FullEvent = Event & {
@@ -67,46 +82,52 @@ export type FullEvent = Event & {
 };
 
 export type Calendar = {
-  _id?: ObjectId | string;
+  _id: ObjectId | string;
   name: string;
   color?: string;
   events: FullEvent[];
 };
 
-export type Post = {
-  _id?: ObjectId | string;
+type SharedData = {
+  _id: ObjectId | string;
   owner: ObjectId | string;
   createdAt: Date;
   lastModified: Date;
-  threadId: ObjectId | string;
+};
+
+type Access = {
+  readAccess?: Array<ObjectId | string>;
+  postAccess?: Array<ObjectId | string>;
+  groupAccess?: Array<[keyof Person, string | number]>;
+};
+
+type SharedForumContent = {
+  likes: Array<ObjectId | string>;
+  dislikes: Array<ObjectId | string>;
   title?: string;
   content: string;
+};
+
+export type Post = SharedData & SharedForumContent & {
+  threadId: ObjectId | string;
   media: Array<{ type: 'video' | 'image', path: string }>;
   subPosts: Array<Omit<Post, 'title' | 'subPosts'> & { postId: string }>;
 };
 
-export type Thread = {
-  _id?: ObjectId | string;
+export type Thread = SharedData & SharedForumContent & {
   forumId: ObjectId | string;
-  owner: ObjectId | string;
-  createdAt: Date;
-  lastModified: Date;
-  title?: string;
-  content: string;
   media: Array<{ type: 'video' | 'image', path: string }>;
   locked: boolean;
   pinned: Array<ObjectId | string>;
 };
 
-export type Forum = {
-  _id?: ObjectId | string;
-  createdAt: Date;
-  lastModified: Date;
-  owner: ObjectId | string;
+export type Forum = SharedData & Access & {
   name: string;
   type: 'personal' | 'forum';
-  readAccess?: Array<ObjectId | string>;
-  postAccess?: Array<ObjectId | string>;
-  groupAccess?: Array<[keyof Person, string | number]>;
   pinned: Array<ObjectId | string>;
+};
+
+export type Document = SharedData & Access & {
+  title: string;
+  json: JSONContent;
 };

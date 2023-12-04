@@ -11,7 +11,10 @@ import {
 import CloseIcon from 'assets/x.svg';
 import React, { ReactNode } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { sizes } from 'styles/global';
+import {
+  colors,
+  sizes,
+} from 'styles/global';
 
 const fadeIn = keyframes`
   from {
@@ -23,7 +26,7 @@ const fadeIn = keyframes`
 `;
 
 const DialogOverlay = styled(Overlay)`
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   inset: 0;
   animation: ${fadeIn} 150ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -39,24 +42,37 @@ const DialogContent = styled(Content)`
   width: calc(100vw - 2rem);
   max-width: ${sizes.mediumMax};
   max-height: calc(100vh - 2rem);
-  padding: 1rem 1.5rem 1.5rem 1.5rem;
-  background-color: #ccc7b5;
+  padding: 1rem;
+  padding-top: 0;
+  background-color: ${colors.componentBackground};
   box-shadow: hsl(206 22% 7% / 35%) 0 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   z-index: 10;
   display: grid;
-  grid-gap: 1rem;
+  grid-gap: .5rem;
+  overflow: auto;
 `;
 
 const DialogClose = styled(Close)`
   display: grid;
   align-items: center;
-  position: absolute;
-  top: .2rem;
-  right: .2rem;
+  position: sticky;
   border: none;
   background: none;
   cursor: pointer;
   padding: 0;
+  margin-right: -.5rem;
+  justify-self: flex-end;
+  height: fit-content;
+`;
+
+const TopContainer = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr; 
+  position: sticky; 
+  top: 0;
+  background-color: ${colors.componentBackground};
+  padding-top: .5rem;
+  padding-bottom: .1rem;
 `;
 
 export const Trigger = styled(RadixTrigger)`
@@ -66,7 +82,10 @@ export const Trigger = styled(RadixTrigger)`
 
 const Title = styled(RadixTitle)`
   margin: 0 auto;
-
+  text-transform: capitalize;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 type ModalProps = {
@@ -99,13 +118,15 @@ const Modal: React.FC<ModalProps> = ({
     <Portal>
       <DialogOverlay />
       <DialogContent>
-        <Title>{title}</Title>
+        <TopContainer>
+          <div style={{ overflow: 'hidden' }}><Title>{title}</Title></div>
+          <DialogClose aria-label="Close window">
+            <CloseIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+          </DialogClose>
+        </TopContainer>
         {description && <Description>{description}</Description>}
         {content}
         {interaction && <div>{interaction}</div>}
-        <DialogClose aria-label="Close window">
-          <CloseIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-        </DialogClose>
       </DialogContent>
     </Portal>
   </Root>
