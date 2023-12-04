@@ -26,6 +26,7 @@ const PersonModal = ({
   trigger: ReactNode,
   personId: ObjectId | string,
 }) => {
+  // FIXME Use usePerson
   const { people } = usePeople();
   const person = people
     .find((foundPerson) => foundPerson._id?.toString() === personId.toString());
@@ -39,9 +40,9 @@ const PersonModal = ({
           {person?.status && (<Text style={{ fontSize: '1.5rem' }}>{`${statusCollection[person?.status]}`}</Text>)}
           {person?.rank && <Text>{`Rank: ${person.rank.toString()}`}</Text>}
           {person?.year && person.year < 5 && <Text>{`År: ${romanNumbers[person.year]}`}</Text>}
-          {person?.pronouns && <Text>{`Pronomen: ${person.pronouns.join('/')}`}</Text>}
+          {person?.pronouns && <Text style={{ textTransform: 'capitalize' }}>{`Pronomen: ${person.pronouns.join('/')}`}</Text>}
           {person?.age && <Text>{`Ålder: ${person.age.toString()}`}</Text>}
-          {person?.province && <Text>{`Provins: ${person?.province}`}</Text>}
+          {person?.province && <Text style={{ textTransform: 'capitalize' }}>{`Provins: ${person?.province}`}</Text>}
           {person?.society && <Text>{`Elevhem: ${person?.society}`}</Text>}
           {person?.type && <Text>{`Titel: ${person?.type}${person?.specialisation ? `, ${person.specialisation}` : ''}`}</Text>}
         </StyledContainer>

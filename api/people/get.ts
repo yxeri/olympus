@@ -1,5 +1,6 @@
 import * as console from 'console';
 import { collection } from 'lib/db/tools';
+import { ObjectId } from 'mongodb';
 import {
   NextApiRequest,
   NextApiResponse
@@ -31,15 +32,15 @@ export const findPersonByAuth: (authId: string) => Promise<Person | null> = asyn
 
 export default async function get(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const body = req.body || {};
+    const query = req.query || {};
 
-    const { person }: {
-      person: Id,
-    } = typeof body === 'object' ? body : JSON.parse(body);
-
-    if (person) {
+    if (query.personId || (query.name && query.family)) {
       res.status(200).json({
-        person: await findPerson(person),
+        person: await findPerson(
+          query.personId
+            ? { _id: new ObjectId(query.personId.toString()) }
+            : { name: query.name as string, family: query.family as string },
+        ),
       });
 
       return;
@@ -50,7 +51,7 @@ export default async function get(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error: any) {
     console.log(error);
-    res.status(500).json({
+    res.status(error.statusCode ?? 500).json({
       error: error.message,
     });
   }

@@ -7,7 +7,6 @@ html, body {
 }
 
 h2 {
-    border-bottom: 1px solid;
 }
 
 /* Needed for Cloudinary upload widget, to override Radix catching all pointer events */

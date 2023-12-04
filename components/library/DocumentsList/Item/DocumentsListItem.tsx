@@ -2,7 +2,9 @@ import ListItem from 'components/List/ListItem';
 import React from 'react';
 import styled from 'styled-components';
 import {
+  borders,
   colors,
+  sizes,
 } from 'styles/global';
 import {
   Document,
@@ -24,9 +26,11 @@ const StyledListItem = styled(ListItem)`
   border: 2px solid;
   box-shadow: 0 0 3px 1px;
   background-color: ${colors.componentBackground};
-  padding: .2rem;
   grid-column-gap: .7rem;
   grid-template-columns: 1fr 1.6rem;
+  padding: .5rem;
+  border-radius: ${sizes.corner};
+  border: ${borders.standard};
 `;
 
 const DocumentsListItem: React.FC<DocumentsListItemProps> = ({ document }) => {
@@ -37,7 +41,7 @@ const DocumentsListItem: React.FC<DocumentsListItemProps> = ({ document }) => {
 
   return (
     <StyledListItem>
-      <Link href={`/library/${id?.toString()}`}>
+      <Link href={`/library/${id?.toString()}`} style={{ textDecoration: 'none' }}>
         <StyledDiv>
           {`${title}`}
         </StyledDiv>

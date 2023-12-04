@@ -5,7 +5,7 @@ import {
   PersonObject
 } from '../../types/data';
 
-type UpdatePeople = (ids: string[], update: Partial<typeof PersonObject>) => void;
+type UpdatePeople = ({ person }: { person: Partial<Person> }) => Promise<any>;
 type InsertPeople = (people: Array<typeof PersonObject>) => void;
 type UsePeopleReturn = Omit<SWRResponse, 'data'> & {
   people: Person[],
@@ -25,14 +25,26 @@ export default function usePeople(): UsePeopleReturn {
     (urlKey) => fetch(urlKey).then((res) => res.json()),
     { keepPreviousData: true, }
   );
-  const updatePeople: UpdatePeople = (ids, update) => fetch(url, {
-    method: 'PATCH',
-    body: JSON.stringify({ ids, update }),
-  }).then(() => {
-    toast.success('Update complete!');
+  const updatePeople: UpdatePeople = async ({ person }) => {
+    try {
+      const result = await fetch(url, {
+        method: 'PATCH',
+        body: JSON.stringify({ people: [person] }),
+      });
 
-    mutate();
-  }).catch(() => toast.error('Something went wrong'));
+      if (!result.ok) {
+        throw new Error(result.status.toString());
+      }
+
+      toast.success('Din profil har uppdaterats!');
+
+      mutate();
+    } catch (error) {
+      toast.error('Något gick fel');
+
+      throw error;
+    }
+  };
   const insertPeople: InsertPeople = (people) => fetch(url, {
     method: 'POST',
     body: JSON.stringify({ people }),

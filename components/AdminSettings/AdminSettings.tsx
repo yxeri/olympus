@@ -1,6 +1,5 @@
 import useAuthPerson from '../../hooks/people/useAuthPerson';
 import { useDictionary } from '../../hooks/useDictionary';
-import { colors } from '../../styles/global';
 import Container from '../Container/Container';
 import CsvDownloader from '../CsvDownloader/CsvDownloader';
 import CsvReader from '../CsvReader/CsvReader';
@@ -16,7 +15,7 @@ const AdminSettings = () => {
   }
 
   return (
-    <Container style={{ color: colors.brightColor, marginTop: '1rem' }}>
+    <Container style={{ marginTop: '1rem' }}>
       <h2>Admin</h2>
       <CsvReader />
       <CsvDownloader />

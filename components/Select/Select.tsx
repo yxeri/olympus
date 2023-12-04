@@ -38,6 +38,7 @@ type SelectProps<T> = {
   groups?: Array<{ label: string, items: Array<SelectItemType<T>> }>,
   defaultValue?: string,
   onValueChange: (value: T) => void,
+  value?: T,
 };
 
 const SelectTrigger = styled(Trigger)`
@@ -55,6 +56,7 @@ const SelectTrigger = styled(Trigger)`
   height: 100%;
   width: 100%;
   font: inherit;
+  grid-template-columns: 1fr max-content;
 
   &[data-state="open"] {
     border-bottom-left-radius: 0;
@@ -112,22 +114,23 @@ const Select = <T, >({
   groups,
   defaultValue,
   onValueChange,
+  value,
 }: SelectProps<string & keyof T>) => {
-  const itemComponents = items?.map(({ value, label }, index) => (
+  const itemComponents = items?.map(({ value: itemValue, label }, index) => (
     // eslint-disable-next-line react/no-array-index-key
-    <StyledSelectItem key={index} value={value}>{label}</StyledSelectItem>));
+    <StyledSelectItem key={index} value={itemValue}>{label}</StyledSelectItem>));
   const groupComponents = groups?.map(({ label, items: groupItems }, index) => (
     // eslint-disable-next-line react/no-array-index-key
     <Group key={index}>
       <Label>{label}</Label>
-      {groupItems.map(({ value, label: itemLabel }, itemIndex) => (
+      {groupItems.map(({ value: itemValue, label: itemLabel }, itemIndex) => (
         // eslint-disable-next-line react/no-array-index-key
-        <StyledSelectItem key={itemIndex} value={value}>{itemLabel}</StyledSelectItem>))}
+        <StyledSelectItem key={itemIndex} value={itemValue}>{itemLabel}</StyledSelectItem>))}
     </Group>
   ));
 
   return (
-    <Root defaultValue={defaultValue} onValueChange={onValueChange}>
+    <Root value={value} defaultValue={defaultValue} onValueChange={onValueChange}>
       <SelectTrigger aria-label="Select list filtering">
         <Value placeholder={placeholder} />
         <SelectIcon>

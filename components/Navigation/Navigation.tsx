@@ -1,6 +1,5 @@
 import BookIcon from 'assets/book-nav.svg';
 import CalendarIcon from 'assets/calendar-nav.svg';
-import PhotoIcon from 'assets/camera-nav.svg';
 import MessageIcon from 'assets/message-circle-nav.svg';
 import LogoImage from 'assets/olympus.jpg.webp';
 import PersonIcon from 'assets/person-nav.svg';
@@ -139,11 +138,6 @@ const Navigation: React.FC<NavigationProps> = ({ slim }) => (
             <li style={{ display: 'contents' }}>
               <StyledLink href="/settings" aria-label="Settings">
                 <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-              </StyledLink>
-            </li>
-            <li style={{ display: 'contents' }}>
-              <StyledLink href="/photos" aria-label="Photos">
-                <PhotoIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
               </StyledLink>
             </li>
           </JustifiedDiv>

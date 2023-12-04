@@ -28,6 +28,10 @@ export const PersonObject: Omit<Person, '_id'> = {
   type: 'Discipli',
   score: 0,
   profile: {},
+  age: 20,
+  province: 'imperiet',
+  pronouns: ['hon'],
+  imgVersion: 1,
 };
 
 export type Person = {
@@ -44,12 +48,28 @@ export type Person = {
   profile: Record<string, any>,
   mail?: string,
   auth?: Record<string, Record<'user' | 'mod' | 'admin', boolean>>,
-  imgVersion?: string | number,
+  imgVersion?: number,
   isInactive?: boolean;
   pronouns?: string[];
   province?: 'imperiet' | 'afrikanska samväldet' | 'förenade asien' | 'nya amerika';
   specialisation?: string;
   age?: number;
+};
+
+export const FamilyObject: Omit<Family, '_id'> = {
+  name: 'name',
+  status: 'a',
+  province: 'imperiet',
+  imgVersion: 1,
+};
+
+export type Family = {
+  name: string;
+  status: Status;
+  imgVersion?: number;
+  _id?: ObjectId | string;
+  profile?: Record<string, any>,
+  province?: 'imperiet' | 'afrikanska samväldet' | 'förenade asien' | 'nya amerika';
 };
 
 export const statusCollection: { [key in Status]: string } = {

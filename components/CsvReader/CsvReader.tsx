@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import {
   borders,
-  colors
 } from 'styles/global';
 import { validatePerson } from 'utils/validatePerson';
 import {
@@ -22,7 +21,6 @@ import Container from '../Container/Container';
 
 const StyledDiv = styled.div`
   border: ${borders.standard};
-  color: ${colors.brightColor};
 `;
 
 const FileView: React.FC<any> = ({
@@ -151,7 +149,6 @@ const CsvReader = () => {
         {(props: any) => (
           <StyledDiv
             {...props.getRootProps()}
-            style={{ color: 'white' }}
           >
             {props.acceptedFile ? <FileView {...props} /> : (
               'Släpp en csv-fil eller klicka för att ladda upp'

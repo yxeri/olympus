@@ -10,6 +10,7 @@ import { colors } from '../../styles/global';
 type LinkProps = NextLinkProps & PropsWithChildren & { style?: CSSProperties };
 
 const StyledLink = styled(NextLink)<{ isactive: 'true' | 'false' }>`
+  font-family: inherit;
   color: inherit;
   cursor: pointer;
   font-weight: bold;

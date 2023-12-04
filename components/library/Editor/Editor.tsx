@@ -1,3 +1,11 @@
+import { Link } from '@tiptap/extension-link';
+import { Image } from '@tiptap/extension-image';
+import { Color } from '@tiptap/extension-color';
+import { Table } from '@tiptap/extension-table';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TextStyle } from '@tiptap/extension-text-style';
 import {
   EditorContent,
   useEditor,
@@ -11,7 +19,11 @@ import styled from 'styled-components';
 import useDocument from '../../../hooks/documents/useDocument';
 import useDocuments from '../../../hooks/documents/useDocuments';
 import useAuthPerson from '../../../hooks/people/useAuthPerson';
-import { colors } from '../../../styles/global';
+import {
+  borders,
+  colors,
+  sizes,
+} from '../../../styles/global';
 import Button from '../../Button/Button';
 import Container from '../../Container/Container';
 
@@ -29,6 +41,14 @@ const StyledDiv = styled.div`
     padding: 0 2mm;
     width: 100%;
     box-sizing: border-box;
+    
+    table {
+      background-color: ${colors.primaryColor};
+      
+      td, col {
+        background-color: ${colors.brightColor};
+      }
+    }
   }
   
   @media print {    
@@ -57,7 +77,19 @@ const Editor = ({ documentId }: { documentId?: string }) => {
     editable: !documentId
       || document?.postAccess?.includes(person?._id.toString())
       || document?.owner.toString() === person?._id.toString(),
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Link,
+      Image,
+      Color,
+      TextStyle,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+    ],
     content: document?.json ?? '<p>Text</p>',
   });
 
@@ -74,6 +106,18 @@ const Editor = ({ documentId }: { documentId?: string }) => {
       }
       {editor?.isEditable && (
         <ControlContainer>
+          <input
+            style={{
+              height: '2.2rem',
+              padding: '.1rem',
+              borderRadius: sizes.corner,
+              border: borders.standard,
+              backgroundColor: colors.clickableBackground,
+            }}
+            type="color"
+            onInput={(event) => editor.chain().focus().setColor(event.currentTarget.value).run()}
+            value={editor.getAttributes('textStyle').color ?? colors.primaryColor}
+          />
           <Button
             onClick={() => editor?.chain().focus().toggleBold().run()}
           >
@@ -148,6 +192,20 @@ const Editor = ({ documentId }: { documentId?: string }) => {
             onClick={() => editor?.chain().focus().toggleBlockquote().run()}
           >
             blockquote
+          </Button>
+          <Button
+            onClick={() => editor?.chain().focus().toggleLink({ href: 'google.com' }).run()}
+          >
+            link
+          </Button>
+          <Button
+            onClick={() => editor.chain().focus().insertTable({
+              rows: 3,
+              cols: 3,
+              withHeaderRow: true,
+            }).run()}
+          >
+            table
           </Button>
           <Button
             onClick={() => editor?.chain().focus().undo().run()}

@@ -12,7 +12,7 @@ const CleanButton = styled(Button)`
 `;
 
 const ThreadLikeButtons = ({ threadId }: { threadId: string }) => {
-  const { likeThread, threads } = useThreads();
+  const { updateLike, threads } = useThreads();
   const { person } = useAuthPerson();
 
   if (!person) {
@@ -23,7 +23,7 @@ const ThreadLikeButtons = ({ threadId }: { threadId: string }) => {
     .find((thread) => thread._id?.toString() === threadId.toString());
   const onSubmit = async ({ like }: { like: boolean }) => {
     try {
-      await likeThread({ threadId, like });
+      await updateLike({ threadId, like });
     } catch (error) {
       console.log(error);
     }

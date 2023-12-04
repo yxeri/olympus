@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import useSwr, { SWRResponse } from 'swr';
 import { Calendar } from '../../types/data';
 
-type InsertCalendar = (calendar: Calendar) => void;
+type InsertCalendar = (calendar: Partial<Calendar>) => void;
 type UseCalendarsReturn = Omit<SWRResponse, 'data'> & {
   calendars: Calendar[],
   insert: InsertCalendar,

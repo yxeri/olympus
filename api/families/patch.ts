@@ -14,13 +14,12 @@ import {
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 import {
-  Person,
-  PersonObject
+  Family,
+  FamilyObject,
 } from '../../types/data';
 import { getAuthPerson } from '../helpers';
 import {
-  Id,
-  IdName
+  FamilyId,
 } from './types';
 
 type ResponseSuccess = {
@@ -34,37 +33,37 @@ type ResponseError = {
 
 type Response = ResponseSuccess | ResponseError;
 
-export const updatePerson: (
-  id: IdName,
-  update: UpdateFilter<Person>,
+export const updateFamily: (
+  id: FamilyId,
+  update: UpdateFilter<Family>,
 ) => Promise<UpdateResult> = async (
   id,
   update,
 ) => {
-  const peopleCollection = await collection<Person>('people');
+  const familyCollection = await collection<Family>('families');
 
-  return peopleCollection.updateOne(id, update);
+  return familyCollection.updateOne(id, update);
 };
 
 export default async function patch(req: NextApiRequest, res: NextApiResponse<Response>) {
   try {
-    const dbCollection = await collection<Person>('people');
+    const dbCollection = await collection<Family>('families');
     const {
-      people,
+      families,
       updateAll
     }: {
-      people: Partial<Person>[],
-      updateAll?: Partial<typeof PersonObject>,
+      families: Partial<Family>[],
+      updateAll?: Partial<Family>,
     } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
 
     if (
-      !Array.isArray(people)
-      || !people.every((person) => (person._id || (person.name && person.family)))
+      !Array.isArray(families)
+      || !families.every((family) => (family._id || family.name))
     ) {
       throw Error(
         `Expected { 
-          people: _id | name & family, 
-          update: Partial<Person>,
+          families: _id | name, 
+          update: Partial<Family>,
          }`
       );
     }
@@ -72,40 +71,30 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
     const authPerson = await getAuthPerson({ req, res });
 
     if (
-      (people.length > 1 && !authPerson?.auth?.people?.admin)
-      || ((people[0].name !== authPerson?.name || people[0].family !== authPerson?.family)
-        && people[0]._id?.toString() !== authPerson?._id?.toString())) {
+      (families.length > 1 && !authPerson?.auth?.people?.admin)
+      || (families[0].name !== authPerson?.family)) {
       throw new ApiError(403, 'Not allowed');
     }
 
-    const operations: AnyBulkWriteOperation<Person>[] = [];
+    const operations: AnyBulkWriteOperation<Family>[] = [];
     let modified = 0;
     let matched = 0;
 
-    people.forEach((person) => {
-      if (person.name) {
+    families.forEach((family) => {
+      if (family.name) {
         // eslint-disable-next-line no-param-reassign
-        person.name = person.name.toLowerCase();
+        family.name = family.name.toLowerCase();
       }
 
-      if (person.family) {
-        // eslint-disable-next-line no-param-reassign
-        person.family = person.family.toLowerCase();
-      }
-
-      if (person.pronouns) {
-        // eslint-disable-next-line no-param-reassign
-        person.pronouns = person.pronouns.map((pronoun) => pronoun.toLowerCase());
-      }
-
-      const filter: Id = person._id
-        ? { _id: new ObjectId(person._id) }
-        : { name: person.name as string, family: person.family as string };
+      const filter: FamilyId = family._id
+        ? { _id: new ObjectId(family._id.toString()) }
+        : { name: family.name as string };
 
       operations.push({
         updateOne: {
           filter,
-          update: createSet<typeof PersonObject>(updateAll ?? person, PersonObject).set,
+          upsert: true,
+          update: createSet<typeof FamilyObject>(updateAll ?? family, FamilyObject).set,
         },
       });
     });
@@ -125,7 +114,8 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
       matched,
     });
   } catch (error: any) {
-    res.status(500).json({
+    console.log(error);
+    res.status(error.statusCode ?? 500).json({
       error: error.message,
     });
   }

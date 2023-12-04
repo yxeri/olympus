@@ -1,8 +1,10 @@
 import { CldUploadWidget } from 'next-cloudinary';
 import * as process from 'process';
 import React, { ReactNode } from 'react';
+import { usePeople } from '../../hooks/people';
 import useAuthPerson from '../../hooks/people/useAuthPerson';
 import { colors } from '../../styles/global';
+import Button from '../Button/Button';
 import Container from '../Container/Container';
 
 type ImageUploaderProps = {
@@ -18,6 +20,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   maxFiles,
   requireAdmin,
 }) => {
+  const { update } = usePeople();
   const { person: authPerson } = useAuthPerson();
 
   if ((requireAdmin && !authPerson?.auth?.images?.admin) || !authPerson) {
@@ -69,14 +72,19 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         }}
         signatureEndpoint="/api/cloudinarySignature"
         uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev_people' : 'people'}
-        onUpload={(...all) => {
-          console.log(all);
-        }}
-        onPublicId={(...all) => {
-          console.log(all);
-        }}
-        onSuccess={(...all) => {
-          console.log(all);
+        onUpload={({ info }) => {
+          if (info && typeof info === 'object') {
+            const { version } = (info as { version: number });
+
+            if (!requireAdmin && maxFiles === 1) {
+              update({
+                person: {
+                  _id: authPerson._id,
+                  imgVersion: version,
+                },
+              });
+            }
+          }
         }}
       >
         {({ open }) => {
@@ -86,9 +94,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           };
 
           return (
-            <button type="button" onClick={handleOnClick}>
+            <Button type="button" onClick={handleOnClick}>
               Upload an Image
-            </button>
+            </Button>
           );
         }}
       </CldUploadWidget>

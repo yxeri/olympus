@@ -33,7 +33,7 @@ import List from '../List/List';
 import ListItem from '../List/ListItem';
 import Modal, { Trigger } from '../Modal/Modal';
 
-const StyledDiv = styled.div`
+const StyledDiv = styled.div`  
   .rbc-time-view, .rbc-month-view, .rbc-time-view, .rbc-agenda-view {
     background-color: ${colors.componentBackground};
     border-color: ${colors.primaryColor};
