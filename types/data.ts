@@ -5,7 +5,9 @@ import { Event } from 'react-big-calendar';
 import { Options } from 'rrule';
 
 export const SocietyObject = {
-  Bacchus: '', Bellona: '', Pheme: '',
+  Bacchus: '',
+  Bellona: '',
+  Pheme: '',
 };
 export type Society = keyof typeof SocietyObject;
 export const StatusObject = {
