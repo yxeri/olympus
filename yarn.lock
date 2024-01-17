@@ -1035,25 +1035,20 @@
     to-fast-properties "^2.0.0"
 
 "@cloudinary-util/url-loader@^3.22.0":
-  version "3.25.0"
-  resolved "https://registry.yarnpkg.com/@cloudinary-util/url-loader/-/url-loader-3.25.0.tgz#db916cb79130eb4a7659e34d3fb3da0f25a58fb8"
-  integrity sha512-StT7dQ+jog6DRqKepc4d77krZHMZWbWYGModaSZdnLPjDd92GNAEKMY+GvBZ8iXeSMr7xkIm1kqO1fAIkBSPlg==
+  version "3.25.2"
+  resolved "https://registry.yarnpkg.com/@cloudinary-util/url-loader/-/url-loader-3.25.2.tgz#1e0da5609db1a62e94ef02682f70277878606e93"
+  integrity sha512-lLlFqrynlqjurmwQmiN+443kx4GEbUuZY0sNu/h8WgXguLp9ogrZDaWhgFOvVHl4huec/JfeQkKDtCq6JkASfg==
   dependencies:
-    "@cloudinary-util/util" "2.4.0-beta.1"
+    "@cloudinary-util/util" "2.4.0"
     "@cloudinary/url-gen" "^1.10.2"
     "@semantic-release/npm" "^9.0.2"
     zod "^3.22.4"
     zod-to-json-schema "^3.22.3"
 
-"@cloudinary-util/util@2.4.0-beta.1":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@cloudinary-util/util/-/util-3.0.0.tgz#4096e0190108b2680c0027bf9afaeca039cea6cc"
-  integrity sha512-o6cJsN49OIelLcSkqUf4WzgefpePDFsAaeQfJbpcKhVdtvmWv71K0oZwMXuX62IY1OolqIg0etMiHtWZPhvPNA==
-
-"@cloudinary-util/util@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@cloudinary-util/util/-/util-2.3.0.tgz#8a2a7ad3d3f089c2fff08f53eaddd50e946048f1"
-  integrity sha512-0Gojd+ZRQjJQmlBEAa8Ua94amvx7uWHoUzVUEGi1S8bgF1wPcMqG07cSUGQfRwHsFQ/9XOesx76Df622E+CevA==
+"@cloudinary-util/util@2.4.0", "@cloudinary-util/util@^2.3.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@cloudinary-util/util/-/util-2.4.0.tgz#a29918c82113f92774ef856bdbf41c61307c7296"
+  integrity sha512-RJW/K1hvm+qL2civTWgg7iKdTPDMLmpFBvH03KUkDxuDk/xi9E9x9nPthEsmdDy65GdCcZm0UKnErXXgKzMOQQ==
 
 "@cloudinary/transformation-builder-sdk@^1.10.0":
   version "1.10.1"
