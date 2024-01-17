@@ -51,7 +51,7 @@ export type Person = {
   score: number,
   profile: Record<string, any>,
   mail?: string,
-  auth?: Record<'calendars' | 'people' | 'documents' | 'forums' | 'score' | 'all', Record<'user' | 'mod' | 'admin', boolean>>,
+  auth?: Record<'calendars' | 'people' | 'documents' | 'forums' | 'score' | 'images' | 'all', Record<'user' | 'mod' | 'admin', boolean>>,
   imgVersion?: number,
   isInactive?: boolean;
   pronouns?: string[];
