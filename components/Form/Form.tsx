@@ -2,7 +2,7 @@ import {
   FormProps as RadixFormProps,
   Root
 } from '@radix-ui/react-form';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   FieldValues,
   FormProvider,
@@ -18,10 +18,17 @@ const StyledForm = styled(Root)`
 
 type FormProps<T, > = Omit<RadixFormProps, 'onSubmit'> & {
   onSubmit: SubmitHandler<T & FieldValues>;
+  keepData?: boolean;
 };
 
-const Form = <T, >({ onSubmit, children }: FormProps<T>) => {
+const Form = <T, >({ onSubmit, children, keepData = false }: FormProps<T>) => {
   const formMethods = useForm<T & FieldValues>();
+
+  useEffect(() => {
+    if (formMethods.formState.isSubmitSuccessful && !keepData) {
+      formMethods.reset();
+    }
+  }, [formMethods.formState.isSubmitSuccessful, keepData]);
 
   return (
     <FormProvider {...formMethods}>

@@ -13,13 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const {
       name,
       family,
-      password,
-      type,
     } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
-
-    if (!password) {
-      throw new ApiError(400, 'Required: password');
-    }
 
     const person = await findPerson({ name: name.toLowerCase(), family: family.toLowerCase() });
 
@@ -49,29 +43,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const decryptedMail = decipher.update(encrypted, 'hex', 'utf-8') + decipher.final('utf-8');
 
-    let data;
-
-    if (type === 'PASSWORD') {
-      data = await supabaseClient.auth.signInWithPassword({
-        password,
-        email: decryptedMail,
-      });
-    } else if (type === 'OTP') {
-      data = await supabaseClient.auth.verifyOtp({
-        email: decryptedMail,
-        token: password,
-        type: 'email',
-      });
-    }
+    const data = await supabaseClient.auth.resetPasswordForEmail(decryptedMail);
 
     if (!data || data?.error) {
       console.log(data);
       throw new ApiError(401, 'Auth failed');
     }
 
-    res.status(200).json({
-      session: data?.data.session,
-    });
+    res.status(200).json({});
   } catch (error: any) {
     console.log(error);
 

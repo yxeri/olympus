@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
 export type PersonFilterable = 'status' | 'house' | 'society';
-export type PersonSortable = 'rank' | 'status' | 'alphabetical' | 'family' | 'society';
+export type PersonSortable = 'rank' | 'status' | 'alphabetical' | 'family' | 'society' | 'year';
 export type PersonListVariant = 'list' | 'grid';
 
 export const filterAtom = atom<{ [key in PersonFilterable]: string[] }>({

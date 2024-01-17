@@ -30,6 +30,8 @@ const StyledTrigger = styled(Trigger)<{ $status: Status }>`
   padding: .2rem;
   grid-template-columns: 1fr auto 3.5rem;
   grid-gap: .2rem;
+  cursor: pointer;
+  color: inherit;
 `;
 
 const StyledPhoto = styled.div`
@@ -58,7 +60,6 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
       <StyledTrigger
         aria-label={`${name} ${family}, ${statusCollection[(status as Status)]}, ${society}`}
         $status={status}
-        style={{ cursor: 'pointer' }}
       >
         <StyledPhoto>
           <CldImage

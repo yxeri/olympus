@@ -5,6 +5,7 @@ export const colors = {
   secondaryBackground: '#56534b',
   selectedBackground: '#b0ad9d',
   clickableBackground: '#f6f2dc',
+  inputBackground: '#fffbe3',
   lightComponentBackground: '#d2cdba',
   componentBackground: '#ccc7b5',
   darkerComponentBackground: '#c5c0ae',

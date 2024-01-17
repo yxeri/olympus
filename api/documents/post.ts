@@ -23,6 +23,7 @@ export const createDocument = async ({
   const result = await dbCollection
     .insertOne({
       ...document,
+      tags: document.tags ?? [],
       owner: new ObjectId(authPerson._id.toString()),
       createdAt: new Date(),
       groupAccess: [],

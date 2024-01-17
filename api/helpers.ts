@@ -1,4 +1,8 @@
-import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
+import {
+  CookieOptions,
+  createServerClient,
+  serialize,
+} from '@supabase/ssr';
 import {
   NextApiRequest,
   NextApiResponse
@@ -11,7 +15,23 @@ export const getAuthPerson = async ({
 }: {
   req: NextApiRequest, res: NextApiResponse,
 }) => {
-  const client = createPagesServerClient({ req, res });
+  const client = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return req.cookies[name];
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          res.setHeader('Set-Cookie', serialize(name, value, options));
+        },
+        remove(name: string, options: CookieOptions) {
+          res.setHeader('Set-Cookie', serialize(name, '', options));
+        },
+      },
+    },
+  );
   const user = await client.auth.getUser();
 
   if (!user.data.user?.id) {

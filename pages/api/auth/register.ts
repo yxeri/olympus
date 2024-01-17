@@ -52,8 +52,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       options: {
         data: {
           [process.env.NEXT_PUBLIC_INSTANCE_NAME ?? '']: {
-            name: name.toLowerCase(),
-            family: family.toLowerCase()
+            identities: [{
+              name: name.toLowerCase(),
+              family: family.toLowerCase(),
+            }],
           },
         },
       },

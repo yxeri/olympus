@@ -67,7 +67,7 @@ const DialogClose = styled(Close)`
 
 const TopContainer = styled.div`
   display: grid;
-  grid-template-columns: auto 1fr; 
+  grid-template-columns: 1fr auto; 
   position: sticky; 
   top: 0;
   background-color: ${colors.componentBackground};
@@ -86,6 +86,7 @@ const Title = styled(RadixTitle)`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  text-align: center;
 `;
 
 type ModalProps = {
@@ -120,7 +121,7 @@ const Modal: React.FC<ModalProps> = ({
       <DialogContent>
         <TopContainer>
           <div style={{ overflow: 'hidden' }}><Title>{title}</Title></div>
-          <DialogClose aria-label="Close window">
+          <DialogClose aria-label="Close window" style={{ color: 'inherit' }}>
             <CloseIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </DialogClose>
         </TopContainer>

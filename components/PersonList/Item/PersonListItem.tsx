@@ -47,6 +47,7 @@ const StyledListItem = styled(ListItem)<{ $status: Status }>`
 `;
 
 const StyledTrigger = styled(Trigger)`
+  color: inherit;
   background-color: transparent;
   border: none;
   margin: 0;
@@ -125,6 +126,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
           <Trigger
             aria-label={`rank ${score}`}
             style={{
+              color: 'inherit',
               display: 'grid',
               justifyItems: 'center',
               backgroundColor: 'transparent',

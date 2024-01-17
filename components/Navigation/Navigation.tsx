@@ -12,12 +12,14 @@ import {
   colors,
   sizes,
 } from 'styles/global';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 
 type NavigationProps = {
   slim?: boolean;
 };
 
 const StyledHeader = styled.header<{ $slim?: boolean }>`
+  width: 100%;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -95,56 +97,62 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const Navigation: React.FC<NavigationProps> = ({ slim }) => (
-  <StyledHeader $slim={slim}>
-    <StyledNav>
-      <ul style={{ display: 'contents' }}>
-        <Line />
-        <ContainerDiv>
-          <JustifiedDiv $justify="flex-end">
+const Navigation: React.FC<NavigationProps> = ({ slim }) => {
+  const { person: authPerson } = useAuthPerson();
+
+  return (
+    <StyledHeader $slim={slim}>
+      <StyledNav>
+        <ul style={{ display: 'contents' }}>
+          <Line />
+          <ContainerDiv>
+            <JustifiedDiv $justify="flex-end">
+              <li style={{ display: 'contents' }}>
+                <StyledLink href="/feeds" aria-label="Feeds">
+                  <MessageIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+                </StyledLink>
+              </li>
+              <li style={{ display: 'contents' }}>
+                <StyledLink href="/people" aria-label="People">
+                  <PersonIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+                </StyledLink>
+              </li>
+              <li style={{ display: 'contents' }}>
+                <StyledLink href="/calendar" aria-label="Calendar">
+                  <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+                </StyledLink>
+              </li>
+            </JustifiedDiv>
             <li style={{ display: 'contents' }}>
-              <StyledLink href="/feeds" aria-label="Feeds">
-                <MessageIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-              </StyledLink>
+              <Logo href="/">
+                <Image
+                  style={{ objectFit: 'contain' }}
+                  src={LogoImage}
+                  alt="Olympus"
+                  width={60}
+                  height={60}
+                />
+              </Logo>
             </li>
-            <li style={{ display: 'contents' }}>
-              <StyledLink href="/people" aria-label="People">
-                <PersonIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-              </StyledLink>
-            </li>
-            <li style={{ display: 'contents' }}>
-              <StyledLink href="/calendar" aria-label="Calendar">
-                <CalendarIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-              </StyledLink>
-            </li>
-          </JustifiedDiv>
-          <li style={{ display: 'contents' }}>
-            <Logo href="/">
-              <Image
-                style={{ objectFit: 'contain' }}
-                src={LogoImage}
-                alt="Olympus"
-                width={60}
-                height={60}
-              />
-            </Logo>
-          </li>
-          <JustifiedDiv $justify="flex-start">
-            <li style={{ display: 'contents' }}>
-              <StyledLink href="/library" aria-label="Index">
-                <BookIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-              </StyledLink>
-            </li>
-            <li style={{ display: 'contents' }}>
-              <StyledLink href="/settings" aria-label="Settings">
-                <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
-              </StyledLink>
-            </li>
-          </JustifiedDiv>
-        </ContainerDiv>
-      </ul>
-    </StyledNav>
-  </StyledHeader>
-);
+            <JustifiedDiv $justify="flex-start">
+              <li style={{ display: 'contents' }}>
+                <StyledLink href="/library" aria-label="Index">
+                  <BookIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+                </StyledLink>
+              </li>
+              {authPerson && (
+                <li style={{ display: 'contents' }}>
+                  <StyledLink href="/settings" aria-label="Settings">
+                    <SettingsIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+                  </StyledLink>
+                </li>
+              )}
+            </JustifiedDiv>
+          </ContainerDiv>
+        </ul>
+      </StyledNav>
+    </StyledHeader>
+  );
+};
 
 export default Navigation;

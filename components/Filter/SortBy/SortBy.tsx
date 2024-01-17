@@ -11,6 +11,7 @@ const sortBy: Array<{ label: string, value: PersonSortable }> = [
   { label: 'Status', value: 'status' },
   { label: 'Rank', value: 'rank' },
   { label: 'Elevhem', value: 'society' },
+  { label: 'År', value: 'year' },
 ];
 
 const SortBy = () => {

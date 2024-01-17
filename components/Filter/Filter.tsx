@@ -16,7 +16,7 @@ const StyledDiv = styled.div`
   align-items: center;
 `;
 
-const Filter = () => (
+const Filter = ({ showSwitch = true }: { showSwitch?: boolean }) => (
   <StyledDiv aria-label="filters" role="toolbar">
     <Popover.Root>
       <Popover.Trigger style={{ display: 'none' }}>
@@ -34,7 +34,7 @@ const Filter = () => (
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
-    <VariantPicker />
+    {showSwitch && <VariantPicker />}
     <Search />
     <SortBy />
   </StyledDiv>

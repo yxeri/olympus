@@ -1,5 +1,5 @@
-import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { createBrowserClient } from '@supabase/ssr';
 import { Session } from '@supabase/supabase-js';
 import Footer from 'components/Footer/Footer';
 import Navigation from 'components/Navigation/Navigation';
@@ -48,7 +48,10 @@ const localStorageProvider = () => {
 };
 
 export default function App({ Component, pageProps }: AppProps<{ initialSession: Session }>) {
-  const [supabaseClient] = useState(() => createPagesBrowserClient());
+  const [supabaseClient] = useState(() => createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  ));
   const { pathname } = useRouter();
   useCalendars();
   usePeople();

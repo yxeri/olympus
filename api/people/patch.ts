@@ -15,7 +15,8 @@ import {
 import { ApiError } from 'next/dist/server/api-utils';
 import {
   Person,
-  PersonObject
+  PersonObject,
+  ScoreChange,
 } from '../../types/data';
 import { getAuthPerson } from '../helpers';
 import {
@@ -51,7 +52,7 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
     const dbCollection = await collection<Person>('people');
     const {
       people,
-      updateAll
+      updateAll,
     }: {
       people: Partial<Person>[],
       updateAll?: Partial<typeof PersonObject>,
@@ -73,8 +74,7 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
 
     if (
       (people.length > 1 && !authPerson?.auth?.people?.admin)
-      || ((people[0].name !== authPerson?.name || people[0].family !== authPerson?.family)
-        && people[0]._id?.toString() !== authPerson?._id?.toString())) {
+      && (people[0]._id?.toString() !== authPerson?._id?.toString())) {
       throw new ApiError(403, 'Not allowed');
     }
 
@@ -82,7 +82,8 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
     let modified = 0;
     let matched = 0;
 
-    people.forEach((person) => {
+    people.forEach((fullPerson) => {
+      const { scoreChanges, ...person } = fullPerson;
       if (person.name) {
         // eslint-disable-next-line no-param-reassign
         person.name = person.name.toLowerCase();
@@ -98,6 +99,18 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
         person.pronouns = person.pronouns.map((pronoun) => pronoun.toLowerCase());
       }
 
+      const update: {
+        $set: Partial<Person>,
+        $inc?: { score: number },
+      } = createSet<typeof PersonObject>(updateAll ?? person, PersonObject).set;
+
+      if (
+        (authPerson?.auth?.score?.admin || authPerson?.auth?.people?.admin)
+        && scoreChanges?.length && scoreChanges.length > 0
+      ) {
+        update.$inc = { score: scoreChanges[0].amount };
+      }
+
       const filter: Id = person._id
         ? { _id: new ObjectId(person._id) }
         : { name: person.name as string, family: person.family as string };
@@ -105,7 +118,7 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
       operations.push({
         updateOne: {
           filter,
-          update: createSet<typeof PersonObject>(updateAll ?? person, PersonObject).set,
+          update,
         },
       });
     });
@@ -115,9 +128,15 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
         matchedCount,
         modifiedCount,
       } = await dbCollection.bulkWrite(operations, { ordered: false });
+      const scoreCollection = await collection<ScoreChange>('scoreChanges');
 
       modified = modifiedCount;
       matched = matchedCount;
+
+      await scoreCollection
+        .insertMany(people
+          .filter((person) => person.scoreChanges?.length && person.scoreChanges.length > 0)
+          .map((person) => (person.scoreChanges as ScoreChange[])[0]));
     }
 
     res.status(200).json({
@@ -125,7 +144,7 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
       matched,
     });
   } catch (error: any) {
-    res.status(500).json({
+    res.status(error.statusCode ?? 500).json({
       error: error.message,
     });
   }

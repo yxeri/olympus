@@ -20,7 +20,7 @@ const StyledField = styled(Field)`
   position: relative;
   display: grid;
   outline: none;
-  background-color: white;
+  background-color: ${colors.clickableBackground};
 
   [data-invalid="true"] {
     border-color: ${colors.errorBorder};
@@ -34,9 +34,11 @@ const StyledField = styled(Field)`
 `;
 
 const StyledInput = styled(Control)`
-  padding: .5rem;
+  padding: .4rem;
   border-radius: ${sizes.corner};
   border: ${borders.standard};
+  font-size: inherit;
+  background-color: ${colors.inputBackground};
 `;
 
 const FocusPlaceholder = styled(Label)<{ hasFocus?: boolean }>`
@@ -55,27 +57,31 @@ const FocusPlaceholder = styled(Label)<{ hasFocus?: boolean }>`
   //text-shadow: 0px 0px 1px rgba(0,0,0,0.5);
 `;
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   name: string,
   label?: string,
   options?: RegisterOptions,
+  hideFocusPlaceholder?: boolean;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   name,
   label,
   options,
+  hideFocusPlaceholder = false,
   ...otherProps
 }, ref) => {
   const [focused, setFocused] = useState(false);
   const { register } = useFormContext();
-  const { ref: formRef, ...registerProps } = register(name, options);
+  const { ref: formRef, ...registerProps } = register(name, {
+    ...options,
+  });
 
   return (
     <Container>
       <StyledField name={name}>
         {label && <Label>{label}</Label>}
-        {otherProps.placeholder
+        {otherProps.placeholder && hideFocusPlaceholder
           && <FocusPlaceholder hasFocus={focused}>{otherProps.placeholder}</FocusPlaceholder>}
         <StyledInput
           {...otherProps}

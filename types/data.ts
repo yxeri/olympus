@@ -19,6 +19,8 @@ export type Year = keyof typeof YearObject;
 export const PersonTypeObject = { Discipli: '', Questi: '', Soter: '' };
 export type PersonType = keyof typeof PersonTypeObject;
 
+export type Province = 'imperiet' | 'afrikanska samväldet' | 'förenade asien' | 'nya amerika';
+
 export const PersonObject: Omit<Person, '_id'> = {
   society: 'Bacchus',
   family: '',
@@ -47,13 +49,28 @@ export type Person = {
   score: number,
   profile: Record<string, any>,
   mail?: string,
-  auth?: Record<string, Record<'user' | 'mod' | 'admin', boolean>>,
+  auth?: Record<'calendars' | 'people' | 'documents' | 'forums' | 'score' | 'all', Record<'user' | 'mod' | 'admin', boolean>>,
   imgVersion?: number,
   isInactive?: boolean;
   pronouns?: string[];
-  province?: 'imperiet' | 'afrikanska samväldet' | 'förenade asien' | 'nya amerika';
+  province?: Province;
   specialisation?: string;
   age?: number;
+  scoreChanges?: ScoreChange[];
+};
+
+type SharedData = {
+  _id: ObjectId | string;
+  owner: ObjectId | string;
+  createdAt: Date;
+  lastModified?: Date;
+};
+
+export type ScoreChange = {
+  userId: ObjectId | string;
+  giverId?: ObjectId | string;
+  comment?: string;
+  amount: number;
 };
 
 export const FamilyObject: Omit<Family, '_id'> = {
@@ -69,7 +86,7 @@ export type Family = {
   imgVersion?: number;
   _id?: ObjectId | string;
   profile?: Record<string, any>,
-  province?: 'imperiet' | 'afrikanska samväldet' | 'förenade asien' | 'nya amerika';
+  province?: Province;
 };
 
 export const statusCollection: { [key in Status]: string } = {
@@ -108,13 +125,6 @@ export type Calendar = {
   events: FullEvent[];
 };
 
-type SharedData = {
-  _id: ObjectId | string;
-  owner: ObjectId | string;
-  createdAt: Date;
-  lastModified: Date;
-};
-
 type Access = {
   readAccess?: Array<ObjectId | string>;
   postAccess?: Array<ObjectId | string>;
@@ -150,4 +160,5 @@ export type Forum = SharedData & Access & {
 export type Document = SharedData & Access & {
   title: string;
   json: JSONContent;
+  tags: string[];
 };

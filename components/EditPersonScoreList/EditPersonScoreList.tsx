@@ -3,16 +3,15 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { sizes } from 'styles/global';
 import {
-  listVariantAtom,
   PersonListVariant,
   searchStringAtom,
   sortByAtom
 } from '../../atoms/filter';
 import { usePeople } from '../../hooks/people';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 import { Person } from '../../types/data';
 import List from '../List/List';
-import PersonListGridItem from './Item/PersonListGridItem';
-import PersonListItem from './Item/PersonListItem';
+import EditPersonScoreListItem from './Item/EditPersonScoreListItem';
 
 type PersonListProps = {};
 
@@ -25,7 +24,6 @@ const StyledList = styled(List)`
 const getFilteredItems = ({
   list,
   searchString,
-  listVariant
 }: {
   list: Person[],
   searchString?: string,
@@ -37,22 +35,20 @@ const getFilteredItems = ({
     || `${person.name} ${person.family}`.toLowerCase().includes(searchString.toLowerCase())
     || Number(searchString) === person.year
   ) {
-    const Comp = listVariant === 'grid' ? PersonListGridItem : PersonListItem;
-
     return [
       ...filteredList,
-      <Comp key={person._id?.toString() ?? `${person.name}${person.family}`} person={person} />
+      <EditPersonScoreListItem key={person._id?.toString() ?? `${person.name}${person.family}`} person={person} />
     ];
   }
 
   return filteredList;
 }, [] as ReactNode[]);
 
-const PersonList: React.FC<PersonListProps> = () => {
-  const listVariant = useRecoilValue(listVariantAtom);
+const EditPersonScoreList: React.FC<PersonListProps> = () => {
   const sortBy = useRecoilValue(sortByAtom);
   const searchString = useRecoilValue(searchStringAtom);
   const { people } = usePeople();
+  const { person } = useAuthPerson();
 
   const sortedPeople = [...people].sort((a, b) => {
     if (sortBy === 'alphabetical') {
@@ -73,11 +69,15 @@ const PersonList: React.FC<PersonListProps> = () => {
     return (a[sortBy] && b[sortBy]) && (a[sortBy] as string) > (b[sortBy] as string) ? 1 : -1;
   });
 
+  if (!person || (!person.auth?.score?.admin && !person.auth?.all?.admin)) {
+    return null;
+  }
+
   return (
-    <StyledList $variant={listVariant} aria-label="people">
-      {getFilteredItems({ searchString, listVariant, list: sortedPeople })}
+    <StyledList $variant="list" aria-label="people">
+      {getFilteredItems({ searchString, list: sortedPeople })}
     </StyledList>
   );
 };
 
-export default PersonList;
+export default EditPersonScoreList;

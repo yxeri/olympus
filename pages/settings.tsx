@@ -1,4 +1,7 @@
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import React from 'react';
 import AdminSettings from '../components/AdminSettings/AdminSettings';
+import Button from '../components/Button/Button';
 import Container from '../components/Container/Container';
 import EditFamilyProfile from '../components/EditFamilyProfile/EditFamilyProfile';
 import EditProfile from '../components/EditProfile/EditProfile';
@@ -8,6 +11,7 @@ import { colors } from '../styles/global';
 
 export default function Settings() {
   const { getDictionaryValue } = useDictionary();
+  const supabaseClient = useSupabaseClient();
 
   return (
     <div className="main-container">
@@ -19,6 +23,13 @@ export default function Settings() {
       }}
       >
         <h2>Inställningar & Profil</h2>
+        <Button
+          onClick={() => {
+            supabaseClient.auth.signOut();
+          }}
+        >
+          Logga ut
+        </Button>
         <EditProfile />
         <EditFamilyProfile />
         <ImageUploader title={getDictionaryValue('settings', 'uploadPortrait')} maxFiles={1} />

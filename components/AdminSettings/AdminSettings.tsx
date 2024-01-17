@@ -10,6 +10,7 @@ const AdminSettings = () => {
   const { getDictionaryValue } = useDictionary();
   const { person: authPerson } = useAuthPerson();
 
+  // @ts-ignore
   if (!Object.keys(authPerson?.auth ?? {}).some((key) => authPerson?.auth?.[key]?.admin)) {
     return null;
   }
