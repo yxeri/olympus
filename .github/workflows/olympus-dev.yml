@@ -16,20 +16,11 @@ jobs:
           node-version: 18.x
           cache: 'yarn'
 
-      - name: Run install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
-      - name: Build production bundle
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build
-      - name: Test the app
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: test
+      - name: Install yarn
+        run: npm install -g yarn
 
-      - name: Start app
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: start
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Test app
+        run: yarn test
