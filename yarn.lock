@@ -5436,9 +5436,9 @@ nerf-dart@^1.0.0:
   integrity sha512-EZSPZB70jiVsivaBLYDCyntd5eH8NTSMOn3rB+HxwdmKThGELLdYv8qVIMWvZEFy9w8ZZpW9h9OB32l1rGtj7g==
 
 next-cloudinary@^5.18.0:
-  version "5.18.0"
-  resolved "https://registry.yarnpkg.com/next-cloudinary/-/next-cloudinary-5.18.0.tgz#ddca41a836dc41b6e780a7ae4fb7f7f70a710187"
-  integrity sha512-QzqjyNs+ji+XCbkDQ+vfOoG37mgNI0gXnI8dPgKPnORIVOfZIjfIRh2hFDL3paEX2ph0CHj4mc4Pu2pSIDTkcw==
+  version "5.19.0"
+  resolved "https://registry.yarnpkg.com/next-cloudinary/-/next-cloudinary-5.19.0.tgz#7dadce1f9e02ec3cdb63d78b92772bcdc3a9ed89"
+  integrity sha512-YCmywqTtCbXr8MnS2WzoX90yvnJKoFtwE7/+/IGA4ZAYr1iP+jcjDuguXoMQiRM4rV7mAQEAWW0UiirLdnVbGg==
   dependencies:
     "@cloudinary-util/url-loader" "^3.22.0"
     "@cloudinary-util/util" "^2.3.0"
