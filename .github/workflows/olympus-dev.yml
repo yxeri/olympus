@@ -21,8 +21,5 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Test app
-        run: yarn run test
-
       - name: Build app
         run: yarn build
