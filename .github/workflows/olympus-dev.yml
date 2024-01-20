@@ -40,5 +40,7 @@ jobs:
       - name: Build app
         run: yarn build
 
-      - name: Restart app
-        run: pm2 reload olympus-dev
+      - name: Copy dir
+        run: |
+          mkdir ../olympus-dev
+          cp -a . ./olympus-dev
