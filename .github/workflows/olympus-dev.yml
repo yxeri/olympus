@@ -42,5 +42,4 @@ jobs:
 
       - name: Copy dir
         run: |
-          mkdir -p ../olympus-dev
-          cp -a . ../olympus-dev
+          rsync -av --exclude=".git" . ../olympus-dev 
