@@ -42,5 +42,5 @@ jobs:
 
       - name: Copy dir
         run: |
-          mkdir ../olympus-dev
-          cp -a . ./olympus-dev
+          mkdir -p ../olympus-dev
+          cp -a ./. ./olympus-dev
