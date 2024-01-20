@@ -3,6 +3,7 @@ import {
   CldVideoPlayer,
 } from 'next-cloudinary';
 import React, { useState } from 'react';
+import { useSwipeable } from 'react-swipeable';
 import styled from 'styled-components';
 import ChevronLeftIcon from 'assets/chevron-left.svg';
 import ChevronRightIcon from 'assets/chevron-right.svg';
@@ -34,8 +35,6 @@ const IndexButton = styled(Button)<{ $align?: 'left' | 'right' }>`
 const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
   const [open, setOpen] = useState(false);
   const [mediaIndex, setMediaIndex] = useState(0);
-  const selectedMedia = media[mediaIndex];
-
   const onMediaClick = (index: number) => {
     if (index > media.length - 1) {
       setMediaIndex(0);
@@ -47,6 +46,11 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
 
     setOpen(true);
   };
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => onMediaClick(mediaIndex + 1),
+    onSwipedRight: () => onMediaClick(mediaIndex - 1),
+  });
+  const selectedMedia = media[mediaIndex];
 
   // eslint-disable-next-line react/no-unstable-nested-components
   const SelectedMediaContent = () => (
@@ -56,6 +60,7 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
         gridAutoFlow: 'column',
         gridTemplateColumns: 'auto 1fr auto',
       }}
+      {...swipeHandlers}
     >
       <IndexButton $align="left" onClick={() => onMediaClick(mediaIndex - 1)}>
         <ChevronLeftIcon width="1rem" />
@@ -64,9 +69,6 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
         ? (
           <div
             className="video"
-            style={{
-              marginTop: '.8rem',
-            }}
           >
             <CldVideoPlayer
               hideContextMenu

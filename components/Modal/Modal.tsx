@@ -120,7 +120,7 @@ const Modal: React.FC<ModalProps> = ({
       <DialogOverlay />
       <DialogContent>
         <TopContainer>
-          <div style={{ overflow: 'hidden' }}><Title>{title}</Title></div>
+          {title && <div style={{ overflow: 'hidden' }}><Title>{title}</Title></div>}
           <DialogClose aria-label="Close window" style={{ color: 'inherit' }}>
             <CloseIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
           </DialogClose>
