@@ -1,3 +1,11 @@
+import { Color } from '@tiptap/extension-color';
+import { Link } from '@tiptap/extension-link';
+import { TextStyle } from '@tiptap/extension-text-style';
+import {
+  EditorContent,
+  useEditor,
+} from '@tiptap/react';
+import { StarterKit } from '@tiptap/starter-kit';
 import { CldUploadWidget } from 'next-cloudinary';
 import process from 'process';
 import React, {
@@ -9,7 +17,6 @@ import PlusIcon from '../../../assets/plus-circle.svg';
 import useForums from '../../../hooks/forums/useForums';
 import useAuthPerson from '../../../hooks/people/useAuthPerson';
 import useThreads from '../../../hooks/threads/useThreads';
-import { useDictionary } from '../../../hooks/useDictionary';
 import {
   colors,
   sizes,
@@ -20,7 +27,6 @@ import {
 } from '../../../types/data';
 import Button from '../../Button/Button';
 import Container from '../../Container/Container';
-import Input from '../../Input/Input';
 import Modal from '../../Modal/Modal';
 import Form from '../../Form/Form';
 import { hasAccessToForum } from '../helpers';
@@ -43,16 +49,18 @@ const StyledTrigger = () => (
     right: 0,
   }}
   >
-    <RadixTrigger style={{
-      boxSizing: 'border-box',
-      color: colors.brightColor,
-      border: `1px solid ${colors.brightColor}`,
-      borderRadius: '50%',
-      backgroundColor: colors.primaryBackground,
-      padding: '.25rem',
-      margin: 0,
-      display: 'grid',
-    }}
+    <RadixTrigger
+      style={{
+        boxSizing: 'border-box',
+        color: colors.brightColor,
+        border: `1px solid ${colors.brightColor}`,
+        borderRadius: '50%',
+        backgroundColor: colors.primaryBackground,
+        padding: '.25rem',
+        margin: 0,
+        display: 'grid',
+        filter: 'drop-shadow(2px 2px 5px #000000)',
+      }}
     >
       <PlusIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
     </RadixTrigger>
@@ -64,12 +72,26 @@ type FormValues = Thread;
 const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => void }) => {
   const [media, setMedia] = useState<Set<Thread['media'][0]>>(new Set());
   const { insert } = useThreads();
-  const { getDictionaryValue } = useDictionary();
   const { person } = useAuthPerson();
+  const editor = useEditor({
+    autofocus: false,
+    editable: true,
+    extensions: [
+      StarterKit,
+      Link,
+      Color,
+      TextStyle,
+    ],
+  });
   const onSubmit: SubmitHandler<FormValues> = async ({
     title,
-    content,
   }) => {
+    const content = editor?.getJSON();
+
+    if (!content) {
+      return;
+    }
+
     try {
       await insert({
         title,
@@ -86,12 +108,7 @@ const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => vo
 
   return (
     <Form onSubmit={onSubmit}>
-      <Input
-        required
-        name="content"
-        placeholder={getDictionaryValue('common', 'content')}
-        aria-label={getDictionaryValue('common', 'content')}
-      />
+      <EditorContent editor={editor} className="content" />
       <CldUploadWidget
         options={{
           maxFiles: 4,

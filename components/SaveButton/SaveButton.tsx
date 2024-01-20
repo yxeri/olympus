@@ -33,6 +33,7 @@ const StyledContainer = () => (
         borderRadius: '10%',
         backgroundColor: colors.primaryBackground,
         display: 'grid',
+        filter: 'drop-shadow(2px 2px 5px #000000)',
       }}
     >
       Spara

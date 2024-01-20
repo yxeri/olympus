@@ -137,7 +137,7 @@ type SharedForumContent = {
   likes: Array<ObjectId | string>;
   dislikes: Array<ObjectId | string>;
   title?: string;
-  content: string;
+  content: JSONContent;
 };
 
 export type Post = SharedData & SharedForumContent & {

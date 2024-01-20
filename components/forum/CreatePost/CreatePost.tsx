@@ -1,3 +1,11 @@
+import { Color } from '@tiptap/extension-color';
+import { Link } from '@tiptap/extension-link';
+import { TextStyle } from '@tiptap/extension-text-style';
+import {
+  EditorContent,
+  useEditor,
+} from '@tiptap/react';
+import { StarterKit } from '@tiptap/starter-kit';
 import { CldUploadWidget } from 'next-cloudinary';
 import process from 'process';
 import React, {
@@ -10,14 +18,12 @@ import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
 import useForums from '../../../hooks/forums/useForums';
 import useAuthPerson from '../../../hooks/people/useAuthPerson';
 import usePosts from '../../../hooks/posts/usePosts';
-import { useDictionary } from '../../../hooks/useDictionary';
 import { colors } from '../../../styles/global';
 import {
   Forum,
   Post
 } from '../../../types/data';
 import Button from '../../Button/Button';
-import Input from '../../Input/Input';
 import Modal from '../../Modal/Modal';
 import Form from '../../Form/Form';
 import { hasAccessToForum } from '../helpers';
@@ -51,11 +57,25 @@ const Content = ({
 }) => {
   const [media, setMedia] = useState<Set<Post['media'][0]>>(new Set());
   const { insert } = usePosts({ threadId });
-  const { getDictionaryValue } = useDictionary();
+  const editor = useEditor({
+    autofocus: false,
+    editable: true,
+    extensions: [
+      StarterKit,
+      Link,
+      Color,
+      TextStyle,
+    ],
+  });
   const onSubmit: SubmitHandler<FormValues> = async ({
     title,
-    content,
   }) => {
+    const content = editor?.getJSON();
+
+    if (!content) {
+      return;
+    }
+
     try {
       await insert({
         title,
@@ -73,12 +93,7 @@ const Content = ({
 
   return (
     <Form onSubmit={onSubmit}>
-      <Input
-        required
-        name="content"
-        placeholder={getDictionaryValue('common', 'content')}
-        aria-label={getDictionaryValue('common', 'content')}
-      />
+      <EditorContent editor={editor} className="content" />
       <CldUploadWidget
         options={{
           maxFiles: 4,

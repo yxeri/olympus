@@ -1,3 +1,11 @@
+import { Color } from '@tiptap/extension-color';
+import { Link } from '@tiptap/extension-link';
+import { TextStyle } from '@tiptap/extension-text-style';
+import {
+  EditorContent,
+  useEditor,
+} from '@tiptap/react';
+import { StarterKit } from '@tiptap/starter-kit';
 import ListItem from 'components/List/ListItem';
 import React from 'react';
 import styled from 'styled-components';
@@ -59,12 +67,23 @@ const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
     createdAt,
     media,
   } = post;
+  const editor = useEditor({
+    autofocus: false,
+    editable: false,
+    extensions: [
+      StarterKit,
+      Link,
+      Color,
+      TextStyle,
+    ],
+    content,
+  });
 
   const subPostItems = subPosts
     .map((subPost) => (
       <SubPostContainer>
         <StyledDiv>
-          {subPost.content}
+          <EditorContent editor={editor} className="content" />
           <MediaContent media={subPost.media} />
         </StyledDiv>
         <NavigationContainer>

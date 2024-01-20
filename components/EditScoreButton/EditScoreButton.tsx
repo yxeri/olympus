@@ -36,6 +36,7 @@ const StyledContainer = () => (
         padding: '.25rem',
         margin: 0,
         display: 'grid',
+        filter: 'drop-shadow(2px 2px 5px #000000)',
       }}
     >
       <PlusIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />

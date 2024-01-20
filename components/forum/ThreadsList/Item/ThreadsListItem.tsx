@@ -3,6 +3,14 @@ import {
   CollapsibleTrigger,
   CollapsibleContent
 } from '@radix-ui/react-collapsible';
+import { Color } from '@tiptap/extension-color';
+import { Link } from '@tiptap/extension-link';
+import { TextStyle } from '@tiptap/extension-text-style';
+import {
+  EditorContent,
+  useEditor,
+} from '@tiptap/react';
+import { StarterKit } from '@tiptap/starter-kit';
 import ListItem from 'components/List/ListItem';
 import {
   CldImage,
@@ -132,6 +140,17 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
     createdAt,
     media = [],
   } = thread;
+  const editor = useEditor({
+    autofocus: false,
+    editable: false,
+    extensions: [
+      StarterKit,
+      Link,
+      Color,
+      TextStyle,
+    ],
+    content,
+  });
 
   const poster = people.find((person) => person._id?.toString() === owner.toString());
   const foundForum = forums.find((forum) => forum._id?.toString() === forumId.toString());
@@ -205,7 +224,7 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
         <MoreIcon width={14} height={14} />
       </CleanButton>
       <StyledDiv>
-        {`${content}`}
+        <EditorContent editor={editor} className="content" />
         <MediaContent media={media} />
       </StyledDiv>
       <StyledCollapsibleRoot defaultOpen={false}>
