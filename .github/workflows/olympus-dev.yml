@@ -16,6 +16,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
+          cache: 'yarn'
 
       - name: Install yarn
         run: npm install -g yarn
@@ -35,7 +36,7 @@ jobs:
           echo "NEXT_PUBLIC_INSTANCE_NAME=${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}" >> .env
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - name: Build app
         run: yarn build
