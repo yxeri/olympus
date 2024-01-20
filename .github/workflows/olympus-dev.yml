@@ -42,4 +42,4 @@ jobs:
 
       - name: Copy dir
         run: |
-          rsync -av --exclude=".git" . ../olympus-dev 
+          rsync -a --delete --delete-excluded --preallocate --exclude=".git" . ../olympus-dev 
