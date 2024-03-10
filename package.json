@@ -86,7 +86,7 @@
     "yarn-upgrade-all": "^0.7.2"
   },
   "volta": {
-    "node": "21.7.1",
+    "node": "21.7.0",
     "yarn": "4.1.0"
   }
 }
