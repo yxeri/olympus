@@ -22,6 +22,7 @@ jobs:
           image-tag: development
 
   start-container:
+    needs: [build-and-publish]
     runs-on: self-hosted
     environment: preview
 
