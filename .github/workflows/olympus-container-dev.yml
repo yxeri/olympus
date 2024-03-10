@@ -8,9 +8,11 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    environment: preview
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Build and publish image
         uses: VaultVulp/gp-docker-action@1.6.0
@@ -19,7 +21,12 @@ jobs:
           image-name: olympus
           image-tag: development
 
-      - name: Start container
+  start-container:
+    runs-on: self-hosted
+    environment: preview
+
+    steps:
+      - name: Docker compose
         uses: isbang/compose-action@v1.5.1
         with:
           compose-file: "./compose.yml"
