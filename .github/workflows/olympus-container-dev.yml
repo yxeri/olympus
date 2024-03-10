@@ -60,4 +60,16 @@ jobs:
         uses: actions/checkout@v4
       - name: Docker compose
         run: docker compose -f ./docker-compose.yml -p olympus-dev up -d --build
+        env:
+          VIRTUAL_HOST: ${{ NEXT_PUBLIC_INSTANCE_NAME }}
+          CLOUDINARY_API_SECRET: ${{ CLOUDINARY_API_SECRET }}
+          MONGODB_URI: ${{ MONGODB_URI }}
+          SECRET: ${{ SECRET }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ SUPABASE_SERVICE_ROLE_KEY }}
+          NEXT_PUBLIC_CLOUDINARY_API_KEY: ${{ NEXT_PUBLIC_CLOUDINARY_API_KEY }}
+          NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_ENVIRONMENT: ${{ NEXT_PUBLIC_ENVIRONMENT }}
+          NEXT_PUBLIC_INSTANCE_NAME: ${{ NEXT_PUBLIC_INSTANCE_NAME }}
 
