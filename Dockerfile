@@ -10,7 +10,7 @@ COPY .yarnrc.yml ./
 COPY .yarn ./.yarn
 
 RUN corepack enable
-RUN corepack prepare yarn@4.1 --activate
+RUN corepack prepare yarn@4.1.1 --activate
 RUN yarn install --immutable --inline-builds
 
 FROM base AS builder
