@@ -1,6 +1,6 @@
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { getAuthPerson } from '../../../api/helpers';
 

@@ -1,6 +1,6 @@
 import {
   Dispatch,
-  SetStateAction
+  SetStateAction,
 } from 'react';
 
 export type AuthState = 'LOGIN' | 'REGISTER' | 'OTP' | 'SEND_OTP' | 'PASSWORD' | 'RESET';

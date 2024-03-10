@@ -1,35 +1,47 @@
+import { collection } from '@/lib/db/tools';
+import { Thread } from '@/types/data';
 import { ObjectId } from 'mongodb';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
-import { collection } from '../../lib/db/tools';
-import {
-  Thread
-} from '../../types/data';
 import {
   findForum,
-  hasAccessToForum
+  hasAccessToForum,
 } from '../forums/get';
 import { createForum } from '../forums/post';
 import { getAuthPerson } from '../helpers';
 
-export default async function post(req: NextApiRequest, res: NextApiResponse) {
+export default async function post(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
     const dbCollection = await collection<Thread>('threads');
-    const { thread } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    const { thread } = typeof req.body === 'object'
+      ? req.body
+      : JSON.parse(req.body);
     let forum = await findForum({ _id: new ObjectId(thread.forumId.toString()) });
 
-    const authPerson = await getAuthPerson({ req, res });
+    const authPerson = await getAuthPerson({
+      req,
+      res,
+    });
 
     if (!authPerson) {
-      throw new ApiError(403, 'Not allowed');
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
 
     if (!forum) {
       if (authPerson._id?.toString() !== thread.forumId.toString()) {
-        throw new ApiError(404, 'Not found');
+        throw new ApiError(
+          404,
+          'Not found',
+        );
       }
 
       // Create a new personal forum for the user
@@ -53,7 +65,10 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
       forum,
       hasPostAccess: true,
     })) {
-      throw new ApiError(403, 'Not allowed');
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
 
     const result = await dbCollection
@@ -67,16 +82,18 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
         pinned: [],
         posts: [],
         owner: authPerson._id,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
-    res.status(200).json({
-      insertedId: result.insertedId,
-    });
+    res.status(200)
+      .json({
+        insertedId: result.insertedId,
+      });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error?.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

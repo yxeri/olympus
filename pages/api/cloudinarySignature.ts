@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

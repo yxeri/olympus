@@ -1,27 +1,27 @@
 import {
+  Person,
+  PersonObject,
+  ScoreChange,
+} from '@/types/data';
+import {
   collection,
-  createSet
+  createSet,
 } from 'lib/db/tools';
 import {
   AnyBulkWriteOperation,
   ObjectId,
   UpdateFilter,
-  UpdateResult
+  UpdateResult,
 } from 'mongodb';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
-import {
-  Person,
-  PersonObject,
-  ScoreChange,
-} from '../../types/data';
 import { getAuthPerson } from '../helpers';
 import {
   Id,
-  IdName
+  IdName,
 } from './types';
 
 type ResponseSuccess = {
@@ -44,10 +44,16 @@ export const updatePerson: (
 ) => {
   const peopleCollection = await collection<Person>('people');
 
-  return peopleCollection.updateOne(id, update);
+  return peopleCollection.updateOne(
+    id,
+    update,
+  );
 };
 
-export default async function patch(req: NextApiRequest, res: NextApiResponse<Response>) {
+export default async function patch(
+  req: NextApiRequest,
+  res: NextApiResponse<Response>,
+) {
   try {
     const dbCollection = await collection<Person>('people');
     const {
@@ -56,7 +62,9 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
     }: {
       people: Partial<Person>[],
       updateAll?: Partial<typeof PersonObject>,
-    } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    } = typeof req.body === 'object'
+      ? req.body
+      : JSON.parse(req.body);
 
     if (
       !Array.isArray(people)
@@ -66,16 +74,22 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
         `Expected { 
           people: _id | name & family, 
           update: Partial<Person>,
-         }`
+         }`,
       );
     }
 
-    const authPerson = await getAuthPerson({ req, res });
+    const authPerson = await getAuthPerson({
+      req,
+      res,
+    });
 
     if (
       (people.length > 1 && !authPerson?.auth?.people?.admin)
       && (people[0]._id?.toString() !== authPerson?._id?.toString())) {
-      throw new ApiError(403, 'Not allowed');
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
 
     const operations: AnyBulkWriteOperation<Person>[] = [];
@@ -83,7 +97,10 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
     let matched = 0;
 
     people.forEach((fullPerson) => {
-      const { scoreChanges, ...person } = fullPerson;
+      const {
+        scoreChanges,
+        ...person
+      } = fullPerson;
       if (person.name) {
         // eslint-disable-next-line no-param-reassign
         person.name = person.name.toLowerCase();
@@ -102,7 +119,10 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
       const update: {
         $set: Partial<Person>,
         $inc?: { score: number },
-      } = createSet<typeof PersonObject>(updateAll ?? person, PersonObject).set;
+      } = createSet<typeof PersonObject>(
+        updateAll ?? person,
+        PersonObject,
+      ).set;
 
       if (
         (authPerson?.auth?.score?.admin || authPerson?.auth?.people?.admin)
@@ -113,7 +133,10 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
 
       const filter: Id = person._id
         ? { _id: new ObjectId(person._id) }
-        : { name: person.name as string, family: person.family as string };
+        : {
+          name: person.name as string,
+          family: person.family as string,
+        };
 
       operations.push({
         updateOne: {
@@ -127,7 +150,10 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
       const {
         matchedCount,
         modifiedCount,
-      } = await dbCollection.bulkWrite(operations, { ordered: false });
+      } = await dbCollection.bulkWrite(
+        operations,
+        { ordered: false },
+      );
       const scoreCollection = await collection<ScoreChange>('scoreChanges');
 
       modified = modifiedCount;
@@ -139,13 +165,15 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
           .map((person) => (person.scoreChanges as ScoreChange[])[0]));
     }
 
-    res.status(200).json({
-      modified,
-      matched,
-    });
+    res.status(200)
+      .json({
+        modified,
+        matched,
+      });
   } catch (error: any) {
-    res.status(error.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

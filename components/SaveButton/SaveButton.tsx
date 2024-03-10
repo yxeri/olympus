@@ -3,7 +3,7 @@ import useAuthPerson from '../../hooks/people/useAuthPerson';
 import {
   colors,
   sizes,
-} from '../../styles/global';
+} from '@/styles/global';
 import Button from '../Button/Button';
 import Container from '../Container/Container';
 
@@ -48,7 +48,7 @@ const SaveButton = () => {
     return null;
   }
 
-  return <StyledContainer />;
+  return <StyledContainer/>;
 };
 
 export default SaveButton;

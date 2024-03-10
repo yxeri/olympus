@@ -1,9 +1,9 @@
-import { toast } from 'react-toastify';
-import useSwr, { SWRResponse } from 'swr';
 import {
   Family,
   FamilyObject,
-} from '../../types/data';
+} from '@/types/data';
+import { toast } from 'react-toastify';
+import useSwr, { SWRResponse } from 'swr';
 
 type UpdateFamilies = ({ family }: { family: Partial<Family> }) => Promise<any>;
 type InsertFamilies = (families: Array<typeof FamilyObject>) => void;
@@ -22,15 +22,19 @@ export default function useFamilies(): UseFamiliesReturn {
     ...swr
   } = useSwr(
     url,
-    (urlKey) => fetch(urlKey).then((res) => res.json()),
-    { keepPreviousData: true, }
+    (urlKey) => fetch(urlKey)
+      .then((res) => res.json()),
+    { keepPreviousData: true },
   );
   const updateFamilies: UpdateFamilies = async ({ family }) => {
     try {
-      const result = await fetch(url, {
-        method: 'PATCH',
-        body: JSON.stringify({ families: [family] }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ families: [family] }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -45,14 +49,19 @@ export default function useFamilies(): UseFamiliesReturn {
       throw error;
     }
   };
-  const insertFamilies: InsertFamilies = (family) => fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({ families: family }),
-  }).then(() => {
-    toast.success('Upload complete!');
+  const insertFamilies: InsertFamilies = (family) => fetch(
+    url,
+    {
+      method: 'POST',
+      body: JSON.stringify({ families: family }),
+    },
+  )
+    .then(() => {
+      toast.success('Upload complete!');
 
-    mutate();
-  }).catch(() => toast.error('Something went wrong'));
+      mutate();
+    })
+    .catch(() => toast.error('Something went wrong'));
 
   return {
     families: data?.families ?? [],

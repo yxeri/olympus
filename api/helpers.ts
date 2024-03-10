@@ -5,7 +5,7 @@ import {
 } from '@supabase/ssr';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 import { findPersonByAuth } from './people/get';

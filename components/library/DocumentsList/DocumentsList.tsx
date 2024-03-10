@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import useDocuments from '../../../hooks/documents/useDocuments';
-import { sizes } from '../../../styles/global';
+import { sizes } from '@/styles/global';
 import List from '../../List/List';
 import DocumentsListItem from './Item/DocumentsListItem';
 
@@ -15,7 +15,7 @@ const DocumentsList = () => {
 
   const ListItems = documents
     .filter((document) => document?._id)
-    .map((document) => <DocumentsListItem document={document} key={document._id?.toString()} />);
+    .map((document) => <DocumentsListItem document={document} key={document._id?.toString()}/>);
 
   return (
     <StyledList>

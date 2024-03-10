@@ -1,11 +1,11 @@
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import {
   get,
   patch,
-  post
+  post,
 } from '../../../api/people';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

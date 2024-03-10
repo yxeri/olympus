@@ -1,7 +1,5 @@
+import { Person } from '@/types/data';
 import useSwr, { SWRResponse } from 'swr';
-import {
-  Person,
-} from '../../types/data';
 
 type UseAuthPersonReturn = Omit<SWRResponse, 'data'> & {
   person: Person,
@@ -13,8 +11,9 @@ export default function useAuthPerson(): UseAuthPersonReturn {
     ...swr
   } = useSwr(
     '/api/people/auth',
-    (urlKey) => fetch(urlKey).then((res) => res.json()),
-    { keepPreviousData: true, }
+    (urlKey) => fetch(urlKey)
+      .then((res) => res.json()),
+    { keepPreviousData: true },
   );
 
   return {

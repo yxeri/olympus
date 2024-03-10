@@ -1,8 +1,6 @@
+import { Forum } from '@/types/data';
 import { toast } from 'react-toastify';
 import useSwr, { SWRResponse } from 'swr';
-import {
-  Forum
-} from '../../types/data';
 
 type InsertForum = (forum: Partial<Forum>) => void;
 type UseForumsReturn = Omit<SWRResponse, 'data'> & {
@@ -18,24 +16,30 @@ export default function useForums({ type }: { type?: Forum['type'] } = {}): UseF
     mutate,
     ...swr
   } = useSwr(
-    `${url}${type ? `?type=${type}` : ''}`,
-    (urlKey: string) => fetch(urlKey).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
+    `${url}${type
+      ? `?type=${type}`
+      : ''}`,
+    (urlKey: string) => fetch(urlKey)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
 
-      throw new Error(res.status.toString());
-    }),
+        throw new Error(res.status.toString());
+      }),
     {
       keepPreviousData: true,
-    }
+    },
   );
   const insertForum: InsertForum = async (forum) => {
     try {
-      const result = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({ forum }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'POST',
+          body: JSON.stringify({ forum }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());

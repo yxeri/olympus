@@ -1,7 +1,7 @@
+import { sizes } from '@/styles/global';
+import { Forum } from '@/types/data';
 import styled from 'styled-components';
 import useForums from '../../../hooks/forums/useForums';
-import { sizes } from '../../../styles/global';
-import { Forum } from '../../../types/data';
 import List from '../../List/List';
 import ForumsListItem from './Item/ForumsListItem';
 
@@ -16,7 +16,7 @@ const ForumsList = ({ type }: { type?: Forum['type'] }) => {
 
   const ListItems = forums
     .filter((forum) => forum?._id)
-    .map((forum) => <ForumsListItem forum={forum} key={forum._id?.toString()} />);
+    .map((forum) => <ForumsListItem forum={forum} key={forum._id?.toString()}/>);
 
   return (
     <StyledList>

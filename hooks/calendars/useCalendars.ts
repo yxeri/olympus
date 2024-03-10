@@ -1,6 +1,6 @@
+import { Calendar } from '@/types/data';
 import { toast } from 'react-toastify';
 import useSwr, { SWRResponse } from 'swr';
-import { Calendar } from '../../types/data';
 
 type InsertCalendar = (calendar: Partial<Calendar>) => void;
 type UseCalendarsReturn = Omit<SWRResponse, 'data'> & {
@@ -17,19 +17,25 @@ export default function useCalendars(): UseCalendarsReturn {
     ...swr
   } = useSwr(
     url,
-    (urlKey) => fetch(urlKey).then((res) => res.json()),
+    (urlKey) => fetch(urlKey)
+      .then((res) => res.json()),
     {
       keepPreviousData: true,
-    }
+    },
   );
-  const insertCalendar: InsertCalendar = (calendar) => fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({ calendar }),
-  }).then(() => {
-    toast.success('Upload complete!');
+  const insertCalendar: InsertCalendar = (calendar) => fetch(
+    url,
+    {
+      method: 'POST',
+      body: JSON.stringify({ calendar }),
+    },
+  )
+    .then(() => {
+      toast.success('Upload complete!');
 
-    mutate(url);
-  }).catch(() => toast.error('Something went wrong'));
+      mutate(url);
+    })
+    .catch(() => toast.error('Something went wrong'));
 
   return {
     calendars: data?.calendars ?? [],

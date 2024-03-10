@@ -1,10 +1,10 @@
-import React from 'react';
-import PlusIcon from '../../assets/plus-circle.svg';
-import useAuthPerson from '../../hooks/people/useAuthPerson';
 import {
   colors,
   sizes,
-} from '../../styles/global';
+} from '@/styles/global';
+import React from 'react';
+import PlusIcon from '../../assets/plus-circle.svg';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 import Container from '../Container/Container';
 import Link from '../Link/Link';
 
@@ -39,7 +39,7 @@ const StyledContainer = () => (
         filter: 'drop-shadow(2px 2px 5px #000000)',
       }}
     >
-      <PlusIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+      <PlusIcon width={sizes.hugeIcon} height={sizes.hugeIcon}/>
     </Link>
   </Container>
 );
@@ -51,7 +51,7 @@ const EditScoreButton = () => {
     return null;
   }
 
-  return <StyledContainer />;
+  return <StyledContainer/>;
 };
 
 export default EditScoreButton;

@@ -10,14 +10,28 @@ export const SocietyObject = {
 };
 export type Society = keyof typeof SocietyObject;
 export const StatusObject = {
-  a: '', b: '', g: '', d: '', e: '',
+  a: '',
+  b: '',
+  g: '',
+  d: '',
+  e: '',
 };
 export type Status = keyof typeof StatusObject;
 export const YearObject = {
-  0: '', 1: '', 2: '', 3: '', 4: '', 99: '', 100: '',
+  0: '',
+  1: '',
+  2: '',
+  3: '',
+  4: '',
+  99: '',
+  100: '',
 };
 export type Year = keyof typeof YearObject;
-export const PersonTypeObject = { Discipli: '', Questi: '', Soter: '' };
+export const PersonTypeObject = {
+  Discipli: '',
+  Questi: '',
+  Soter: '',
+};
 export type PersonType = keyof typeof PersonTypeObject;
 
 export type Province = 'imperiet' | 'afrikanska samväldet' | 'förenade asien' | 'nya amerika';
@@ -37,6 +51,9 @@ export const PersonObject: Omit<Person, '_id'> = {
   imgVersion: 1,
 };
 
+export type PersonAuth = 'calendars' | 'people' | 'documents' | 'forums' | 'score' | 'images' | 'all';
+export type PersonAuthValue = Record<'user' | 'mod' | 'admin', boolean>;
+
 export type Person = {
   authId?: string;
   _id: ObjectId | string,
@@ -50,7 +67,7 @@ export type Person = {
   score: number,
   profile: Record<string, any>,
   mail?: string,
-  auth?: Record<'calendars' | 'people' | 'documents' | 'forums' | 'score' | 'images' | 'all', Record<'user' | 'mod' | 'admin', boolean>>,
+  auth?: Record<PersonAuth, PersonAuthValue>,
   imgVersion?: number,
   isInactive?: boolean;
   pronouns?: string[];

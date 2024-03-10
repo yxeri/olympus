@@ -1,11 +1,7 @@
+import { Document } from '@/types/data';
 import { toast } from 'react-toastify';
-import {
-  SWRResponse,
-} from 'swr';
+import { SWRResponse } from 'swr';
 import useSWRInfinite from 'swr/infinite';
-import {
-  Document,
-} from '../../types/data';
 
 type InsertDocument = (document: Partial<Document>) => Promise<{ insertedId: string }>;
 
@@ -23,7 +19,10 @@ export default function useDocuments(): UseDocumentsReturn {
     mutate,
     ...swr
   } = useSWRInfinite(
-    (index, previousPageData) => {
+    (
+      index,
+      previousPageData,
+    ) => {
       if (previousPageData && !previousPageData.length) {
         return null;
       }
@@ -31,7 +30,10 @@ export default function useDocuments(): UseDocumentsReturn {
       return `${url}?page=${index}`;
     },
     async (urlKey) => {
-      const result = await fetch(urlKey, { method: 'GET' });
+      const result = await fetch(
+        urlKey,
+        { method: 'GET' },
+      );
 
       if (!result.ok) {
         return { documents: [] };
@@ -49,15 +51,18 @@ export default function useDocuments(): UseDocumentsReturn {
       revalidateAll: true,
       parallel: true,
       keepPreviousData: true,
-    }
+    },
   );
 
   const insert: InsertDocument = async (document) => {
     try {
-      const result = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({ document }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'POST',
+          body: JSON.stringify({ document }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -76,7 +81,8 @@ export default function useDocuments(): UseDocumentsReturn {
   };
 
   return {
-    documents: data?.map((page) => page?.documents).flat() ?? [],
+    documents: data?.map((page) => page?.documents)
+      .flat() ?? [],
     insert,
     mutate,
     ...swr,

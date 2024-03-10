@@ -1,3 +1,12 @@
+import {
+  colors,
+  sizes,
+} from '@/styles/global';
+import {
+  Forum,
+  Thread,
+} from '@/types/data';
+import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
 import { Color } from '@tiptap/extension-color';
 import { Link } from '@tiptap/extension-link';
 import { TextStyle } from '@tiptap/extension-text-style';
@@ -8,27 +17,16 @@ import {
 import { StarterKit } from '@tiptap/starter-kit';
 import { CldUploadWidget } from 'next-cloudinary';
 import process from 'process';
-import React, {
-  useState,
-} from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
 import PlusIcon from '../../../assets/plus-circle.svg';
 import useForums from '../../../hooks/forums/useForums';
 import useAuthPerson from '../../../hooks/people/useAuthPerson';
 import useThreads from '../../../hooks/threads/useThreads';
-import {
-  colors,
-  sizes,
-} from '../../../styles/global';
-import {
-  Thread,
-  Forum,
-} from '../../../types/data';
 import Button from '../../Button/Button';
 import Container from '../../Container/Container';
-import Modal from '../../Modal/Modal';
 import Form from '../../Form/Form';
+import Modal from '../../Modal/Modal';
 import { hasAccessToForum } from '../helpers';
 
 const StyledTrigger = () => (
@@ -62,14 +60,17 @@ const StyledTrigger = () => (
         filter: 'drop-shadow(2px 2px 5px #000000)',
       }}
     >
-      <PlusIcon width={sizes.hugeIcon} height={sizes.hugeIcon} />
+      <PlusIcon width={sizes.hugeIcon} height={sizes.hugeIcon}/>
     </RadixTrigger>
   </Container>
 );
 
 type FormValues = Thread;
 
-const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => void }) => {
+const Content = ({
+  forumId,
+  onSuccess,
+}: { forumId?: string, onSuccess: () => void }) => {
   const [media, setMedia] = useState<Set<Thread['media'][0]>>(new Set());
   const { insert } = useThreads();
   const { person } = useAuthPerson();
@@ -108,7 +109,7 @@ const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => vo
 
   return (
     <Form onSubmit={onSubmit}>
-      <EditorContent editor={editor} className="content" />
+      <EditorContent editor={editor} className="content"/>
       <CldUploadWidget
         options={{
           maxFiles: 4,
@@ -133,12 +134,21 @@ const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => vo
               background: colors.primaryTransBackground,
             },
           },
-          clientAllowedFormats: ['image', 'video'],
+          clientAllowedFormats: [
+            'image',
+            'video',
+          ],
           singleUploadAutoClose: false,
-          sources: ['local', 'url', 'camera'],
+          sources: [
+            'local',
+            'url',
+            'camera',
+          ],
         }}
         signatureEndpoint="/api/cloudinarySignature"
-        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev_media' : 'media'}
+        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+          ? 'dev_media'
+          : 'media'}
         onUpload={({ info }) => {
           if (info && typeof info === 'object') {
             const newMedia = {
@@ -146,7 +156,10 @@ const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => vo
               type: (info as { resource_type: 'image' | 'video' }).resource_type,
             };
 
-            setMedia(new Set([...Array.from(media), newMedia]));
+            setMedia(new Set([
+              ...Array.from(media),
+              newMedia,
+            ]));
           }
         }}
       >
@@ -170,7 +183,10 @@ const Content = ({ forumId, onSuccess }: { forumId?: string, onSuccess: () => vo
   );
 };
 
-const CreateThread = ({ type, forumId }: { type?: Forum['type'], forumId?: string } = {}) => {
+const CreateThread = ({
+  type,
+  forumId,
+}: { type?: Forum['type'], forumId?: string } = {}) => {
   const [open, setOpen] = useState<boolean>();
   const { forums } = useForums({ type });
   const { person } = useAuthPerson();
@@ -183,7 +199,10 @@ const CreateThread = ({ type, forumId }: { type?: Forum['type'], forumId?: strin
   if (forumId) {
     foundForum = forums.find((forum) => forum._id?.toString() === forumId);
 
-    if (!foundForum || !hasAccessToForum({ forum: foundForum, authPerson: person }).post) {
+    if (!foundForum || !hasAccessToForum({
+      forum: foundForum,
+      authPerson: person,
+    }).post) {
       return null;
     }
   }
@@ -192,9 +211,9 @@ const CreateThread = ({ type, forumId }: { type?: Forum['type'], forumId?: strin
     <Modal
       open={open}
       onOpenChange={(newOpen) => setOpen(newOpen)}
-      trigger={<StyledTrigger />}
+      trigger={<StyledTrigger/>}
       title={foundForum?.name ?? `${person.name} ${person.family}`}
-      content={<Content forumId={forumId} onSuccess={() => setOpen(false)} />}
+      content={<Content forumId={forumId} onSuccess={() => setOpen(false)}/>}
     />
   );
 };

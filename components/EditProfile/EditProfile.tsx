@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
-import styled from 'styled-components';
+import { useDictionary } from '@/hooks/useDictionary';
 import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
-import { usePeople } from '../../hooks/people';
-import useAuthPerson from '../../hooks/people/useAuthPerson';
-import { useDictionary } from '../../hooks/useDictionary';
 import {
   borders,
   colors,
   sizes,
-} from '../../styles/global';
-import { Person } from '../../types/data';
+} from '@/styles/global';
+import { Person } from '@/types/data';
+import React, { useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
+import styled from 'styled-components';
+import { usePeople } from '../../hooks/people';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 import Button from '../Button/Button';
 import Form from '../Form/Form';
 import Input from '../Input/Input';
@@ -18,12 +18,12 @@ import Modal from '../Modal/Modal';
 import Select from '../Select/Select';
 
 const StyledTrigger = styled(RadixTrigger)`
-  width: fit-content;
-  background-color: ${colors.clickableBackground};
-  padding: .5rem;
-  border-radius: ${sizes.corner};
-  border: ${borders.standard};
-  cursor: pointer;
+    width: fit-content;
+    background-color: ${colors.clickableBackground};
+    padding: .5rem;
+    border-radius: ${sizes.corner};
+    border: ${borders.standard};
+    cursor: pointer;
 `;
 
 type FormValues = Partial<Person>;
@@ -51,7 +51,9 @@ const Content = ({ onSuccess }: { onSuccess: () => void }) => {
           _id: person._id,
           society: chosenSociety,
           province: chosenProvince,
-          pronouns: pronouns ? Array.from((pronouns as unknown as string)?.split(',')) : undefined,
+          pronouns: pronouns
+            ? Array.from((pronouns as unknown as string)?.split(','))
+            : undefined,
         },
       });
 
@@ -72,16 +74,28 @@ const Content = ({ onSuccess }: { onSuccess: () => void }) => {
         style={{ textTransform: 'capitalize' }}
         defaultValue={person?.name}
         name="name"
-        placeholder={getDictionaryValue('common', 'name')}
-        aria-label={getDictionaryValue('common', 'name')}
+        placeholder={getDictionaryValue(
+          'common',
+          'name',
+        )}
+        aria-label={getDictionaryValue(
+          'common',
+          'name',
+        )}
       />
       <Input
         required
         style={{ textTransform: 'capitalize' }}
         defaultValue={person?.family}
         name="family"
-        placeholder={getDictionaryValue('common', 'family')}
-        aria-label={getDictionaryValue('common', 'family')}
+        placeholder={getDictionaryValue(
+          'common',
+          'family',
+        )}
+        aria-label={getDictionaryValue(
+          'common',
+          'family',
+        )}
       />
       <Input
         required
@@ -102,10 +116,22 @@ const Content = ({ onSuccess }: { onSuccess: () => void }) => {
       />
       <Select
         items={[
-          { label: 'Imperiet', value: 'imperiet' },
-          { label: 'Afrikanska Samväldet', value: 'afrikanska samväldet' },
-          { label: 'Förenade Asien', value: 'förenade asien' },
-          { label: 'Nya Amerika', value: 'nya amerika' },
+          {
+            label: 'Imperiet',
+            value: 'imperiet',
+          },
+          {
+            label: 'Afrikanska Samväldet',
+            value: 'afrikanska samväldet',
+          },
+          {
+            label: 'Förenade Asien',
+            value: 'förenade asien',
+          },
+          {
+            label: 'Nya Amerika',
+            value: 'nya amerika',
+          },
         ]}
         defaultValue={person?.province}
         placeholder="Provins"
@@ -113,9 +139,18 @@ const Content = ({ onSuccess }: { onSuccess: () => void }) => {
       />
       <Select
         items={[
-          { label: 'Bacchus', value: 'Bacchus' },
-          { label: 'Pheme', value: 'Pheme' },
-          { label: 'Bellona', value: 'Bellona' },
+          {
+            label: 'Bacchus',
+            value: 'Bacchus',
+          },
+          {
+            label: 'Pheme',
+            value: 'Pheme',
+          },
+          {
+            label: 'Bellona',
+            value: 'Bellona',
+          },
         ]}
         defaultValue={person?.society}
         placeholder="Elevhem"
@@ -135,9 +170,9 @@ const EditProfile = () => {
     <Modal
       open={open}
       onOpenChange={(newOpen) => setOpen(newOpen)}
-      trigger={<Trigger />}
+      trigger={<Trigger/>}
       title="Profil"
-      content={<Content onSuccess={() => setOpen(false)} />}
+      content={<Content onSuccess={() => setOpen(false)}/>}
     />
   );
 };

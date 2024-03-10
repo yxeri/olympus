@@ -4,7 +4,7 @@ import { usePeople } from '../../hooks/people';
 import {
   Family,
   statusCollection,
-} from '../../types/data';
+} from '@/types/data';
 import Container from '../Container/Container';
 import List from '../List/List';
 import ListItem from '../List/ListItem';

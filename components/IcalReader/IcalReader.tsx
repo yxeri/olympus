@@ -6,12 +6,12 @@ import { useRef } from 'react';
 import {
   Frequency,
   Weekday,
-  WeekdayStr
+  WeekdayStr,
 } from 'rrule';
 import randomColor from 'randomcolor';
 import useCalendars from '../../hooks/calendars/useCalendars';
 import useAuthPerson from '../../hooks/people/useAuthPerson';
-import { FullEvent } from '../../types/data';
+import { FullEvent } from '@/types/data';
 import Container from '../Container/Container';
 
 dayjs.extend(dayjsUtc);
@@ -50,110 +50,133 @@ const IcalReader = () => {
           if (changeEvent.target.files?.[0]) {
             const reader = new FileReader();
 
-            reader.addEventListener('load', (loadEvent) => {
-              if (loadEvent.target?.result) {
-                let content;
+            reader.addEventListener(
+              'load',
+              (loadEvent) => {
+                if (loadEvent.target?.result) {
+                  let content;
 
-                if (typeof loadEvent.target.result === 'string') {
-                  content = loadEvent.target.result;
-                } else {
-                  const decoder = new TextDecoder();
+                  if (typeof loadEvent.target.result === 'string') {
+                    content = loadEvent.target.result;
+                  } else {
+                    const decoder = new TextDecoder();
 
-                  content = decoder.decode(loadEvent.target.result);
+                    content = decoder.decode(loadEvent.target.result);
+                  }
+
+                  const iCalToJson = iCal.parse(content);
+                  const component = new iCal.Component(iCalToJson);
+
+                  const calendarName = component.getFirstPropertyValue('x-wr-calname');
+
+                  const parsedEvents: [string, FullEvent][] = component
+                    .getAllSubcomponents('vevent')
+                    .map((calendarEvent: { toJSON: () => JsonEvent }) => {
+                      const [, event] = calendarEvent.toJSON();
+
+                      const fullEvent: FullEvent = event
+                        .reduce(
+                          (
+                            previous,
+                            current,
+                          ) => {
+                            const [label, , , value] = current;
+                            switch (label) {
+                              case 'uid': {
+                                return {
+                                  ...previous,
+                                  id: value,
+                                };
+                              }
+                              case 'dtstart': {
+                                return {
+                                  ...previous,
+                                  allDay: !value.includes('T'),
+                                  start: new Date(dayjs(value)
+                                    .utc()
+                                    .format()),
+                                };
+                              }
+                              case 'dtend': {
+                                return {
+                                  ...previous,
+                                  end: new Date(dayjs(value)
+                                    .utc()
+                                    .format()),
+                                };
+                              }
+                              case 'summary': {
+                                return {
+                                  ...previous,
+                                  title: value,
+                                };
+                              }
+                              case 'description': {
+                                return {
+                                  ...previous,
+                                  description: value,
+                                };
+                              }
+                              case 'location': {
+                                return {
+                                  ...previous,
+                                  location: value,
+                                };
+                              }
+                              case 'rrule': {
+                                const {
+                                  freq,
+                                  byday,
+                                  ...rrule
+                                } = value;
+
+                                return {
+                                  ...previous,
+                                  rrule: {
+                                    ...rrule,
+                                    ...(freq && { freq: Frequency[value.freq] }),
+                                    ...(byday
+                                      && {
+                                        byweekday: value
+                                          .byday
+                                          .map((day: WeekdayStr) => Weekday.fromStr(day)),
+                                      }),
+                                  },
+                                };
+                              }
+                              default: {
+                                return previous;
+                              }
+                            }
+                          },
+                          {} as FullEvent,
+                        );
+
+                      return [
+                        fullEvent.id,
+                        fullEvent,
+                      ];
+                    })
+                    .filter(([, event]: [string, FullEvent]) => (
+                      event.id && event.title && event.start && event.end
+                    ));
+
+                  insert({
+                    name: calendarName,
+                    events: parsedEvents.map(([, event]) => event),
+                    color: randomColor({ luminosity: 'light' }),
+                  });
+
+                  if (inputRef.current) {
+                    inputRef.current.value = '';
+                  }
                 }
-
-                const iCalToJson = iCal.parse(content);
-                const component = new iCal.Component(iCalToJson);
-
-                const calendarName = component.getFirstPropertyValue('x-wr-calname');
-
-                const parsedEvents: [string, FullEvent][] = component
-                  .getAllSubcomponents('vevent')
-                  .map((calendarEvent: { toJSON: () => JsonEvent }) => {
-                    const [, event] = calendarEvent.toJSON();
-
-                    const fullEvent: FullEvent = event
-                      .reduce((previous, current) => {
-                        const [label, , , value] = current;
-                        switch (label) {
-                          case 'uid': {
-                            return {
-                              ...previous,
-                              id: value,
-                            };
-                          }
-                          case 'dtstart': {
-                            return {
-                              ...previous,
-                              allDay: !value.includes('T'),
-                              start: new Date(dayjs(value).utc().format()),
-                            };
-                          }
-                          case 'dtend': {
-                            return {
-                              ...previous,
-                              end: new Date(dayjs(value).utc().format()),
-                            };
-                          }
-                          case 'summary': {
-                            return {
-                              ...previous,
-                              title: value,
-                            };
-                          }
-                          case 'description': {
-                            return {
-                              ...previous,
-                              description: value,
-                            };
-                          }
-                          case 'location': {
-                            return {
-                              ...previous,
-                              location: value,
-                            };
-                          }
-                          case 'rrule': {
-                            const { freq, byday, ...rrule } = value;
-
-                            return {
-                              ...previous,
-                              rrule: {
-                                ...rrule,
-                                ...(freq && { freq: Frequency[value.freq] }),
-                                ...(byday
-                                  && {
-                                    byweekday: value
-                                      .byday
-                                      .map((day: WeekdayStr) => Weekday.fromStr(day))
-                                  }),
-                              },
-                            };
-                          }
-                          default: {
-                            return previous;
-                          }
-                        }
-                      }, {} as FullEvent);
-
-                    return [fullEvent.id, fullEvent];
-                  })
-                  .filter(([, event]: [string, FullEvent]) => (
-                    event.id && event.title && event.start && event.end
-                  ));
-
-                insert({
-                  name: calendarName,
-                  events: parsedEvents.map(([, event]) => event),
-                  color: randomColor({ luminosity: 'light' }),
-                });
-
-                if (inputRef.current) {
-                  inputRef.current.value = '';
-                }
-              }
-            });
-            reader.readAsText(changeEvent.target.files[0], 'UTF-8');
+              },
+            );
+            reader.readAsText(
+              changeEvent.target.files[0],
+              'UTF-8',
+            );
           }
         }}
       />

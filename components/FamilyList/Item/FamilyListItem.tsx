@@ -11,7 +11,7 @@ import {
   Family,
   Status,
   statusCollection,
-} from '../../../types/data';
+} from '@/types/data';
 import PersonModal from '../../PersonModal/PersonModal';
 
 export type FamilyListItemProps = {
@@ -79,7 +79,10 @@ const FamilyListItem: React.FC<FamilyListItemProps> = ({ family }) => {
       >
         {statusCollection[status]}
       </StatusDiv>
-      <StyledDiv style={{ gridArea: 'name', textTransform: 'capitalize' }}>
+      <StyledDiv style={{
+        gridArea: 'name',
+        textTransform: 'capitalize',
+      }}>
         {`${name}}`}
       </StyledDiv>
       <StyledPhoto>
@@ -88,7 +91,12 @@ const FamilyListItem: React.FC<FamilyListItemProps> = ({ family }) => {
           loading="lazy"
           alt={`${name} ${family}`}
           format="webp"
-          src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev/' : ''}families/${name.replaceAll(/[^\w\d]/g, '_')}`}
+          src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+            ? 'dev/'
+            : ''}families/${name.replaceAll(
+            /[^\w\d]/g,
+            '_',
+          )}`}
           height={50}
           width={50}
           transformations={['thumb-person']}

@@ -5,7 +5,7 @@ import {
   Title,
 } from '@radix-ui/react-toast';
 import React, { ReactNode } from 'react';
-import styled, { css, } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 type ToastBase = {
   title?: ReactNode | string;

@@ -1,6 +1,6 @@
+import { sizes } from '@/styles/global';
 import styled from 'styled-components';
 import useThreads from '../../../hooks/threads/useThreads';
-import { sizes } from '../../../styles/global';
 import List from '../../List/List';
 import ThreadsListItem from './Item/ThreadsListItem';
 
@@ -15,7 +15,7 @@ const ThreadsList = ({ forumId }: { forumId?: string }) => {
 
   const listItems = threads
     .filter((thread) => thread?._id)
-    .map((thread) => <ThreadsListItem thread={thread} key={thread._id?.toString()} />);
+    .map((thread) => <ThreadsListItem thread={thread} key={thread._id?.toString()}/>);
 
   console.log(listItems);
 

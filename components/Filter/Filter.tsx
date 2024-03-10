@@ -1,8 +1,8 @@
+import { sizes } from '@/styles/global';
 import * as Popover from '@radix-ui/react-popover';
-import FilterIcon from 'assets/filter.svg';
-import XIcon from 'assets/x.svg';
 import styled from 'styled-components';
-import { sizes } from 'styles/global';
+import FilterIcon from '../../assets/filter.svg';
+import XIcon from '../../assets/x.svg';
 import Search from '../Search/Search';
 import SortBy from './SortBy/SortBy';
 import VariantPicker from './VariantPicker/VariantPicker';
@@ -20,7 +20,7 @@ const Filter = ({ showSwitch = true }: { showSwitch?: boolean }) => (
   <StyledDiv aria-label="filters" role="toolbar">
     <Popover.Root>
       <Popover.Trigger style={{ display: 'none' }}>
-        <FilterIcon alt="Filter" width={sizes.largeIcon} height={sizes.largeIcon} />
+        <FilterIcon alt="Filter" width={sizes.largeIcon} height={sizes.largeIcon}/>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content>
@@ -34,9 +34,9 @@ const Filter = ({ showSwitch = true }: { showSwitch?: boolean }) => (
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
-    {showSwitch && <VariantPicker />}
-    <Search />
-    <SortBy />
+    {showSwitch && <VariantPicker/>}
+    <Search/>
+    <SortBy/>
   </StyledDiv>
 );
 

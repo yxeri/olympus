@@ -1,24 +1,33 @@
+import { collection } from '@/lib/db/tools';
+import { Alias } from '@/types/data';
 import { ObjectId } from 'mongodb';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
-import { collection } from '../../lib/db/tools';
-import {
-  Alias,
-} from '../../types/data';
 import { getAuthPerson } from '../helpers';
 
-export default async function post(req: NextApiRequest, res: NextApiResponse) {
+export default async function post(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
     const dbCollection = await collection<Alias>('aliases');
-    const { alias } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    const { alias } = typeof req.body === 'object'
+      ? req.body
+      : JSON.parse(req.body);
 
-    const authPerson = await getAuthPerson({ req, res });
+    const authPerson = await getAuthPerson({
+      req,
+      res,
+    });
 
     if (!authPerson) {
-      throw new ApiError(403, 'Not allowed');
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
 
     const aliasToCreate: Alias = {
@@ -33,13 +42,15 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
     const result = await dbCollection
       .insertOne(aliasToCreate);
 
-    res.status(200).json({
-      insertedId: result.insertedId,
-    });
+    res.status(200)
+      .json({
+        insertedId: result.insertedId,
+      });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error?.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

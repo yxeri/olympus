@@ -1,11 +1,7 @@
+import { Post } from '@/types/data';
 import { toast } from 'react-toastify';
-import {
-  SWRResponse,
-} from 'swr';
+import { SWRResponse } from 'swr';
 import useSWRInfinite from 'swr/infinite';
-import {
-  Post,
-} from '../../types/data';
 
 type InsertPost = (post: Partial<Post> & { postId?: string }) => void;
 
@@ -31,15 +27,23 @@ export default function usePosts({ threadId }: { threadId?: string } = {}): UseP
     mutate,
     ...swr
   } = useSWRInfinite(
-    (index, previousPageData) => {
+    (
+      index,
+      previousPageData,
+    ) => {
       if (previousPageData && !previousPageData.length) {
         return null;
       }
 
-      return `${url}?page=${index}${threadId ? `&threadId=${threadId}` : ''}`;
+      return `${url}?page=${index}${threadId
+        ? `&threadId=${threadId}`
+        : ''}`;
     },
     async (urlKey) => {
-      const result = await fetch(urlKey, { method: 'GET' });
+      const result = await fetch(
+        urlKey,
+        { method: 'GET' },
+      );
 
       if (!result.ok) {
         return { posts: [] };
@@ -57,15 +61,18 @@ export default function usePosts({ threadId }: { threadId?: string } = {}): UseP
       revalidateAll: true,
       parallel: true,
       keepPreviousData: true,
-    }
+    },
   );
 
   const insertPost: InsertPost = async (post) => {
     try {
-      const result = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({ post }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'POST',
+          body: JSON.stringify({ post }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -81,12 +88,21 @@ export default function usePosts({ threadId }: { threadId?: string } = {}): UseP
     }
   };
 
-  const likePost: LikePost = async ({ postId, like }) => {
+  const likePost: LikePost = async ({
+    postId,
+    like,
+  }) => {
     try {
-      const result = await fetch(url, {
-        method: 'PATCH',
-        body: JSON.stringify({ thread: { _id: postId }, like }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            thread: { _id: postId },
+            like,
+          }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -102,7 +118,8 @@ export default function usePosts({ threadId }: { threadId?: string } = {}): UseP
 
   return {
     likePost,
-    posts: data?.map((page) => page?.posts).flat() ?? [],
+    posts: data?.map((page) => page?.posts)
+      .flat() ?? [],
     insert: insertPost,
     mutate,
     ...swr,

@@ -1,12 +1,8 @@
+import { Forum } from '@/types/data';
 import ListItem from 'components/List/ListItem';
 import React from 'react';
 import styled from 'styled-components';
-import {
-  colors,
-} from 'styles/global';
-import {
-  Forum,
-} from '../../../../types/data';
+import { colors } from 'styles/global';
 
 export type ForumsListItemProps = {
   forum: Forum,

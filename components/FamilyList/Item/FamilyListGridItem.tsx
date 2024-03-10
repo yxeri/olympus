@@ -7,7 +7,7 @@ import { colors } from 'styles/global';
 import {
   Status,
   statusCollection,
-} from '../../../types/data';
+} from '@/types/data';
 import FamilyModal from '../../FamilyModal/FamilyModal';
 import {
   FamilyListItemProps,
@@ -62,7 +62,12 @@ const FamilyListGridItem: React.FC<FamilyListItemProps> = ({ family }) => {
             loading="lazy"
             alt={`${name} ${family}`}
             format="webp"
-            src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev/' : ''}people/${name.replaceAll(/[^\w\d]/g, '_')}`}
+            src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+              ? 'dev/'
+              : ''}people/${name.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}`}
             height={186}
             width={186}
             transformations={['profile']}
@@ -77,7 +82,10 @@ const FamilyListGridItem: React.FC<FamilyListItemProps> = ({ family }) => {
         >
           {name}
         </StyledDiv>
-        <StyledDiv style={{ gridArea: 'status', gridAutoFlow: 'column' }}>
+        <StyledDiv style={{
+          gridArea: 'status',
+          gridAutoFlow: 'column',
+        }}>
           <StatusDiv
             $status={status}
             style={{

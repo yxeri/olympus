@@ -1,3 +1,4 @@
+import { colors } from '@/styles/global';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, {
@@ -5,7 +6,6 @@ import React, {
   PropsWithChildren,
 } from 'react';
 import styled from 'styled-components';
-import { colors } from '../../styles/global';
 
 type LinkProps = NextLinkProps & PropsWithChildren & { style?: CSSProperties };
 
@@ -16,11 +16,13 @@ const StyledLink = styled(NextLink)<{ isactive: 'true' | 'false' }>`
   font-weight: bold;
   display: grid;
 
-  ${({ isactive }) => (isactive === 'true' ? `
+  ${({ isactive }) => (isactive === 'true'
+  ? `
     > * {
       stroke: ${colors.active};
     }
-  ` : `
+  `
+  : `
     :focus {
       > * {
         stroke: ${colors.selected};
@@ -29,13 +31,18 @@ const StyledLink = styled(NextLink)<{ isactive: 'true' | 'false' }>`
   `)}
 `;
 
-const Link: React.FC<LinkProps> = ({ children, ...props }) => {
+const Link: React.FC<LinkProps> = ({
+  children,
+  ...props
+}) => {
   const pathname = usePathname();
 
   return (
     <StyledLink
       {...props}
-      isactive={props.href === pathname ? 'true' : 'false'}
+      isactive={props.href === pathname
+        ? 'true'
+        : 'false'}
     >
       {children}
     </StyledLink>

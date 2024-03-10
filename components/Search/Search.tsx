@@ -1,10 +1,10 @@
-import SearchIcon from 'assets/search.svg';
-import XIcon from 'assets/x.svg';
-import { searchStringAtom } from 'atoms/filter';
+import SearchIcon from '@/assets/search.svg';
+import XIcon from '@/assets/x.svg';
+import { searchStringAtom } from '@/atoms/filter';
 import {
   ChangeEvent,
   useCallback,
-  useState
+  useState,
 } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -16,33 +16,33 @@ import {
 import { debounce } from 'throttle-debounce';
 
 const StyledInput = styled.input`
-  background-color: ${colors.clickableBackground};
-  border-radius: ${sizes.corner};
-  padding: .3rem;
-  border: ${borders.standard};
-  min-height: ${sizes.largeIcon}px;
-  height: 100%;
-  box-sizing: border-box;
+    background-color: ${colors.clickableBackground};
+    border-radius: ${sizes.corner};
+    padding: .3rem;
+    border: ${borders.standard};
+    min-height: ${sizes.largeIcon}px;
+    height: 100%;
+    box-sizing: border-box;
 `;
 
 const StyledDiv = styled.div`
-  position: relative;
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  height: 100%;
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    height: 100%;
 `;
 
 const SearchImage = styled(SearchIcon)<{ $isHidden: boolean }>`
-  position: absolute;
-  left: .3rem;
-  ${({ $isHidden }) => $isHidden && 'display: none;'}
+    position: absolute;
+    left: .3rem;
+    ${({ $isHidden }) => $isHidden && 'display: none;'}
 `;
 
 const ClearImage = styled(XIcon)<{ $isHidden: boolean }>`
-  position: absolute;
-  right: .3rem;
-  ${({ $isHidden }) => $isHidden && 'display: none;'}
+    position: absolute;
+    right: .3rem;
+    ${({ $isHidden }) => $isHidden && 'display: none;'}
 `;
 
 const Search = () => {
@@ -50,11 +50,14 @@ const Search = () => {
   const [value, setValue] = useState(searchString);
   const [hasContent, setHasContent] = useState(!!searchString);
 
-  const updateSearchString = useCallback(debounce(
-    250,
-    (newString: string) => setSearchString(newString),
-    { atBegin: false }
-  ), []);
+  const updateSearchString = useCallback(
+    debounce(
+      250,
+      (newString: string) => setSearchString(newString),
+      { atBegin: false },
+    ),
+    [],
+  );
 
   return (
     <StyledDiv>

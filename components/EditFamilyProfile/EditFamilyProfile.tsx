@@ -1,29 +1,27 @@
-import React, { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
-import styled from 'styled-components';
-import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
-import useFamilies from '../../hooks/families/useFamilies';
-import useAuthPerson from '../../hooks/people/useAuthPerson';
 import {
   borders,
   colors,
   sizes,
-} from '../../styles/global';
-import {
-  Family,
-} from '../../types/data';
+} from '@/styles/global';
+import { Family } from '@/types/data';
+import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
+import React, { useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
+import styled from 'styled-components';
+import useFamilies from '../../hooks/families/useFamilies';
+import useAuthPerson from '../../hooks/people/useAuthPerson';
 import Button from '../Button/Button';
 import Form from '../Form/Form';
 import Modal from '../Modal/Modal';
 import Select from '../Select/Select';
 
 const StyledTrigger = styled(RadixTrigger)`
-  width: fit-content;
-  background-color: ${colors.clickableBackground};
-  padding: .5rem;
-  border-radius: ${sizes.corner};
-  border: ${borders.standard};
-  cursor: pointer;
+    width: fit-content;
+    background-color: ${colors.clickableBackground};
+    padding: .5rem;
+    border-radius: ${sizes.corner};
+    border: ${borders.standard};
+    cursor: pointer;
 `;
 
 type FormValues = Partial<Family>;
@@ -32,7 +30,10 @@ const Trigger = () => (<StyledTrigger>Uppdatera din familjs profil</StyledTrigge
 
 const Content = ({ onSuccess }: { onSuccess: () => void }) => {
   const [chosenProvince, setChosenProvince] = useState<Family['province'] | undefined>();
-  const { update, families } = useFamilies();
+  const {
+    update,
+    families,
+  } = useFamilies();
   const { person } = useAuthPerson();
 
   const family = families.find((fam) => fam.name === person?.family);
@@ -61,10 +62,22 @@ const Content = ({ onSuccess }: { onSuccess: () => void }) => {
     <Form onSubmit={onSubmit}>
       <Select
         items={[
-          { label: 'Imperiet', value: 'imperiet' },
-          { label: 'Afrikanska Samväldet', value: 'afrikanska samväldet' },
-          { label: 'Förenade Asien', value: 'förenade asien' },
-          { label: 'Nya Amerika', value: 'nya amerika' },
+          {
+            label: 'Imperiet',
+            value: 'imperiet',
+          },
+          {
+            label: 'Afrikanska Samväldet',
+            value: 'afrikanska samväldet',
+          },
+          {
+            label: 'Förenade Asien',
+            value: 'förenade asien',
+          },
+          {
+            label: 'Nya Amerika',
+            value: 'nya amerika',
+          },
         ]}
         defaultValue={family?.province}
         placeholder="Provins"
@@ -84,9 +97,9 @@ const EditFamilyProfile = () => {
     <Modal
       open={open}
       onOpenChange={(newOpen) => setOpen(newOpen)}
-      trigger={<Trigger />}
+      trigger={<Trigger/>}
       title="Profil"
-      content={<Content onSuccess={() => setOpen(false)} />}
+      content={<Content onSuccess={() => setOpen(false)}/>}
     />
   );
 };

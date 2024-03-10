@@ -23,7 +23,7 @@ import {
   borders,
   colors,
   sizes,
-} from '../../../styles/global';
+} from '@/styles/global';
 import Button from '../../Button/Button';
 import Container from '../../Container/Container';
 
@@ -70,7 +70,10 @@ const Editor = ({ documentId }: { documentId?: string }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [id, setId] = useState<string | undefined>(documentId);
   const { insert } = useDocuments();
-  const { update, document } = useDocument({ documentId: id });
+  const {
+    update,
+    document,
+  } = useDocument({ documentId: id });
   const { person } = useAuthPerson();
   const editor = useEditor({
     autofocus: false,
@@ -101,8 +104,16 @@ const Editor = ({ documentId }: { documentId?: string }) => {
     <Container>
       {
         editor?.isEditable
-          ? <input ref={inputRef} placeholder="Title" defaultValue={document?.title} style={{ fontSize: '1.5rem', color: colors.brightColor, background: 'inherit' }} />
-          : <h1 style={{ color: colors.brightColor, fontSize: '1.5rem', margin: 0 }}>{document?.title}</h1>
+          ? <input ref={inputRef} placeholder="Title" defaultValue={document?.title} style={{
+            fontSize: '1.5rem',
+            color: colors.brightColor,
+            background: 'inherit',
+          }}/>
+          : <h1 style={{
+            color: colors.brightColor,
+            fontSize: '1.5rem',
+            margin: 0,
+          }}>{document?.title}</h1>
       }
       {editor?.isEditable && (
         <ControlContainer>
@@ -115,108 +126,174 @@ const Editor = ({ documentId }: { documentId?: string }) => {
               backgroundColor: colors.clickableBackground,
             }}
             type="color"
-            onInput={(event) => editor.chain().focus().setColor(event.currentTarget.value).run()}
+            onInput={(event) => editor.chain()
+              .focus()
+              .setColor(event.currentTarget.value)
+              .run()}
             value={editor.getAttributes('textStyle').color ?? colors.primaryColor}
           />
           <Button
-            onClick={() => editor?.chain().focus().toggleBold().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleBold()
+              .run()}
           >
             bold
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleItalic().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleItalic()
+              .run()}
           >
             italic
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleStrike().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleStrike()
+              .run()}
           >
             strike
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().setParagraph().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .setParagraph()
+              .run()}
           >
             paragraph
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleHeading({ level: 1 })
+              .run()}
           >
             h1
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleHeading({ level: 2 })
+              .run()}
           >
             h2
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleHeading({ level: 3 })
+              .run()}
           >
             h3
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 4 }).run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleHeading({ level: 4 })
+              .run()}
           >
             h4
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 5 }).run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleHeading({ level: 5 })
+              .run()}
           >
             h5
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleHeading({ level: 6 }).run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleHeading({ level: 6 })
+              .run()}
           >
             h6
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleBulletList().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleBulletList()
+              .run()}
           >
             bullet list
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleOrderedList()
+              .run()}
           >
             ordered list
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().setHardBreak().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .setHardBreak()
+              .run()}
           >
             hard break
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().setHorizontalRule().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .setHorizontalRule()
+              .run()}
           >
             horisontal line
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleBlockquote().run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleBlockquote()
+              .run()}
           >
             blockquote
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().toggleLink({ href: 'google.com' }).run()}
+            onClick={() => editor?.chain()
+              .focus()
+              .toggleLink({ href: 'google.com' })
+              .run()}
           >
             link
           </Button>
           <Button
-            onClick={() => editor.chain().focus().insertTable({
-              rows: 3,
-              cols: 3,
-              withHeaderRow: true,
-            }).run()}
+            onClick={() => editor.chain()
+              .focus()
+              .insertTable({
+                rows: 3,
+                cols: 3,
+                withHeaderRow: true,
+              })
+              .run()}
           >
             table
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().undo().run()}
-            disabled={!editor?.can().chain().focus().undo()
+            onClick={() => editor?.chain()
+              .focus()
+              .undo()
+              .run()}
+            disabled={!editor?.can()
+              .chain()
+              .focus()
+              .undo()
               .run()}
           >
             undo
           </Button>
           <Button
-            onClick={() => editor?.chain().focus().redo().run()}
-            disabled={!editor?.can().chain().focus().redo()
+            onClick={() => editor?.chain()
+              .focus()
+              .redo()
+              .run()}
+            disabled={!editor?.can()
+              .chain()
+              .focus()
+              .redo()
               .run()}
           >
             redo
@@ -252,7 +329,7 @@ const Editor = ({ documentId }: { documentId?: string }) => {
         </ControlContainer>
       )}
       <StyledDiv>
-        <EditorContent editor={editor} className="content" />
+        <EditorContent editor={editor} className="content"/>
       </StyledDiv>
     </Container>
   );

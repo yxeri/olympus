@@ -1,3 +1,5 @@
+import ReplyIcon from '@/assets/reply.svg';
+import { Post } from '@/types/data';
 import { Color } from '@tiptap/extension-color';
 import { Link } from '@tiptap/extension-link';
 import { TextStyle } from '@tiptap/extension-text-style';
@@ -9,13 +11,7 @@ import { StarterKit } from '@tiptap/starter-kit';
 import ListItem from 'components/List/ListItem';
 import React from 'react';
 import styled from 'styled-components';
-import {
-  colors,
-} from 'styles/global';
-import ReplyIcon from 'assets/reply.svg';
-import {
-  Post,
-} from '../../../../types/data';
+import { colors } from 'styles/global';
 import CreatePost from '../../CreatePost/CreatePost';
 import { getTimeSince } from '../../helpers';
 import PostLikeButtons from '../../LikeButtons/PostLikeButtons';
@@ -27,17 +23,17 @@ export type PostsListItemProps = {
 };
 
 const StyledDiv = styled.div`
-  background-color: ${colors.darkerComponentBackground};
-  border-radius: 4px;
-  padding: .4rem;
-  border: .5px solid;
-  max-width: 100%;
-  width: fit-content;
-  min-width: 7rem;
+    background-color: ${colors.darkerComponentBackground};
+    border-radius: 4px;
+    padding: .4rem;
+    border: .5px solid;
+    max-width: 100%;
+    width: fit-content;
+    min-width: 7rem;
 `;
 
 const StyledListItem = styled(ListItem)`
-  display: grid;
+    display: grid;
 `;
 
 const Container = styled.div`
@@ -45,20 +41,23 @@ const Container = styled.div`
 `;
 
 const NavigationContainer = styled.div`
-  display: flex;
-  grid-gap: 1rem;
-  font-size: .9rem;
-  margin-left: .4rem;
-  margin-top: .2rem;
-  height: fit-content;
+    display: flex;
+    grid-gap: 1rem;
+    font-size: .9rem;
+    margin-left: .4rem;
+    margin-top: .2rem;
+    height: fit-content;
 `;
 
 const SubPostContainer = styled.div`
-  margin-left: .8rem;
-  margin-top: .4rem;
+    margin-left: .8rem;
+    margin-top: .4rem;
 `;
 
-const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
+const PostsListItem: React.FC<PostsListItemProps> = ({
+  post,
+  forumId,
+}) => {
   const {
     content,
     subPosts,
@@ -83,12 +82,12 @@ const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
     .map((subPost) => (
       <SubPostContainer>
         <StyledDiv>
-          <EditorContent editor={editor} className="content" />
-          <MediaContent media={subPost.media} />
+          <EditorContent editor={editor} className="content"/>
+          <MediaContent media={subPost.media}/>
         </StyledDiv>
         <NavigationContainer>
           {getTimeSince({ date: new Date(createdAt) })}
-          <PostLikeButtons postId={id?.toString() ?? ''} />
+          <PostLikeButtons postId={id?.toString() ?? ''}/>
         </NavigationContainer>
       </SubPostContainer>
     ));
@@ -97,17 +96,17 @@ const PostsListItem: React.FC<PostsListItemProps> = ({ post, forumId }) => {
     <StyledListItem>
       <StyledDiv>
         {`${content}`}
-        <MediaContent media={media} />
+        <MediaContent media={media}/>
       </StyledDiv>
       <Container>
         <NavigationContainer>
           {getTimeSince({ date: new Date(createdAt) })}
-          <PostLikeButtons postId={id?.toString() ?? ''} />
+          <PostLikeButtons postId={id?.toString() ?? ''}/>
           <CreatePost
             forumId={forumId}
             threadId={threadId.toString()}
             postId={id?.toString()}
-            label={<ReplyIcon width={14} height={14} />}
+            label={<ReplyIcon width={14} height={14}/>}
           />
         </NavigationContainer>
         {subPostItems}

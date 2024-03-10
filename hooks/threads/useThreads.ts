@@ -1,11 +1,7 @@
+import { Thread } from '@/types/data';
 import { toast } from 'react-toastify';
-import {
-  SWRResponse,
-} from 'swr';
+import { SWRResponse } from 'swr';
 import useSWRInfinite from 'swr/infinite';
-import {
-  Thread,
-} from '../../types/data';
 
 type InsertThread = (thread: Partial<Thread>) => void;
 
@@ -34,15 +30,23 @@ export default function useThreads({ forumId }: { forumId?: string } = {}): UseT
     mutate,
     ...swr
   } = useSWRInfinite(
-    (index, previousPageData) => {
+    (
+      index,
+      previousPageData,
+    ) => {
       if (previousPageData && !previousPageData.length) {
         return null;
       }
 
-      return `${url}?page=${index}${forumId ? `&forumId=${forumId}` : ''}`;
+      return `${url}?page=${index}${forumId
+        ? `&forumId=${forumId}`
+        : ''}`;
     },
     async (urlKey) => {
-      const result = await fetch(urlKey, { method: 'GET' });
+      const result = await fetch(
+        urlKey,
+        { method: 'GET' },
+      );
 
       if (!result.ok) {
         return { threads: [] };
@@ -60,15 +64,18 @@ export default function useThreads({ forumId }: { forumId?: string } = {}): UseT
       revalidateAll: true,
       parallel: true,
       keepPreviousData: true,
-    }
+    },
   );
 
   const insert: InsertThread = async (thread) => {
     try {
-      const result = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({ thread }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'POST',
+          body: JSON.stringify({ thread }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -86,10 +93,13 @@ export default function useThreads({ forumId }: { forumId?: string } = {}): UseT
 
   const update: UpdateThread = async (thread) => {
     try {
-      const result = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({ thread }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'POST',
+          body: JSON.stringify({ thread }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -105,12 +115,21 @@ export default function useThreads({ forumId }: { forumId?: string } = {}): UseT
     }
   };
 
-  const updateLike: LikeThread = async ({ threadId, like }) => {
+  const updateLike: LikeThread = async ({
+    threadId,
+    like,
+  }) => {
     try {
-      const result = await fetch(url, {
-        method: 'PATCH',
-        body: JSON.stringify({ thread: { _id: threadId }, like }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            thread: { _id: threadId },
+            like,
+          }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -127,7 +146,8 @@ export default function useThreads({ forumId }: { forumId?: string } = {}): UseT
   return {
     updateLike,
     update,
-    threads: data?.map((page) => page?.threads).flat() ?? [],
+    threads: data?.map((page) => page?.threads)
+      .flat() ?? [],
     insert,
     mutate,
     ...swr,

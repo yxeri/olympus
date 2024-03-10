@@ -1,5 +1,6 @@
+import { useDictionary } from '@/hooks/useDictionary';
+import { PersonAuth } from '@/types/data';
 import useAuthPerson from '../../hooks/people/useAuthPerson';
-import { useDictionary } from '../../hooks/useDictionary';
 import Container from '../Container/Container';
 import CsvDownloader from '../CsvDownloader/CsvDownloader';
 import CsvReader from '../CsvReader/CsvReader';
@@ -11,26 +12,36 @@ const AdminSettings = () => {
   const { person: authPerson } = useAuthPerson();
 
   // @ts-ignore
-  if (!Object.keys(authPerson?.auth ?? {}).some((key) => authPerson?.auth?.[key]?.admin)) {
+  if (!((Object.keys(authPerson?.auth ?? {}) as Array<PersonAuth>))
+    .some((key) => authPerson?.auth?.[key]?.admin)) {
     return null;
   }
 
   return (
     <Container style={{ marginTop: '1rem' }}>
       <h2>Admin</h2>
-      <CsvReader />
-      <CsvDownloader />
-      <IcalReader />
+      <CsvReader/>
+      <CsvDownloader/>
+      <IcalReader/>
       <ImageUploader
         requireAdmin
-        title={getDictionaryValue('settings', 'uploadImages')}
+        title={getDictionaryValue(
+          'settings',
+          'uploadImages',
+        )}
         text={(
           <>
             <p>
-              {getDictionaryValue('settings', 'uploadImagesText')}
+              {getDictionaryValue(
+                'settings',
+                'uploadImagesText',
+              )}
             </p>
             <p>
-              {getDictionaryValue('settings', 'uploadImagesExample')}
+              {getDictionaryValue(
+                'settings',
+                'uploadImagesExample',
+              )}
             </p>
           </>
         )}

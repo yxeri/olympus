@@ -8,7 +8,7 @@ import {
 } from 'styles/global';
 import {
   Document,
-} from '../../../../types/data';
+} from '@/types/data';
 import Link from '../../../Link/Link';
 
 export type DocumentsListItemProps = {

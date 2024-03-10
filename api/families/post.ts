@@ -1,27 +1,27 @@
 import {
+  Person,
+  PersonObject,
+} from '@/types/data';
+import {
   collection,
-  createSet
+  createSet,
 } from 'lib/db/tools';
 import {
   AnyBulkWriteOperation,
   MongoBulkWriteError,
-  ObjectId
+  ObjectId,
 } from 'mongodb';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 
 import { validatePerson } from 'utils/validatePerson';
-import {
-  Person,
-  PersonObject
-} from '../../types/data';
 import { getAuthPerson } from '../helpers';
 import {
+  ResponseError,
   UserId,
-  ResponseError
 } from './types';
 
 type ResponseSuccess = {
@@ -31,45 +31,68 @@ type ResponseSuccess = {
 
 type ResponseData = ResponseError | ResponseSuccess;
 
-export default async function post(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+export default async function post(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>,
+) {
   try {
     const dbCollection = await collection<Person>('people');
-    const { people } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    const { people } = typeof req.body === 'object'
+      ? req.body
+      : JSON.parse(req.body);
 
     if (!Array.isArray(people) || people.length < 1) {
-      throw new ApiError(400, 'Expected People[]');
+      throw new ApiError(
+        400,
+        'Expected People[]',
+      );
     }
 
-    const authPerson = await getAuthPerson({ req, res });
+    const authPerson = await getAuthPerson({
+      req,
+      res,
+    });
 
     if (!authPerson?.auth?.people?.admin) {
-      throw new ApiError(403, 'Not allowed');
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
 
     const filteredIds: string[] = [];
-    const filteredPeople: Person[] = people.reduce((filtered, person) => {
-      if (validatePerson(person)[0]) {
-        filtered.push({
-          ...person,
-          name: person.name.toLowerCase(),
-          family: person.family.toLowerCase(),
-        });
+    const filteredPeople: Person[] = people.reduce(
+      (
+        filtered,
+        person,
+      ) => {
+        if (validatePerson(person)[0]) {
+          filtered.push({
+            ...person,
+            name: person.name.toLowerCase(),
+            family: person.family.toLowerCase(),
+          });
 
-        if (person._id) {
-          filteredIds.push(person._id);
+          if (person._id) {
+            filteredIds.push(person._id);
+          }
         }
-      }
 
-      return filtered;
-    }, []);
+        return filtered;
+      },
+      [],
+    );
 
     const updatedIds: UserId[] = [];
     const result = await dbCollection
-      .insertMany(filteredPeople.map((person) => ({
-        ...(person._id && { _id: new ObjectId(person._id) }),
-        ...person,
-        profile: person.profile ?? {},
-      })), { ordered: false })
+      .insertMany(
+        filteredPeople.map((person) => ({
+          ...(person._id && { _id: new ObjectId(person._id) }),
+          ...person,
+          profile: person.profile ?? {},
+        })),
+        { ordered: false },
+      )
       .then((insertResult) => ({
         insertedIds: Object.values(insertResult?.insertedIds),
         existIndexes: ([] as number[]),
@@ -77,12 +100,18 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
       .catch((operation: MongoBulkWriteError) => {
         const indexes: number[] = [];
         const existIds = Array.isArray(operation.writeErrors)
-          ? operation.writeErrors.reduce<string[]>((failed, error) => {
-            failed.push(error.err.op._id);
-            indexes.push(error.index);
+          ? operation.writeErrors.reduce<string[]>(
+            (
+              failed,
+              error,
+            ) => {
+              failed.push(error.err.op._id);
+              indexes.push(error.index);
 
-            return failed;
-          }, [])
+              return failed;
+            },
+            [],
+          )
           : [];
         const inserted = (Object
           .values(operation.result?.insertedIds ?? {})
@@ -98,28 +127,47 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
       const operations: AnyBulkWriteOperation<Person>[] = [];
 
       filteredPeople
-        .reduce<[string | undefined, Person][]>((existingPeople, person, index) => {
-        if (result.existIndexes.includes(index)) {
-          existingPeople.push([filteredIds[index], person]);
-        }
+        .reduce<[string | undefined, Person][]>(
+          (
+            existingPeople,
+            person,
+            index,
+          ) => {
+            if (result.existIndexes.includes(index)) {
+              existingPeople.push([
+                filteredIds[index],
+                person,
+              ]);
+            }
 
-        return existingPeople;
-      }, [])
+            return existingPeople;
+          },
+          [],
+        )
         .forEach(([id, person]) => {
           const filter: UserId = id
             ? { _id: new ObjectId(id) }
-            : { name: person.name, family: person.family };
+            : {
+              name: person.name,
+              family: person.family,
+            };
           updatedIds.push(filter);
 
           try {
             operations.push({
               updateOne: {
                 filter,
-                update: createSet<typeof PersonObject>(person, PersonObject).set,
+                update: createSet<typeof PersonObject>(
+                  person,
+                  PersonObject,
+                ).set,
               },
             });
           } catch (error) {
-            console.log('error', error);
+            console.log(
+              'error',
+              error,
+            );
           }
         });
 
@@ -128,14 +176,16 @@ export default async function post(req: NextApiRequest, res: NextApiResponse<Res
       }
     }
 
-    res.status(200).json({
-      updatedIndexes: updatedIds,
-      insertedIds: result?.insertedIds?.map((id) => id.toString()),
-    });
+    res.status(200)
+      .json({
+        updatedIndexes: updatedIds,
+        insertedIds: result?.insertedIds?.map((id) => id.toString()),
+      });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error?.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

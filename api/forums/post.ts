@@ -1,14 +1,14 @@
+import { collection } from '@/lib/db/tools';
+import {
+  Forum,
+  Person,
+} from '@/types/data';
 import { ObjectId } from 'mongodb';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
-import { collection } from '../../lib/db/tools';
-import {
-  Forum,
-  Person
-} from '../../types/data';
 import { getAuthPerson } from '../helpers';
 
 export const createForum = async ({
@@ -37,27 +37,43 @@ export const createForum = async ({
   };
 };
 
-export default async function post(req: NextApiRequest, res: NextApiResponse) {
+export default async function post(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
-    const { forum }: { forum: Partial<Forum> } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    const { forum }: { forum: Partial<Forum> } = typeof req.body === 'object'
+      ? req.body
+      : JSON.parse(req.body);
 
     if (!forum.name) {
-      throw new ApiError(400, 'Missing data');
+      throw new ApiError(
+        400,
+        'Missing data',
+      );
     }
 
-    const authPerson = await getAuthPerson({ req, res });
+    const authPerson = await getAuthPerson({
+      req,
+      res,
+    });
 
     if (!authPerson) {
-      throw new ApiError(403, 'Not allowed');
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
 
-    res.status(200).json(await createForum({
-      authPerson,
-      forum,
-    }));
+    res.status(200)
+      .json(await createForum({
+        authPerson,
+        forum,
+      }));
   } catch (error: any) {
-    res.status(error?.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error?.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

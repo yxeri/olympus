@@ -1,26 +1,24 @@
 import {
+  Family,
+  FamilyObject,
+} from '@/types/data';
+import {
   collection,
-  createSet
+  createSet,
 } from 'lib/db/tools';
 import {
   AnyBulkWriteOperation,
   ObjectId,
   UpdateFilter,
-  UpdateResult
+  UpdateResult,
 } from 'mongodb';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
-import {
-  Family,
-  FamilyObject,
-} from '../../types/data';
 import { getAuthPerson } from '../helpers';
-import {
-  FamilyId,
-} from './types';
+import { FamilyId } from './types';
 
 type ResponseSuccess = {
   modified: number,
@@ -42,19 +40,27 @@ export const updateFamily: (
 ) => {
   const familyCollection = await collection<Family>('families');
 
-  return familyCollection.updateOne(id, update);
+  return familyCollection.updateOne(
+    id,
+    update,
+  );
 };
 
-export default async function patch(req: NextApiRequest, res: NextApiResponse<Response>) {
+export default async function patch(
+  req: NextApiRequest,
+  res: NextApiResponse<Response>,
+) {
   try {
     const dbCollection = await collection<Family>('families');
     const {
       families,
-      updateAll
+      updateAll,
     }: {
       families: Partial<Family>[],
       updateAll?: Partial<Family>,
-    } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    } = typeof req.body === 'object'
+      ? req.body
+      : JSON.parse(req.body);
 
     if (
       !Array.isArray(families)
@@ -64,16 +70,22 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
         `Expected { 
           families: _id | name, 
           update: Partial<Family>,
-         }`
+         }`,
       );
     }
 
-    const authPerson = await getAuthPerson({ req, res });
+    const authPerson = await getAuthPerson({
+      req,
+      res,
+    });
 
     if (
       (families.length > 1 && !authPerson?.auth?.people?.admin)
       || (families[0].name !== authPerson?.family)) {
-      throw new ApiError(403, 'Not allowed');
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
 
     const operations: AnyBulkWriteOperation<Family>[] = [];
@@ -94,7 +106,10 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
         updateOne: {
           filter,
           upsert: true,
-          update: createSet<typeof FamilyObject>(updateAll ?? family, FamilyObject).set,
+          update: createSet<typeof FamilyObject>(
+            updateAll ?? family,
+            FamilyObject,
+          ).set,
         },
       });
     });
@@ -103,20 +118,25 @@ export default async function patch(req: NextApiRequest, res: NextApiResponse<Re
       const {
         matchedCount,
         modifiedCount,
-      } = await dbCollection.bulkWrite(operations, { ordered: false });
+      } = await dbCollection.bulkWrite(
+        operations,
+        { ordered: false },
+      );
 
       modified = modifiedCount;
       matched = matchedCount;
     }
 
-    res.status(200).json({
-      modified,
-      matched,
-    });
+    res.status(200)
+      .json({
+        modified,
+        matched,
+      });
   } catch (error: any) {
     console.log(error);
-    res.status(error.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

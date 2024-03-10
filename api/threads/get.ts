@@ -1,18 +1,18 @@
-import { ObjectId } from 'mongodb';
-import {
-  NextApiRequest,
-  NextApiResponse
-} from 'next';
-import { ApiError } from 'next/dist/server/api-utils';
-import { collection } from '../../lib/db/tools';
+import { collection } from '@/lib/db/tools';
 import {
   Forum,
   Person,
   Thread,
-} from '../../types/data';
+} from '@/types/data';
+import { ObjectId } from 'mongodb';
+import {
+  NextApiRequest,
+  NextApiResponse,
+} from 'next';
+import { ApiError } from 'next/dist/server/api-utils';
 import {
   findForum,
-  hasAccessToForum
+  hasAccessToForum,
 } from '../forums/get';
 import { createForum } from '../forums/post';
 import { getAuthPerson } from '../helpers';
@@ -23,22 +23,37 @@ export const findThread: ({
 }: {
   _id: ObjectId,
   authPerson?: Person,
-}) => Promise<Thread | null> = async ({ _id, authPerson }) => {
+}) => Promise<Thread | null> = async ({
+  _id,
+  authPerson,
+}) => {
   const threadCollection = await collection<Thread>('threads');
   const thread = await threadCollection.findOne({ _id });
 
   if (!thread) {
-    throw new ApiError(404, 'Not found');
+    throw new ApiError(
+      404,
+      'Not found',
+    );
   }
 
   const forum = await findForum({ _id: new ObjectId(thread.forumId.toString()) });
 
   if (!forum) {
-    throw new ApiError(404, 'Not found');
+    throw new ApiError(
+      404,
+      'Not found',
+    );
   }
 
-  if (!hasAccessToForum({ forum, authPerson })) {
-    throw new ApiError(403, 'Not allowed');
+  if (!hasAccessToForum({
+    forum,
+    authPerson,
+  })) {
+    throw new ApiError(
+      403,
+      'Not allowed',
+    );
   }
 
   return thread;
@@ -52,7 +67,11 @@ export const getThreads: ({
   page?: number
   forumId?: ObjectId,
   authPerson?: Person,
-}) => Promise<Thread[]> = async ({ forumId, authPerson, page = 0 }) => {
+}) => Promise<Thread[]> = async ({
+  forumId,
+  authPerson,
+  page = 0,
+}) => {
   const threadCollection = await collection<Thread>('threads');
   const forumIds = [];
 
@@ -63,11 +82,17 @@ export const getThreads: ({
 
     if (!forum) {
       if (!authPerson) {
-        throw new ApiError(403, 'Not allowed');
+        throw new ApiError(
+          403,
+          'Not allowed',
+        );
       }
 
       if (authPerson?._id?.toString() !== forumId.toString()) {
-        throw new ApiError(404, 'Not found');
+        throw new ApiError(
+          404,
+          'Not found',
+        );
       }
 
       // Create a new personal forum for the user
@@ -86,39 +111,57 @@ export const getThreads: ({
       });
     }
 
-    if (!forum || !hasAccessToForum({ forum, authPerson })) {
-      throw new ApiError(403, 'Not allowed');
+    if (!forum || !hasAccessToForum({
+      forum,
+      authPerson,
+    })) {
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
   } else {
     const forumCollection = await collection<Forum>('forums');
-    const orFilter: Array<{ [key in keyof Partial<Forum>]: {} }> = [{
-      groupAccess: { $size: 0 },
-      readAccess: { $size: 0 },
-    }, {
-      groupAccess: { $not: { $size: 0 } },
-    }];
+    const orFilter: Array<{ [key in keyof Partial<Forum>]: {} }> = [
+      {
+        groupAccess: { $size: 0 },
+        readAccess: { $size: 0 },
+      },
+      {
+        groupAccess: { $not: { $size: 0 } },
+      },
+    ];
 
     if (authPerson) {
-      orFilter.push({
-        owner: new ObjectId(authPerson._id?.toString())
-      }, {
-        readAccess: new ObjectId(authPerson._id?.toString()),
-      });
+      orFilter.push(
+        {
+          owner: new ObjectId(authPerson._id?.toString()),
+        },
+        {
+          readAccess: new ObjectId(authPerson._id?.toString()),
+        },
+      );
     }
 
-    const forums = (await forumCollection.find({
-      $or: orFilter,
-    }, {
-      projection: {
-        _id: 1,
-        owner: 1,
-        readAccess: 1,
-        groupAccess: 1,
-        postAccess: 1,
+    const forums = (await forumCollection.find(
+      {
+        $or: orFilter,
       },
-    })
+      {
+        projection: {
+          _id: 1,
+          owner: 1,
+          readAccess: 1,
+          groupAccess: 1,
+          postAccess: 1,
+        },
+      },
+    )
       .toArray())
-      .filter((forum) => hasAccessToForum({ forum, authPerson }));
+      .filter((forum) => hasAccessToForum({
+        forum,
+        authPerson,
+      }));
 
     forumIds.push(...forums.map((forum) => forum._id));
   }
@@ -131,48 +174,58 @@ export const getThreads: ({
     .toArray();
 };
 
-export default async function get(req: NextApiRequest, res: NextApiResponse) {
+export default async function get(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
     const query = req.query || {};
     const page = !!query.page && typeof query.page === 'number'
       ? Number(query.page)
       : 0;
 
-    const authPerson = await getAuthPerson({ req, res });
+    const authPerson = await getAuthPerson({
+      req,
+      res,
+    });
 
     if (query.threadId) {
-      res.status(200).json({
-        thread: await findThread({
-          authPerson,
-          _id: new ObjectId(query.threadId.toString()),
-        }),
-      });
+      res.status(200)
+        .json({
+          thread: await findThread({
+            authPerson,
+            _id: new ObjectId(query.threadId.toString()),
+          }),
+        });
 
       return;
     }
 
     if (query.forumId) {
-      res.status(200).json({
-        threads: await getThreads({
-          authPerson,
-          page,
-          forumId: new ObjectId(query.forumId.toString()),
-        }),
-      });
+      res.status(200)
+        .json({
+          threads: await getThreads({
+            authPerson,
+            page,
+            forumId: new ObjectId(query.forumId.toString()),
+          }),
+        });
 
       return;
     }
 
-    res.status(200).json({
-      threads: await getThreads({
-        authPerson,
-        page,
-      }),
-    });
+    res.status(200)
+      .json({
+        threads: await getThreads({
+          authPerson,
+          page,
+        }),
+      });
   } catch (error: any) {
     console.log(error);
-    res.status(error?.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error?.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

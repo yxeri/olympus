@@ -1,14 +1,14 @@
+import { collection } from '@/lib/db/tools';
+import {
+  Document,
+  Person,
+} from '@/types/data';
 import { ObjectId } from 'mongodb';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
-import { collection } from '../../lib/db/tools';
-import {
-  Person,
-  Document,
-} from '../../types/data';
 import { getAuthPerson } from '../helpers';
 
 export const createDocument = async ({
@@ -36,28 +36,44 @@ export const createDocument = async ({
   };
 };
 
-export default async function post(req: NextApiRequest, res: NextApiResponse) {
+export default async function post(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
-    const { document }: { document: Partial<Document> } = typeof req.body === 'object' ? req.body : JSON.parse(req.body);
+    const { document }: { document: Partial<Document> } = typeof req.body === 'object'
+      ? req.body
+      : JSON.parse(req.body);
 
     if (!document.title) {
-      throw new ApiError(400, 'Missing data');
+      throw new ApiError(
+        400,
+        'Missing data',
+      );
     }
 
-    const authPerson = await getAuthPerson({ req, res });
+    const authPerson = await getAuthPerson({
+      req,
+      res,
+    });
 
     if (!authPerson) {
-      throw new ApiError(403, 'Not allowed');
+      throw new ApiError(
+        403,
+        'Not allowed',
+      );
     }
 
-    res.status(200).json(await createDocument({
-      authPerson,
-      document,
-    }));
+    res.status(200)
+      .json(await createDocument({
+        authPerson,
+        document,
+      }));
   } catch (error: any) {
     console.log(error);
-    res.status(error?.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error?.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

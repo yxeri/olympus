@@ -1,5 +1,9 @@
+import { colors } from '@/styles/global';
 import {
-  Root, Trigger, Portal, Content
+  Content,
+  Portal,
+  Root,
+  Trigger,
 } from '@radix-ui/react-popover';
 import {
   ReactNode,
@@ -11,10 +15,12 @@ import {
   ListBoxItemProps,
 } from 'react-aria-components';
 import { useFormContext } from 'react-hook-form';
-import { colors } from '../../styles/global';
 import Input from '../Input/Input';
 
-const ListItem = ({ children, ...props }: ListBoxItemProps & { children: React.ReactNode }) => (
+const ListItem = ({
+  children,
+  ...props
+}: ListBoxItemProps & { children: ReactNode }) => (
   <ListBoxItem {...props}>
     {({ isSelected }) => (
       <div style={{ textTransform: 'capitalize' }}>

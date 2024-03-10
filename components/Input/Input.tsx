@@ -1,7 +1,12 @@
 import {
+  borders,
+  colors,
+  sizes,
+} from '@/styles/global';
+import {
   Control,
   Field,
-  Label
+  Label,
 } from '@radix-ui/react-form';
 import React, { useState } from 'react';
 import {
@@ -9,11 +14,6 @@ import {
   useFormContext,
 } from 'react-hook-form';
 import styled from 'styled-components';
-import {
-  borders,
-  colors,
-  sizes
-} from '../../styles/global';
 import Container from '../Container/Container';
 
 const StyledField = styled(Field)`
@@ -42,7 +42,9 @@ const StyledInput = styled(Control)`
 `;
 
 const FocusPlaceholder = styled(Label)<{ hasFocus?: boolean }>`
-  display: ${({ hasFocus }) => (hasFocus ? 'inherit' : 'none')};
+  display: ${({ hasFocus }) => (hasFocus
+  ? 'inherit'
+  : 'none')};
   position: absolute;
   top: -1.1rem;
   left: .3rem;
@@ -64,18 +66,27 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   hideFocusPlaceholder?: boolean;
 };
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(({
-  name,
-  label,
-  options,
-  hideFocusPlaceholder = false,
-  ...otherProps
-}, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>((
+  {
+    name,
+    label,
+    options,
+    hideFocusPlaceholder = false,
+    ...otherProps
+  },
+  ref,
+) => {
   const [focused, setFocused] = useState(false);
   const { register } = useFormContext();
-  const { ref: formRef, ...registerProps } = register(name, {
-    ...options,
-  });
+  const {
+    ref: formRef,
+    ...registerProps
+  } = register(
+    name,
+    {
+      ...options,
+    },
+  );
 
   return (
     <Container>

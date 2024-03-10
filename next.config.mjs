@@ -1,3 +1,5 @@
+// @ts-check
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
@@ -9,10 +11,10 @@ const nextConfig = {
             test: /\.svg$/i,
             issuer: /\.[jt]sx?$/,
             use: [{loader: '@svgr/webpack', options: {dimensions: false}}],
-        })
+        });
 
-        return config
+        return config;
     },
-}
+};
 
-module.exports = nextConfig
+export default nextConfig;

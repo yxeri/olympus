@@ -1,9 +1,9 @@
+import { colors } from '@/styles/global';
 import { CldUploadWidget } from 'next-cloudinary';
 import * as process from 'process';
 import React, { ReactNode } from 'react';
 import { usePeople } from '../../hooks/people';
 import useAuthPerson from '../../hooks/people/useAuthPerson';
-import { colors } from '../../styles/global';
 import Button from '../Button/Button';
 import Container from '../Container/Container';
 
@@ -35,15 +35,21 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
       {title && <h3>{title}</h3>}
       {text
         && (
-        <Container>
-          {text}
-        </Container>
+          <Container>
+            {text}
+          </Container>
         )}
       <CldUploadWidget
         options={{
           maxFiles,
           publicId: maxFiles === 1
-            ? `${authPerson?.name?.replaceAll(/[^\w\d]/g, '_')}-${authPerson?.family?.replaceAll(/[^\w\d]/g, '_')}`
+            ? `${authPerson?.name?.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}-${authPerson?.family?.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}`
             : undefined,
           multiple: maxFiles !== 1,
           styles: {
@@ -68,10 +74,16 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           },
           clientAllowedFormats: ['image'],
           singleUploadAutoClose: false,
-          sources: ['local', 'url', 'camera'],
+          sources: [
+            'local',
+            'url',
+            'camera',
+          ],
         }}
         signatureEndpoint="/api/cloudinarySignature"
-        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev_people' : 'people'}
+        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+          ? 'dev_people'
+          : 'people'}
         onUpload={({ info }) => {
           if (info && typeof info === 'object') {
             const { version } = (info as { version: number });

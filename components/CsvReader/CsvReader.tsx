@@ -1,3 +1,8 @@
+import {
+  Person,
+  PersonObject,
+} from '@/types/data';
+import { validatePerson } from '@/utils/validatePerson';
 import React from 'react';
 import {
   formatFileSize,
@@ -5,22 +10,13 @@ import {
 } from 'react-papaparse';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import {
-  borders,
-} from 'styles/global';
-import { validatePerson } from '../../utils/validatePerson';
-import {
-  usePeople,
-} from '../../hooks/people';
+import { borders } from 'styles/global';
+import { usePeople } from '../../hooks/people';
 import useAuthPerson from '../../hooks/people/useAuthPerson';
-import {
-  Person,
-  PersonObject
-} from '../../types/data';
 import Container from '../Container/Container';
 
 const StyledDiv = styled.div`
-  border: ${borders.standard};
+    border: ${borders.standard};
 `;
 
 const FileView: React.FC<any> = ({
@@ -37,12 +33,12 @@ const FileView: React.FC<any> = ({
       <span>{acceptedFile.name}</span>
     </div>
     <div>
-      <ProgressBar />
+      <ProgressBar/>
     </div>
     <div
       {...getRemoveFileProps()}
     >
-      <Remove />
+      <Remove/>
     </div>
   </div>
 );
@@ -76,7 +72,10 @@ const CsvReader = () => {
             return null;
           }
 
-          const columns: string[] = results.data.slice(0, 1)?.[0] ?? [];
+          const columns: string[] = results.data.slice(
+            0,
+            1,
+          )?.[0] ?? [];
           const rows: string[][] = results.data.slice(1);
           const {
             profile,
@@ -91,48 +90,67 @@ const CsvReader = () => {
             ...personObject
           } = PersonObject;
 
-          if (!Object.keys(personObject).every((key) => {
-            const includes = columns.includes(key);
+          if (!Object.keys(personObject)
+            .every((key) => {
+              const includes = columns.includes(key);
 
-            if (!includes) {
-              toast.error(`Missing ${key} in columns`);
-            }
+              if (!includes) {
+                toast.error(`Missing ${key} in columns`);
+              }
 
-            return includes;
-          })) {
+              return includes;
+            })) {
             return null;
           }
 
           const rowErrors: string[] = [];
 
-          const parsedPeople: Person[] = rows.reduce<Person[]>((people, row, currentIndex) => {
-            const object = Object
-              .fromEntries(row.map((value, index) => [columns[index], value]));
-            const person = {
-              ...object,
-              pronouns: object.pronouns?.split('/'),
-              isInactive: !!object.isInactive,
-              year: object.type === 'Questi' ? 99 : object.year ?? 100,
-              society: object.society ?? '',
-              score: object.score ?? -9999,
-              profile: object.profile ?? {},
-            };
+          const parsedPeople: Person[] = rows.reduce<Person[]>(
+            (
+              people,
+              row,
+              currentIndex,
+            ) => {
+              const object = Object
+                .fromEntries(row.map((
+                  value,
+                  index,
+                ) => [
+                  columns[index],
+                  value,
+                ]));
+              const person = {
+                ...object,
+                pronouns: object.pronouns?.split('/'),
+                isInactive: !!object.isInactive,
+                year: object.type === 'Questi'
+                  ? 99
+                  : object.year ?? 100,
+                society: object.society ?? '',
+                score: object.score ?? -9999,
+                profile: object.profile ?? {},
+              };
 
-            const [isValidPerson, errors] = validatePerson(person);
+              const [isValidPerson, errors] = validatePerson(person);
 
-            console.log(errors);
+              console.log(errors);
 
-            if (isValidPerson) {
-              people.push(person as unknown as Person);
-            } else {
-              rowErrors.push(`${currentIndex + 2}`);
-            }
+              if (isValidPerson) {
+                people.push(person as unknown as Person);
+              } else {
+                rowErrors.push(`${currentIndex + 2}`);
+              }
 
-            return people;
-          }, []);
+              return people;
+            },
+            [],
+          );
 
           if (rowErrors.length > 0) {
-            toast.error(`Rows with errors: ${rowErrors.join(', ')}`, { autoClose: false });
+            toast.error(
+              `Rows with errors: ${rowErrors.join(', ')}`,
+              { autoClose: false },
+            );
           }
 
           insert(parsedPeople);
@@ -150,9 +168,11 @@ const CsvReader = () => {
           <StyledDiv
             {...props.getRootProps()}
           >
-            {props.acceptedFile ? <FileView {...props} /> : (
-              'Släpp en csv-fil eller klicka för att ladda upp'
-            )}
+            {props.acceptedFile
+              ? <FileView {...props} />
+              : (
+                'Släpp en csv-fil eller klicka för att ladda upp'
+              )}
           </StyledDiv>
         )}
       </CSVReader>

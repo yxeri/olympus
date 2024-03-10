@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import KeyIcon from '../../assets/key.svg';
-import { sessionAtom } from '../../atoms/session';
+import KeyIcon from '@/assets/key.svg';
+import { sessionAtom } from '@/atoms/session';
 import {
   colors,
-  sizes
-} from '../../styles/global';
+  sizes,
+} from '@/styles/global';
+import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import Container from '../Container/Container';
 import Modal, { Trigger } from '../Modal/Modal';
 import LoginContent from './content/LoginContent';
@@ -17,8 +17,12 @@ const StyledTrigger = ({ float }: { float?: boolean }) => (
     display: 'grid',
     justifyItems: 'flex-end',
     paddingRight: sizes.largeGap,
-    position: float ? 'fixed' : 'sticky',
-    bottom: float ? '1rem' : '2rem',
+    position: float
+      ? 'fixed'
+      : 'sticky',
+    bottom: float
+      ? '1rem'
+      : '2rem',
     marginTop: '.5rem',
     marginRight: 'auto',
     marginLeft: 'auto',
@@ -73,9 +77,9 @@ const Auth = ({ float }: { float?: boolean }) => {
   return (
     <Modal
       onOpenChange={(open) => open && setAuthState('LOGIN')}
-      trigger={<StyledTrigger float={float} />}
+      trigger={<StyledTrigger float={float}/>}
       title={title}
-      content={<LoginContent setAuthState={setAuthState} />}
+      content={<LoginContent setAuthState={setAuthState}/>}
     />
   );
 };

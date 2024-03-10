@@ -1,9 +1,9 @@
-import { toast } from 'react-toastify';
-import useSwr, { SWRResponse } from 'swr';
 import {
   Person,
-  PersonObject
-} from '../../types/data';
+  PersonObject,
+} from '@/types/data';
+import { toast } from 'react-toastify';
+import useSwr, { SWRResponse } from 'swr';
 
 type UpdatePeople = ({
   people,
@@ -28,15 +28,22 @@ export default function usePeople(): UsePeopleReturn {
     ...swr
   } = useSwr(
     url,
-    (urlKey) => fetch(urlKey).then((res) => res.json()),
-    { keepPreviousData: true, }
+    (urlKey) => fetch(urlKey)
+      .then((res) => res.json()),
+    { keepPreviousData: true },
   );
-  const updatePeople: UpdatePeople = async ({ people, person }) => {
+  const updatePeople: UpdatePeople = async ({
+    people,
+    person,
+  }) => {
     try {
-      const result = await fetch(url, {
-        method: 'PATCH',
-        body: JSON.stringify({ people: people || [person] }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ people: people || [person] }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -55,18 +62,32 @@ export default function usePeople(): UsePeopleReturn {
       throw error;
     }
   };
-  const insertPeople: InsertPeople = (people) => fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({ people }),
-  }).then(() => {
-    toast.success('Upload complete!');
+  const insertPeople: InsertPeople = (people) => fetch(
+    url,
+    {
+      method: 'POST',
+      body: JSON.stringify({ people }),
+    },
+  )
+    .then(() => {
+      toast.success('Upload complete!');
 
-    mutate();
-  }).catch(() => toast.error('Something went wrong'));
+      mutate();
+    })
+    .catch(() => toast.error('Something went wrong'));
 
   return {
-    people: data?.people?.sort((a: Person, b: Person) => a.score < b.score)
-      .map((person: Person, index: number) => ({ ...person, rank: index + 1 })) ?? [],
+    people: data?.people?.sort((
+      a: Person,
+      b: Person,
+    ) => a.score < b.score)
+      .map((
+        person: Person,
+        index: number,
+      ) => ({
+        ...person,
+        rank: index + 1,
+      })) ?? [],
     update: updatePeople,
     insert: insertPeople,
     mutate,

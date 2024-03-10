@@ -1,9 +1,9 @@
+import { colors } from '@/styles/global';
 import { ObjectId } from 'mongodb';
 import React from 'react';
 import styled from 'styled-components';
 import useForums from '../../../../hooks/forums/useForums';
 import useAuthPerson from '../../../../hooks/people/useAuthPerson';
-import { colors } from '../../../../styles/global';
 import CreatePost from '../../CreatePost/CreatePost';
 import { hasAccessToForum } from '../../helpers';
 
@@ -40,14 +40,17 @@ const PostNavigationContainer = ({
   if (forumId) {
     const foundForum = forums.find((forum) => forum._id?.toString() === forumId);
 
-    if (!foundForum || !hasAccessToForum({ forum: foundForum, authPerson: person }).post) {
+    if (!foundForum || !hasAccessToForum({
+      forum: foundForum,
+      authPerson: person,
+    }).post) {
       return null;
     }
   }
 
   return (
     <Container>
-      <CreatePost forumId={forumId.toString()} threadId={id.toString()} label="Write a comment..." />
+      <CreatePost forumId={forumId.toString()} threadId={id.toString()} label="Write a comment..."/>
     </Container>
   );
 };

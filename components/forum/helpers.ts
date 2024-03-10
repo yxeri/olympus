@@ -1,7 +1,7 @@
 import {
   Forum,
   Person,
-} from '../../types/data';
+} from '@/types/data';
 
 export const getTimeSince = ({ date }: { date: Date }) => {
   const seconds = Math.floor((new Date()).getTime() - date.getTime()) / 1000;
@@ -43,11 +43,11 @@ export const hasAccessToForum = ({
     ?.some(([fieldName, value]) => authPerson[fieldName] === value);
   const hasReadAccess = [
     forum?.owner.toString(),
-    ...((forum?.readAccess) ?? [])
+    ...((forum?.readAccess) ?? []),
   ].includes(authPerson?._id?.toString() ?? '');
   const hasPostAccess = [
     forum?.owner.toString(),
-    ...((forum?.postAccess) ?? [])
+    ...((forum?.postAccess) ?? []),
   ].includes(authPerson?._id?.toString() ?? '');
 
   return {

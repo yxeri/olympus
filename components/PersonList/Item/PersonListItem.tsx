@@ -13,7 +13,7 @@ import {
   romanNumbers,
   Status,
   statusCollection,
-} from '../../../types/data';
+} from '@/types/data';
 import PersonModal from '../../PersonModal/PersonModal';
 
 export type PersonListItemProps = {
@@ -93,10 +93,16 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       >
         {statusCollection[status]}
       </StatusDiv>
-      <StyledDiv style={{ gridArea: 'name', textTransform: 'capitalize' }}>
+      <StyledDiv style={{
+        gridArea: 'name',
+        textTransform: 'capitalize',
+      }}>
         {`${name} ${family.toUpperCase()}`}
       </StyledDiv>
-      <StyledDiv style={{ gridArea: 'society', minHeight: '1rem' }}>
+      <StyledDiv style={{
+        gridArea: 'society',
+        minHeight: '1rem',
+      }}>
         {society}
       </StyledDiv>
       <StyledPhoto>
@@ -105,7 +111,15 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
           loading="lazy"
           alt={`${name} ${family}`}
           format="webp"
-          src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev/' : ''}people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`}
+          src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+            ? 'dev/'
+            : ''}people/${name.replaceAll(
+            /[^\w\d]/g,
+            '_',
+          )}-${family.replaceAll(
+            /[^\w\d]/g,
+            '_',
+          )}`}
           height={50}
           width={50}
           transformations={['thumb-person']}
@@ -135,7 +149,7 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
               padding: 0,
             }}
           >
-            <Award style={{ alignSelf: 'center' }} width="14" height="14" />
+            <Award style={{ alignSelf: 'center' }} width="14" height="14"/>
             <span style={{ alignSelf: 'center' }}>{score}</span>
           </Trigger>
         )}

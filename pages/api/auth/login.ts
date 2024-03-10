@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as crypto from 'crypto';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
 import { ApiError } from 'next/dist/server/api-utils';
 import * as process from 'process';

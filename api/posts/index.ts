@@ -1,7 +1,7 @@
-import get from './get';
-import post from './post';
-import patch from './patch';
 import remove from './delete';
+import get from './get';
+import patch from './patch';
+import post from './post';
 
 export {
   get,

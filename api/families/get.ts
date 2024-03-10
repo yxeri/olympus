@@ -1,13 +1,11 @@
+import { Family } from '@/types/data';
 import * as console from 'console';
 import { collection } from 'lib/db/tools';
 import { ObjectId } from 'mongodb';
 import {
   NextApiRequest,
-  NextApiResponse
+  NextApiResponse,
 } from 'next';
-import {
-  Family,
-} from '../../types/data';
 import { FamilyId } from './types';
 
 export const getFamilies: () => Promise<Family[]> = async () => {
@@ -26,29 +24,35 @@ export const findFamily: (
   return familiesCollection.findOne(id);
 };
 
-export default async function get(req: NextApiRequest, res: NextApiResponse) {
+export default async function get(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
     const query = req.query || {};
 
     if (query.familyId || query.name) {
-      res.status(200).json({
-        person: await findFamily(
-          query.familyId
-            ? { _id: new ObjectId(query.familyId.toString()) }
-            : { name: query.name as string },
-        ),
-      });
+      res.status(200)
+        .json({
+          person: await findFamily(
+            query.familyId
+              ? { _id: new ObjectId(query.familyId.toString()) }
+              : { name: query.name as string },
+          ),
+        });
 
       return;
     }
 
-    res.status(200).json({
-      people: await getFamilies(),
-    });
+    res.status(200)
+      .json({
+        people: await getFamilies(),
+      });
   } catch (error: any) {
     console.log(error);
-    res.status(error.statusCode ?? 500).json({
-      error: error.message,
-    });
+    res.status(error.statusCode ?? 500)
+      .json({
+        error: error.message,
+      });
   }
 }

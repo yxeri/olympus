@@ -8,7 +8,7 @@ import {
   romanNumbers,
   Status,
   statusCollection,
-} from '../../../types/data';
+} from '@/types/data';
 import PersonModal from '../../PersonModal/PersonModal';
 import {
   PersonListItemProps,
@@ -67,7 +67,15 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
             loading="lazy"
             alt={`${name} ${family}`}
             format="webp"
-            src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev/' : ''}people/${name.replaceAll(/[^\w\d]/g, '_')}-${family.replaceAll(/[^\w\d]/g, '_')}`}
+            src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+              ? 'dev/'
+              : ''}people/${name.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}-${family.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}`}
             height={186}
             width={186}
             transformations={['profile']}
@@ -90,7 +98,10 @@ const PersonListGridItem: React.FC<PersonListItemProps> = ({ person }) => {
         >
           {family}
         </StyledDiv>
-        <StyledDiv style={{ gridArea: 'status', gridAutoFlow: 'column' }}>
+        <StyledDiv style={{
+          gridArea: 'status',
+          gridAutoFlow: 'column',
+        }}>
           <StyledDiv style={{
             justifySelf: 'center',
           }}

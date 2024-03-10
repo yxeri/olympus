@@ -4,7 +4,10 @@ import Container from '../Container/Container';
 
 const CsvDownloader = () => {
   const { people } = usePeople();
-  const { CSVDownloader, Type } = useCSVDownloader();
+  const {
+    CSVDownloader,
+    Type,
+  } = useCSVDownloader();
 
   return (
     <Container style={{

@@ -1,8 +1,6 @@
+import { Alias } from '@/types/data';
 import { toast } from 'react-toastify';
 import useSwr, { SWRResponse } from 'swr';
-import {
-  Alias,
-} from '../../types/data';
 
 type UpdateAliases = ({
   aliases,
@@ -27,15 +25,22 @@ export default function useAliases(): UseAliasesReturn {
     ...swr
   } = useSwr(
     url,
-    (urlKey) => fetch(urlKey).then((res) => res.json()),
-    { keepPreviousData: true, }
+    (urlKey) => fetch(urlKey)
+      .then((res) => res.json()),
+    { keepPreviousData: true },
   );
-  const updateAliases: UpdateAliases = async ({ aliases, alias }) => {
+  const updateAliases: UpdateAliases = async ({
+    aliases,
+    alias,
+  }) => {
     try {
-      const result = await fetch(url, {
-        method: 'PATCH',
-        body: JSON.stringify({ people: aliases || [alias] }),
-      });
+      const result = await fetch(
+        url,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ people: aliases || [alias] }),
+        },
+      );
 
       if (!result.ok) {
         throw new Error(result.status.toString());
@@ -54,14 +59,19 @@ export default function useAliases(): UseAliasesReturn {
       throw error;
     }
   };
-  const insertAliases: InsertAlias = (aliases) => fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({ aliases }),
-  }).then(() => {
-    toast.success('Upload complete!');
+  const insertAliases: InsertAlias = (aliases) => fetch(
+    url,
+    {
+      method: 'POST',
+      body: JSON.stringify({ aliases }),
+    },
+  )
+    .then(() => {
+      toast.success('Upload complete!');
 
-    mutate();
-  }).catch(() => toast.error('Something went wrong'));
+      mutate();
+    })
+    .catch(() => toast.error('Something went wrong'));
 
   return {
     aliases: data?.aliases ?? [],

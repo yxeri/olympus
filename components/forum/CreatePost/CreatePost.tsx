@@ -1,3 +1,16 @@
+import Button from '@/components/Button/Button';
+import Form from '@/components/Form/Form';
+import { hasAccessToForum } from '@/components/forum/helpers';
+import Modal from '@/components/Modal/Modal';
+import useForums from '@/hooks/forums/useForums';
+import useAuthPerson from '@/hooks/people/useAuthPerson';
+import usePosts from '@/hooks/posts/usePosts';
+import { colors } from '@/styles/global';
+import {
+  Forum,
+  Post,
+} from '@/types/data';
+import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
 import { Color } from '@tiptap/extension-color';
 import { Link } from '@tiptap/extension-link';
 import { TextStyle } from '@tiptap/extension-text-style';
@@ -14,32 +27,19 @@ import React, {
 } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import styled from 'styled-components';
-import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
-import useForums from '../../../hooks/forums/useForums';
-import useAuthPerson from '../../../hooks/people/useAuthPerson';
-import usePosts from '../../../hooks/posts/usePosts';
-import { colors } from '../../../styles/global';
-import {
-  Forum,
-  Post
-} from '../../../types/data';
-import Button from '../../Button/Button';
-import Modal from '../../Modal/Modal';
-import Form from '../../Form/Form';
-import { hasAccessToForum } from '../helpers';
 
 const StyledTrigger = styled(RadixTrigger)`
-  background: none;
-  border: none;
-  font-size: inherit;
-  font-family: inherit;
-  color: inherit;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  height: fit-content;
+    background: none;
+    border: none;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    height: fit-content;
 `;
 
 type FormValues = Post;
@@ -93,7 +93,7 @@ const Content = ({
 
   return (
     <Form onSubmit={onSubmit}>
-      <EditorContent editor={editor} className="content" />
+      <EditorContent editor={editor} className="content"/>
       <CldUploadWidget
         options={{
           maxFiles: 4,
@@ -118,12 +118,21 @@ const Content = ({
               background: colors.primaryTransBackground,
             },
           },
-          clientAllowedFormats: ['image', 'video'],
+          clientAllowedFormats: [
+            'image',
+            'video',
+          ],
           singleUploadAutoClose: false,
-          sources: ['local', 'url', 'camera'],
+          sources: [
+            'local',
+            'url',
+            'camera',
+          ],
         }}
         signatureEndpoint="/api/cloudinarySignature"
-        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev' ? 'dev_media' : 'media'}
+        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+          ? 'dev_media'
+          : 'media'}
         onUpload={({ info }) => {
           if (info && typeof info === 'object') {
             const newMedia = {
@@ -131,7 +140,10 @@ const Content = ({
               type: (info as { resource_type: 'image' | 'video' }).resource_type,
             };
 
-            setMedia(new Set([...Array.from(media), newMedia]));
+            setMedia(new Set([
+              ...Array.from(media),
+              newMedia,
+            ]));
           }
         }}
       >
@@ -175,7 +187,10 @@ const CreatePost = ({
   if (forumId) {
     const foundForum = forums.find((forum) => forum._id?.toString() === forumId);
 
-    if (!foundForum || !hasAccessToForum({ forum: foundForum, authPerson: person }).post) {
+    if (!foundForum || !hasAccessToForum({
+      forum: foundForum,
+      authPerson: person,
+    }).post) {
       return null;
     }
   }
@@ -184,9 +199,9 @@ const CreatePost = ({
     <Modal
       open={open}
       onOpenChange={(newOpen) => setOpen(newOpen)}
-      trigger={<Trigger label={label} />}
+      trigger={<Trigger label={label}/>}
       title={label ?? 'Create post'}
-      content={<Content threadId={threadId} postId={postId} onSuccess={() => setOpen(false)} />}
+      content={<Content threadId={threadId} postId={postId} onSuccess={() => setOpen(false)}/>}
     />
   );
 };
