@@ -9,8 +9,6 @@ services:
     image: ghcr.io/yxeri/olympus:dev
     command: node server.js
     restart: always
-    expose:
-      - "3000"
     environment:
       - PORT=3000
       - HOSTNAME=0.0.0.0
