@@ -20,6 +20,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           image-name: olympus
           image-tag: development
+          extract-git-tag: true
 
   start-container:
     needs: [build-and-publish]

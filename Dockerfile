@@ -1,4 +1,4 @@
-FROM node:21.7.0 AS base
+FROM node:21.7.0-bookworm AS base
 
 FROM base AS deps
 
