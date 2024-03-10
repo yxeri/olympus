@@ -1,0 +1,36 @@
+name: Build and publish development
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and publish image
+        uses: VaultVulp/gp-docker-action@1.6.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          image-name: olympus
+          image-tag: development
+
+      - name: Start container
+        uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "./compose.yml"
+        env:
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          NEXT_PUBLIC_CLOUDINARY_API_KEY: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_API_KEY }
+          NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SECRET: ${{ secrets.SECRET }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          NEXT_PUBLIC_ENVIRONMENT: ${{ vars.NEXT_PUBLIC_ENVIRONMENT }}
+          NEXT_PUBLIC_INSTANCE_NAME: ${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}

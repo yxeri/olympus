@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Trigger as RadixTrigger } from '@radix-ui/react-dialog';
 import useForums from '../../../hooks/forums/useForums';
 import { useDictionary } from '../../../hooks/useDictionary';
+import AccessSelect from '../../AccessSelect/AccessSelect';
 import Button from '../../Button/Button';
 import Form from '../../Form/Form';
 import Input from '../../Input/Input';
@@ -38,6 +39,7 @@ const Content = ({ onSuccess }: { onSuccess: () => void }) => {
         placeholder={getDictionaryValue('common', 'name')}
         aria-label={getDictionaryValue('common', 'name')}
       />
+      <AccessSelect />
       <Button type="submit">
         Create forum
       </Button>

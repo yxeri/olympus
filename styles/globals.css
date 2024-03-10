@@ -46,6 +46,10 @@ iframe {
     display: none;
 }
 
+.content {
+    font-size: 1rem;
+}
+
 .content p:first-child {
     margin-top: 0;
 }

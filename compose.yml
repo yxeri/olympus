@@ -1,0 +1,17 @@
+name: olympus
+
+services:
+  db:
+    image: mongo:5.0.25
+    restart: always
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - DB_HOST=db
+    links:
+      - db
+    ports:
+      - "3000:3000"

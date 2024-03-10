@@ -16,6 +16,7 @@ import 'styles/globals.css';
 import { SWRConfig } from 'swr';
 import Auth from '../components/Auth/Auth';
 import SessionHandler from '../components/SessionHandler/SessionHandler';
+import { useAliases } from '../hooks/aliases';
 import useCalendars from '../hooks/calendars/useCalendars';
 import { usePeople } from '../hooks/people';
 
@@ -55,6 +56,7 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
   const { pathname } = useRouter();
   useCalendars();
   usePeople();
+  useAliases();
 
   return (
     <SWRConfig value={{ provider: localStorageProvider }}>

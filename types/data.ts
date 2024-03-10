@@ -61,6 +61,11 @@ export type Person = {
   scoreChanges?: ScoreChange[];
 };
 
+export type Alias = SharedData & Access & {
+  name: string,
+  family: string,
+};
+
 type SharedData = {
   _id: ObjectId | string;
   owner: ObjectId | string;
