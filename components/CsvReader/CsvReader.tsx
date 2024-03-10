@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import {
   borders,
 } from 'styles/global';
-import { validatePerson } from 'utils/validatePerson';
+import { validatePerson } from '../../utils/validatePerson';
 import {
   usePeople,
 } from '../../hooks/people';

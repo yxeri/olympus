@@ -1,6 +1,5 @@
 import { JSONContent } from '@tiptap/react';
 import { ObjectId } from 'mongodb';
-import { ReactNode } from 'react';
 import { Event } from 'react-big-calendar';
 import { Options } from 'rrule';
 
@@ -115,9 +114,6 @@ export const romanNumbers: { [key in Year]: string } = {
 };
 
 export type FullEvent = Event & {
-  start: Date;
-  end: Date;
-  title: ReactNode;
   id: string;
   description?: string;
   location?: string;
