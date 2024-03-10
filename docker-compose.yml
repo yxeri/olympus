@@ -11,6 +11,7 @@ services:
     restart: always
     environment:
       - DB_HOST=db
+      - VIRTUAL_HOST=${NEXT_PUBLIC_INSTANCE_NAME}
       - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
       - MONGODB_URI=${MONGODB_URI}
       - SECRET=${SECRET}
