@@ -69,11 +69,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker compose
-        uses: isbang/compose-action@v1.5.1
-        with:
-          compose-file: "./docker-compose.yml"
-          compose-flags: "-p olympus-dev"
-          up-flags: "-d"
+        run: |
+          docker compose -f docker-compose.yml -p olympus-dev up -d
         env:
           VIRTUAL_HOST: ${{ vars.INSTANCE_NAME }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
