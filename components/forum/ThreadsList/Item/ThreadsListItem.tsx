@@ -157,6 +157,11 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
     <StyledListItem key={id?.toString() ?? ''}>
       <div style={{ maxWidth: 'calc(100% - 1.4rem)' }}>
         <CldImage
+          config={{
+            cloud: {
+              cloudName: window.cloudinaryCloudName,
+            },
+          }}
           style={{
             float: 'left',
             marginRight: '.4rem',

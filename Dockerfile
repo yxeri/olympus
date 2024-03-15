@@ -1,53 +1,54 @@
-FROM node:21.7.0-bookworm AS base
+FROM node:21.7.1 AS base
 
-FROM base AS deps
-
-WORKDIR /app
-
-COPY package.json ./
-COPY yarn.lock ./
-COPY .yarnrc.yml ./
-COPY .yarn ./.yarn
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV production
 
 RUN corepack enable
-RUN corepack prepare yarn@4.1.1 --activate
-RUN yarn install --immutable --inline-builds
+RUN corepack use pnpm@8.15.4
+
+COPY . /app
+WORKDIR /app
+
+FROM base AS prod-deps
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
 FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+
+COPY --from=prod-deps /app/node_modules ./node_modules
 COPY . .
 
-ARG NEXT_PUBLIC_CLOUDINARY_API_KEY
+FROM base AS build
+
 ARG NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
-ARG NEXT_PUBLIC_SUPABASE_URL
 ARG NEXT_PUBLIC_ENVIRONMENT
-ARG NEXT_PUBLIC_INSTANCE_NAME
 
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NEXT_PUBLIC_CLOUDINARY_API_KEY="${NEXT_PUBLIC_CLOUDINARY_API_KEY}"
-ENV NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}"
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="${NEXT_PUBLIC_SUPABASE_ANON_KEY}"
-ENV NEXT_PUBLIC_SUPABASE_URL="${NEXT_PUBLIC_SUPABASE_URL}"
-ENV NEXT_PUBLIC_ENVIRONMENT="${NEXT_PUBLIC_ENVIRONMENT}"
-ENV NEXT_PUBLIC_INSTANCE_NAME="${NEXT_PUBLIC_INSTANCE_NAME}"
+ENV NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=$NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+ENV NEXT_PUBLIC_ENVIRONMENT=$NEXT_PUBLIC_ENVIRONMENT
 
-RUN yarn build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm run build
 
 FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=build /app/public ./public
 
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]

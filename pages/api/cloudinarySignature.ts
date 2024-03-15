@@ -4,19 +4,32 @@ import {
   NextApiResponse,
 } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
-    const { paramsToSign } = JSON.parse(req.body);
+    const { paramsToSign } = req.body;
     const signature = cloudinary.utils.api_sign_request(
       paramsToSign,
       process.env.CLOUDINARY_API_SECRET ?? '',
     );
-    res.status(200).json({
-      signature,
-    });
+
+    console.log(signature);
+    res.status(200)
+      .json({
+        signature,
+      });
   } catch (error: any) {
-    res.status(500).json({
-      error: error.message,
-    });
+    res.status(500)
+      .json({
+        error: error.message,
+      });
   }
 }

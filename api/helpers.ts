@@ -11,23 +11,45 @@ import { ApiError } from 'next/dist/server/api-utils';
 import { findPersonByAuth } from './people/get';
 
 export const getAuthPerson = async ({
-  req, res,
+  req,
+  res,
 }: {
   req: NextApiRequest, res: NextApiResponse,
 }) => {
   const client = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(name: string) {
           return req.cookies[name];
         },
-        set(name: string, value: string, options: CookieOptions) {
-          res.setHeader('Set-Cookie', serialize(name, value, options));
+        set(
+          name: string,
+          value: string,
+          options: CookieOptions,
+        ) {
+          res.setHeader(
+            'Set-Cookie',
+            serialize(
+              name,
+              value,
+              options,
+            ),
+          );
         },
-        remove(name: string, options: CookieOptions) {
-          res.setHeader('Set-Cookie', serialize(name, '', options));
+        remove(
+          name: string,
+          options: CookieOptions,
+        ) {
+          res.setHeader(
+            'Set-Cookie',
+            serialize(
+              name,
+              '',
+              options,
+            ),
+          );
         },
       },
     },
@@ -41,7 +63,10 @@ export const getAuthPerson = async ({
   const authPerson = await findPersonByAuth(user.data.user.id);
 
   if (!authPerson) {
-    throw new ApiError(401, 'Not authorised');
+    throw new ApiError(
+      401,
+      'Not authorised',
+    );
   }
 
   return authPerson;

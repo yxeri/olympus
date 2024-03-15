@@ -1,13 +1,13 @@
+import {
+  Status,
+  statusCollection,
+} from '@/types/data';
 import ListItem from 'components/List/ListItem';
 import { Trigger } from 'components/Modal/Modal';
 import { CldImage } from 'next-cloudinary';
 import React from 'react';
 import styled from 'styled-components';
 import { colors } from 'styles/global';
-import {
-  Status,
-  statusCollection,
-} from '@/types/data';
 import FamilyModal from '../../FamilyModal/FamilyModal';
 import {
   FamilyListItemProps,
@@ -16,31 +16,31 @@ import {
 } from './FamilyListItem';
 
 const StyledTrigger = styled(Trigger)<{ $status: Status }>`
-  width: 100%;
-  display: grid;
-  border: 2px solid ${({ $status }) => colors[$status] ?? 'transparent'};
-  box-shadow: 0 0 3px 1px ${({ $status }) => colors[$status] ?? 'transparent'};
-  background-color: ${colors.componentBackground};
-  grid-template-areas:
+    width: 100%;
+    display: grid;
+    border: 2px solid ${({ $status }) => colors[$status] ?? 'transparent'};
+    box-shadow: 0 0 3px 1px ${({ $status }) => colors[$status] ?? 'transparent'};
+    background-color: ${colors.componentBackground};
+    grid-template-areas:
     "photo photo photo"
     "name status status"
     "family society society";
-  position: relative;
-  padding: .2rem;
-  grid-template-columns: 1fr auto 3.5rem;
-  grid-gap: .2rem;
-  cursor: pointer;
-  color: inherit;
+    position: relative;
+    padding: .2rem;
+    grid-template-columns: 1fr auto 3.5rem;
+    grid-gap: .2rem;
+    cursor: pointer;
+    color: inherit;
 `;
 
 const StyledPhoto = styled.div`
-  grid-area: photo;
-  display: grid;
+    grid-area: photo;
+    display: grid;
 
-  img {
-    object-fit: cover;
-    max-width: 100%;
-  }
+    img {
+        object-fit: cover;
+        max-width: 100%;
+    }
 `;
 
 const FamilyListGridItem: React.FC<FamilyListItemProps> = ({ family }) => {
@@ -58,6 +58,11 @@ const FamilyListGridItem: React.FC<FamilyListItemProps> = ({ family }) => {
       >
         <StyledPhoto>
           <CldImage
+            config={{
+              cloud: {
+                cloudName: window.cloudinaryCloudName,
+              },
+            }}
             version={imgVersion}
             loading="lazy"
             alt={`${name} ${family}`}

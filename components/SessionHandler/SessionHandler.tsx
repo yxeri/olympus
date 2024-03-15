@@ -4,7 +4,6 @@ import {
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
-import * as process from 'process';
 import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -12,7 +11,7 @@ import {
   useSetRecoilState,
 } from 'recoil';
 
-type SessionHandlerProps = { supabaseClient: SupabaseClient };
+type SessionHandlerProps = { supabaseClient: SupabaseClient, instanceName?: string };
 
 const passwordRecovery = async ({
   supabaseClient,
@@ -60,7 +59,10 @@ const passwordRecovery = async ({
   }
 };
 
-const SessionHandler: React.FC<SessionHandlerProps> = ({ supabaseClient }) => {
+const SessionHandler: React.FC<SessionHandlerProps> = ({
+  supabaseClient,
+  instanceName,
+}) => {
   const setSession = useSetRecoilState(sessionAtom);
   const router = useRouter();
 
@@ -68,7 +70,7 @@ const SessionHandler: React.FC<SessionHandlerProps> = ({ supabaseClient }) => {
     () => {
       supabaseClient.auth.getSession()
         .then(({ data }) => {
-          const userData = data.session?.user.user_metadata[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
+          const userData = data.session?.user.user_metadata[instanceName ?? ''];
 
           if (!data.session) {
             return null;

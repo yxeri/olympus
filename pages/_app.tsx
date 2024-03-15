@@ -1,11 +1,20 @@
+import { Env } from '@/pages/api/env';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserClient } from '@supabase/ssr';
 import { Session } from '@supabase/supabase-js';
 import Footer from 'components/Footer/Footer';
 import Navigation from 'components/Navigation/Navigation';
-import type { AppProps } from 'next/app';
+import type {
+  AppContext,
+  AppInitialProps,
+  AppProps as NextAppProps,
+} from 'next/app';
+import NextApp from 'next/app';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import {
+  useEffect,
+  useState,
+} from 'react';
 import {
   Slide,
   ToastContainer,
@@ -19,6 +28,10 @@ import SessionHandler from '../components/SessionHandler/SessionHandler';
 import { useAliases } from '../hooks/aliases';
 import useCalendars from '../hooks/calendars/useCalendars';
 import { usePeople } from '../hooks/people';
+
+type AppProps = {
+  env: Env,
+};
 
 const hideFooterPaths = [
   '/calendar',
@@ -39,24 +52,48 @@ const localStorageProvider = () => {
   const map = new Map<string, any>(JSON.parse(window.localStorage.getItem('app-cache') || '[]'));
 
   // Before unloading the app, we write back all the data into `localStorage`.
-  window.addEventListener('beforeunload', () => {
-    const appCache = JSON.stringify(Array.from(map.entries()));
-    localStorage.setItem('app-cache', appCache);
-  });
+  window.addEventListener(
+    'beforeunload',
+    () => {
+      const appCache = JSON.stringify(Array.from(map.entries()));
+      localStorage.setItem(
+        'app-cache',
+        appCache,
+      );
+    },
+  );
 
   // We still use the map for write & read for performance.
   return map;
 };
 
-export default function App({ Component, pageProps }: AppProps<{ initialSession: Session }>) {
+export default function App({
+  Component,
+  pageProps,
+  env,
+}: NextAppProps<{ initialSession: Session }> & AppProps) {
   const [supabaseClient] = useState(() => createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    env.supabaseUrl!,
+    env.supabaseAnonKey!,
   ));
   const { pathname } = useRouter();
   useCalendars();
   usePeople();
   useAliases();
+
+  useEffect(
+    () => {
+      if (typeof window !== 'undefined') {
+        window.cloudinaryCloudName = env.cloudinaryCloudName;
+        window.cloudinaryApiKey = env.cloudinaryApiKey;
+      }
+    },
+    [env.cloudinaryCloudName],
+  );
+
+  if (typeof window === 'undefined' || !window?.cloudinaryCloudName) {
+    return;
+  }
 
   return (
     <SWRConfig value={{ provider: localStorageProvider }}>
@@ -65,8 +102,8 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
         initialSession={pageProps.initialSession}
       >
         <RecoilRoot>
-          <SessionHandler supabaseClient={supabaseClient} />
-          <Navigation slim={slimHeaderPaths.includes(pathname)} />
+          <SessionHandler supabaseClient={supabaseClient} instanceName={env.instanceName}/>
+          <Navigation slim={slimHeaderPaths.includes(pathname)}/>
           <ToastContainer
             transition={Slide}
             position="top-right"
@@ -75,10 +112,36 @@ export default function App({ Component, pageProps }: AppProps<{ initialSession:
           <main>
             <Component {...pageProps} />
           </main>
-          {!hideFooterPaths.includes(pathname) && <Footer />}
-          <Auth float={hideFooterPaths.includes(pathname)} />
+          {!hideFooterPaths.includes(pathname) && <Footer/>}
+          <Auth float={hideFooterPaths.includes(pathname)}/>
         </RecoilRoot>
       </SessionContextProvider>
     </SWRConfig>
   );
 }
+
+App.getInitialProps = async (context: AppContext): Promise<AppProps & AppInitialProps> => {
+  const ctx = await NextApp.getInitialProps(context);
+  let env;
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/env`,
+      { method: 'GET' },
+    );
+
+    env = await response.json();
+  } catch (_) {
+    const response = await fetch(
+      process.env.INSTANCE_NAME ?? '',
+      { method: 'GET' },
+    );
+
+    env = await response.json();
+  }
+
+  return {
+    ...ctx,
+    env,
+  };
+};

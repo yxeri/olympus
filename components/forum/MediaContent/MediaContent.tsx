@@ -74,6 +74,8 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
           >
             <CldVideoPlayer
               hideContextMenu
+              /* @ts-ignore */
+              cloud_name={window.cloudinaryCloudName}
               height={600}
               width={600}
               src={selectedMedia.path}
@@ -82,6 +84,11 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
         )
         : (
           <CldImage
+            config={{
+              cloud: {
+                cloudName: window.cloudinaryCloudName,
+              },
+            }}
             onClick={() => onMediaClick(0)}
             style={{
               maxWidth: '100%',
@@ -136,6 +143,8 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
               >
                 <CldVideoPlayer
                   hideContextMenu
+                  /* @ts-ignore */
+                  cloud_name={window.cloudinaryCloudName}
                   id={path}
                   floatingWhenNotVisible="right"
                   height={600}
@@ -148,6 +157,11 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
 
           return (
             <CldImage
+              config={{
+                cloud: {
+                  cloudName: window.cloudinaryCloudName,
+                },
+              }}
               onClick={() => onMediaClick(0)}
               key={path}
               id={path}
@@ -197,6 +211,8 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
                   >
                     <CldVideoPlayer
                       hideContextMenu
+                      /* @ts-ignore */
+                      cloud_name={window.cloudinaryCloudName}
                       id={path}
                       floatingWhenNotVisible="right"
                       height={200}
@@ -210,6 +226,11 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
 
             return (
               <CldImage
+                config={{
+                  cloud: {
+                    cloudName: window.cloudinaryCloudName,
+                  },
+                }}
                 onClick={() => onMediaClick(index + 1)}
                 key={path}
                 id={path}

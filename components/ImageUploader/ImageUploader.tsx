@@ -40,6 +40,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           </Container>
         )}
       <CldUploadWidget
+        onOpen={({ update }) => {
+          update({
+            cloudName: window.cloudinaryCloudName,
+            apiKey: window.cloudinaryApiKey,
+          });
+        }}
         options={{
           maxFiles,
           publicId: maxFiles === 1
@@ -99,7 +105,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           }
         }}
       >
-        {({ open }) => {
+        {({
+          open,
+        }) => {
           const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
             open();

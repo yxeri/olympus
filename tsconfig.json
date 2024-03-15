@@ -56,7 +56,8 @@
   },
   "files": [
     "next-env.d.ts",
-    "custom.d.ts"
+    "custom.d.ts",
+    "global.d.ts"
   ],
   "include": [
     "**/*.ts",

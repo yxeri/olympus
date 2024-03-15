@@ -7,11 +7,8 @@ services:
   frontend:
     user: nextjs
     image: ghcr.io/yxeri/olympus:dev
-    command: node server.js
     restart: always
     environment:
-      - PORT=3000
-      - HOSTNAME=0.0.0.0
       - DB_HOST=db
       - VIRTUAL_HOST=${NEXT_PUBLIC_INSTANCE_NAME}
       - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}

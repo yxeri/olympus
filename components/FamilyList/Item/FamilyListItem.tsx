@@ -1,3 +1,8 @@
+import {
+  Family,
+  Status,
+  statusCollection,
+} from '@/types/data';
 import ListItem from 'components/List/ListItem';
 import { Trigger } from 'components/Modal/Modal';
 import { CldImage } from 'next-cloudinary';
@@ -7,11 +12,6 @@ import {
   colors,
   sizes,
 } from 'styles/global';
-import {
-  Family,
-  Status,
-  statusCollection,
-} from '@/types/data';
 import PersonModal from '../../PersonModal/PersonModal';
 
 export type FamilyListItemProps = {
@@ -19,48 +19,48 @@ export type FamilyListItemProps = {
 };
 
 export const StyledDiv = styled.div`
-  display: grid;
-  justify-items: center;
-  align-items: center;
+    display: grid;
+    justify-items: center;
+    align-items: center;
 `;
 
 const StyledPhoto = styled.div`
-  grid-area: photo;
-  display: grid;
-  min-height: 50px;
+    grid-area: photo;
+    display: grid;
+    min-height: 50px;
 
-  img {
-    max-width: 100%;
-  }
+    img {
+        max-width: 100%;
+    }
 `;
 
 const StyledListItem = styled(ListItem)<{ $status: Status }>`
-  display: grid;
-  border: 2px solid ${({ $status }) => colors[$status] ?? 'transparent'};
-  box-shadow: 0 0 3px 1px ${({ $status }) => colors[$status] ?? 'transparent'};
-  background-color: ${colors.componentBackground};
-  padding: .2rem;
-  grid-column-gap: .7rem;
-  grid-template-columns: 1fr 1.6rem;
+    display: grid;
+    border: 2px solid ${({ $status }) => colors[$status] ?? 'transparent'};
+    box-shadow: 0 0 3px 1px ${({ $status }) => colors[$status] ?? 'transparent'};
+    background-color: ${colors.componentBackground};
+    padding: .2rem;
+    grid-column-gap: .7rem;
+    grid-template-columns: 1fr 1.6rem;
 `;
 
 const StyledTrigger = styled(Trigger)`
-  background-color: transparent;
-  border: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  align-items: center;
-  grid-column-gap: .7rem;
-  grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight[0]};
-  grid-template-areas:
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    align-items: center;
+    grid-column-gap: .7rem;
+    grid-template-columns: 1.1rem 1.2rem 1fr ${sizes.smallImageHeight[0]};
+    grid-template-areas:
     "rank year name photo"
     "rank status name photo"
     "rank status society photo";
 `;
 
 export const StatusDiv = styled(StyledDiv)<{ $status: Status }>`
-  text-shadow: 0 0 2px ${({ $status }) => colors[$status]};
+    text-shadow: 0 0 2px ${({ $status }) => colors[$status]};
 `;
 
 const FamilyListItem: React.FC<FamilyListItemProps> = ({ family }) => {
@@ -87,6 +87,11 @@ const FamilyListItem: React.FC<FamilyListItemProps> = ({ family }) => {
       </StyledDiv>
       <StyledPhoto>
         <CldImage
+          config={{
+            cloud: {
+              cloudName: window.cloudinaryCloudName,
+            },
+          }}
           version={imgVersion}
           loading="lazy"
           alt={`${name} ${family}`}
