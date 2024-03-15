@@ -69,18 +69,22 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker compose
-        run: docker compose -f ./docker-compose.yml -p olympus-dev up -d
+        uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "./docker-compose.yml"
+          compose-flags: "-p olympus-dev"
+          up-flags: "-d"
         env:
-          VIRTUAL_HOST: ${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}
+          VIRTUAL_HOST: ${{ vars.INSTANCE_NAME }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          CLOUDINARY_API_KEY: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_API_KEY }}
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}
-          SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          INSTANCE_NAME: ${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}
+          CLOUDINARY_API_KEY: ${{ vars.CLOUDINARY_API_KEY }}
+          CLOUDINARY_CLOUD_NAME: ${{ vars.CLOUDINARY_CLOUD_NAME }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          INSTANCE_NAME: ${{ vars.INSTANCE_NAME }}
           CALENDAR_START: ${{ vars.CALENDAR_START }}
           CALENDAR_END: ${{ vars.CALENDAR_END }}
 
