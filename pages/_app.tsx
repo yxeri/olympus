@@ -1,15 +1,9 @@
-import { Env } from '@/pages/api/env';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserClient } from '@supabase/ssr';
 import { Session } from '@supabase/supabase-js';
 import Footer from 'components/Footer/Footer';
 import Navigation from 'components/Navigation/Navigation';
-import type {
-  AppContext,
-  AppInitialProps,
-  AppProps as NextAppProps,
-} from 'next/app';
-import NextApp from 'next/app';
+import type { AppProps as NextAppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import {
   useEffect,
@@ -29,9 +23,15 @@ import { useAliases } from '../hooks/aliases';
 import useCalendars from '../hooks/calendars/useCalendars';
 import { usePeople } from '../hooks/people';
 
-type AppProps = {
-  env: Env,
-};
+const serverEnv = await fetch(
+  process.env.INSTANCE_NAME && process.env.NEXT_PUBLIC_ENVIRONMENT !== 'dev'
+    ? `https://${process.env.INSTANCE_NAME}/api/env`
+    : 'http://localhost:3000/api/env',
+  {
+    method: 'GET',
+  },
+)
+  .then((response) => response.json());
 
 const hideFooterPaths = [
   '/calendar',
@@ -70,11 +70,10 @@ const localStorageProvider = () => {
 export default function App({
   Component,
   pageProps,
-  env,
-}: NextAppProps<{ initialSession: Session }> & AppProps) {
+}: NextAppProps<{ initialSession: Session }>) {
   const [supabaseClient] = useState(() => createBrowserClient(
-    env.supabaseUrl!,
-    env.supabaseAnonKey!,
+    serverEnv.supabaseUrl!,
+    serverEnv.supabaseAnonKey!,
   ));
   const { pathname } = useRouter();
   useCalendars();
@@ -83,17 +82,11 @@ export default function App({
 
   useEffect(
     () => {
-      if (typeof window !== 'undefined') {
-        window.cloudinaryCloudName = env.cloudinaryCloudName;
-        window.cloudinaryApiKey = env.cloudinaryApiKey;
-      }
+      window.cloudinaryCloudName = serverEnv.cloudinaryCloudName;
+      window.cloudinaryApiKey = serverEnv.cloudinaryApiKey;
     },
-    [env.cloudinaryCloudName],
+    [serverEnv.cloudinaryCloudName],
   );
-
-  if (typeof window === 'undefined' || !window?.cloudinaryCloudName) {
-    return;
-  }
 
   return (
     <SWRConfig value={{ provider: localStorageProvider }}>
@@ -102,7 +95,7 @@ export default function App({
         initialSession={pageProps.initialSession}
       >
         <RecoilRoot>
-          <SessionHandler supabaseClient={supabaseClient} instanceName={env.instanceName}/>
+          <SessionHandler supabaseClient={supabaseClient} instanceName={serverEnv.instanceName}/>
           <Navigation slim={slimHeaderPaths.includes(pathname)}/>
           <ToastContainer
             transition={Slide}
@@ -119,22 +112,3 @@ export default function App({
     </SWRConfig>
   );
 }
-
-App.getInitialProps = async (context: AppContext): Promise<AppProps & AppInitialProps> => {
-  const ctx = await NextApp.getInitialProps(context);
-  let env;
-
-  const response = await fetch(
-    process.env.INSTANCE_NAME && process.env.NEXT_PUBLIC_ENVIRONMENT !== 'dev'
-      ? `https://${process.env.INSTANCE_NAME}/api/env`
-      : 'http://localhost:3000/api/env',
-    { method: 'GET' },
-  );
-
-  env = await response.json();
-
-  return {
-    ...ctx,
-    env,
-  };
-};

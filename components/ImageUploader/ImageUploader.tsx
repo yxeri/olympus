@@ -1,3 +1,4 @@
+import CloudinaryWrapper from '@/components/CloudinaryWrapper/CloudinaryWrapper';
 import { colors } from '@/styles/global';
 import { CldUploadWidget } from 'next-cloudinary';
 import * as process from 'process';
@@ -39,87 +40,89 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             {text}
           </Container>
         )}
-      <CldUploadWidget
-        onOpen={({ update }) => {
-          update({
-            cloudName: window.cloudinaryCloudName,
-            apiKey: window.cloudinaryApiKey,
-          });
-        }}
-        options={{
-          maxFiles,
-          publicId: maxFiles === 1
-            ? `${authPerson?.name?.replaceAll(
-              /[^\w\d]/g,
-              '_',
-            )}-${authPerson?.family?.replaceAll(
-              /[^\w\d]/g,
-              '_',
-            )}`
-            : undefined,
-          multiple: maxFiles !== 1,
-          styles: {
-            palette: {
-              inactiveTabIcon: colors.selectedBrightColor,
-              tabIcon: colors.brightColor,
-              menuIcons: colors.brightColor,
-              textLight: colors.brightColor,
-              window: colors.primaryBackground,
-              sourceBg: colors.componentBackground,
-              textDark: colors.primaryColor,
-              link: colors.brightColor,
-              action: colors.primaryColor,
-              windowBorder: colors.primaryColor,
-              error: colors.error,
-              inProgress: colors.progress,
-              complete: colors.success,
+      <CloudinaryWrapper>
+        <CldUploadWidget
+          onOpen={({ update }) => {
+            update({
+              cloudName: window.cloudinaryCloudName,
+              apiKey: window.cloudinaryApiKey,
+            });
+          }}
+          options={{
+            maxFiles,
+            publicId: maxFiles === 1
+              ? `${authPerson?.name?.replaceAll(
+                /[^\w\d]/g,
+                '_',
+              )}-${authPerson?.family?.replaceAll(
+                /[^\w\d]/g,
+                '_',
+              )}`
+              : undefined,
+            multiple: maxFiles !== 1,
+            styles: {
+              palette: {
+                inactiveTabIcon: colors.selectedBrightColor,
+                tabIcon: colors.brightColor,
+                menuIcons: colors.brightColor,
+                textLight: colors.brightColor,
+                window: colors.primaryBackground,
+                sourceBg: colors.componentBackground,
+                textDark: colors.primaryColor,
+                link: colors.brightColor,
+                action: colors.primaryColor,
+                windowBorder: colors.primaryColor,
+                error: colors.error,
+                inProgress: colors.progress,
+                complete: colors.success,
+              },
+              frame: {
+                background: colors.primaryTransBackground,
+              },
             },
-            frame: {
-              background: colors.primaryTransBackground,
-            },
-          },
-          clientAllowedFormats: ['image'],
-          singleUploadAutoClose: false,
-          sources: [
-            'local',
-            'url',
-            'camera',
-          ],
-        }}
-        signatureEndpoint="/api/cloudinarySignature"
-        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
-          ? 'dev_people'
-          : 'people'}
-        onUpload={({ info }) => {
-          if (info && typeof info === 'object') {
-            const { version } = (info as { version: number });
+            clientAllowedFormats: ['image'],
+            singleUploadAutoClose: false,
+            sources: [
+              'local',
+              'url',
+              'camera',
+            ],
+          }}
+          signatureEndpoint="/api/cloudinarySignature"
+          uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+            ? 'dev_people'
+            : 'people'}
+          onUpload={({ info }) => {
+            if (info && typeof info === 'object') {
+              const { version } = (info as { version: number });
 
-            if (!requireAdmin && maxFiles === 1) {
-              update({
-                person: {
-                  _id: authPerson._id,
-                  imgVersion: version,
-                },
-              });
+              if (!requireAdmin && maxFiles === 1) {
+                update({
+                  person: {
+                    _id: authPerson._id,
+                    imgVersion: version,
+                  },
+                });
+              }
             }
-          }
-        }}
-      >
-        {({
-          open,
-        }) => {
-          const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
-            open();
-          };
+          }}
+        >
+          {({
+            open,
+          }) => {
+            const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              open();
+            };
 
-          return (
-            <Button type="button" onClick={handleOnClick}>
-              Upload an Image
-            </Button>
-          );
-        }}
-      </CldUploadWidget>
+            return (
+              <Button type="button" onClick={handleOnClick}>
+                Upload an Image
+              </Button>
+            );
+          }}
+        </CldUploadWidget>
+      </CloudinaryWrapper>
     </Container>
   );
 };

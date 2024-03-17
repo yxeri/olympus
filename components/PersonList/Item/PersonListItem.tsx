@@ -1,3 +1,4 @@
+import CloudinaryWrapper from '@/components/CloudinaryWrapper/CloudinaryWrapper';
 import {
   Person,
   romanNumbers,
@@ -106,29 +107,31 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
         {society}
       </StyledDiv>
       <StyledPhoto>
-        <CldImage
-          config={{
-            cloud: {
-              cloudName: window.cloudinaryCloudName,
-            },
-          }}
-          version={imgVersion}
-          loading="lazy"
-          alt={`${name} ${family}`}
-          format="webp"
-          src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
-            ? 'dev/'
-            : ''}people/${name.replaceAll(
-            /[^\w\d]/g,
-            '_',
-          )}-${family.replaceAll(
-            /[^\w\d]/g,
-            '_',
-          )}`}
-          height={50}
-          width={50}
-          transformations={['thumb-person']}
-        />
+        <CloudinaryWrapper>
+          <CldImage
+            config={{
+              cloud: {
+                cloudName: window.cloudinaryCloudName,
+              },
+            }}
+            version={imgVersion}
+            loading="lazy"
+            alt={`${name} ${family}`}
+            format="webp"
+            src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+              ? 'dev/'
+              : ''}people/${name.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}-${family.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}`}
+            height={50}
+            width={50}
+            transformations={['thumb-person']}
+          />
+        </CloudinaryWrapper>
       </StyledPhoto>
     </StyledTrigger>
   );

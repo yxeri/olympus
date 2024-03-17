@@ -1,5 +1,6 @@
 import MessageIcon from '@/assets/message-square.svg';
 import MoreIcon from '@/assets/more-vertical.svg';
+import CloudinaryWrapper from '@/components/CloudinaryWrapper/CloudinaryWrapper';
 import { Thread } from '@/types/data';
 import {
   CollapsibleContent,
@@ -156,34 +157,36 @@ const ThreadsListItem: React.FC<ThreadsListItemProps> = ({ thread }) => {
   return (
     <StyledListItem key={id?.toString() ?? ''}>
       <div style={{ maxWidth: 'calc(100% - 1.4rem)' }}>
-        <CldImage
-          config={{
-            cloud: {
-              cloudName: window.cloudinaryCloudName,
-            },
-          }}
-          style={{
-            float: 'left',
-            marginRight: '.4rem',
-            borderRadius: '4px',
-          }}
-          version={poster.imgVersion}
-          loading="lazy"
-          alt={`${poster.name} ${poster.family}`}
-          format="webp"
-          src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
-            ? 'dev/'
-            : ''}people/${poster.name.replaceAll(
-            /[^\w\d]/g,
-            '_',
-          )}-${poster.family.replaceAll(
-            /[^\w\d]/g,
-            '_',
-          )}`}
-          height={34}
-          width={34}
-          transformations={['thumb-person']}
-        />
+        <CloudinaryWrapper>
+          <CldImage
+            config={{
+              cloud: {
+                cloudName: window.cloudinaryCloudName,
+              },
+            }}
+            style={{
+              float: 'left',
+              marginRight: '.4rem',
+              borderRadius: '4px',
+            }}
+            version={poster.imgVersion}
+            loading="lazy"
+            alt={`${poster.name} ${poster.family}`}
+            format="webp"
+            src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+              ? 'dev/'
+              : ''}people/${poster.name.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}-${poster.family.replaceAll(
+              /[^\w\d]/g,
+              '_',
+            )}`}
+            height={34}
+            width={34}
+            transformations={['thumb-person']}
+          />
+        </CloudinaryWrapper>
         {foundForum?.name
           ? (
             <>

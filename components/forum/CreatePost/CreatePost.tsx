@@ -1,4 +1,5 @@
 import Button from '@/components/Button/Button';
+import CloudinaryWrapper from '@/components/CloudinaryWrapper/CloudinaryWrapper';
 import Form from '@/components/Form/Form';
 import { hasAccessToForum } from '@/components/forum/helpers';
 import Modal from '@/components/Modal/Modal';
@@ -94,72 +95,74 @@ const Content = ({
   return (
     <Form onSubmit={onSubmit}>
       <EditorContent editor={editor} className="content"/>
-      <CldUploadWidget
-        options={{
-          maxFiles: 4,
-          multiple: true,
-          styles: {
-            palette: {
-              inactiveTabIcon: colors.selectedBrightColor,
-              tabIcon: colors.brightColor,
-              menuIcons: colors.brightColor,
-              textLight: colors.brightColor,
-              window: colors.primaryBackground,
-              sourceBg: colors.componentBackground,
-              textDark: colors.primaryColor,
-              link: colors.brightColor,
-              action: colors.primaryColor,
-              windowBorder: colors.primaryColor,
-              error: colors.error,
-              inProgress: colors.progress,
-              complete: colors.success,
+      <CloudinaryWrapper>
+        <CldUploadWidget
+          options={{
+            maxFiles: 4,
+            multiple: true,
+            styles: {
+              palette: {
+                inactiveTabIcon: colors.selectedBrightColor,
+                tabIcon: colors.brightColor,
+                menuIcons: colors.brightColor,
+                textLight: colors.brightColor,
+                window: colors.primaryBackground,
+                sourceBg: colors.componentBackground,
+                textDark: colors.primaryColor,
+                link: colors.brightColor,
+                action: colors.primaryColor,
+                windowBorder: colors.primaryColor,
+                error: colors.error,
+                inProgress: colors.progress,
+                complete: colors.success,
+              },
+              frame: {
+                background: colors.primaryTransBackground,
+              },
             },
-            frame: {
-              background: colors.primaryTransBackground,
-            },
-          },
-          clientAllowedFormats: [
-            'image',
-            'video',
-          ],
-          singleUploadAutoClose: false,
-          sources: [
-            'local',
-            'url',
-            'camera',
-          ],
-        }}
-        signatureEndpoint="/api/cloudinarySignature"
-        uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
-          ? 'dev_media'
-          : 'media'}
-        onUpload={({ info }) => {
-          if (info && typeof info === 'object') {
-            const newMedia = {
-              path: (info as { public_id: string }).public_id,
-              type: (info as { resource_type: 'image' | 'video' }).resource_type,
+            clientAllowedFormats: [
+              'image',
+              'video',
+            ],
+            singleUploadAutoClose: false,
+            sources: [
+              'local',
+              'url',
+              'camera',
+            ],
+          }}
+          signatureEndpoint="/api/cloudinarySignature"
+          uploadPreset={process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+            ? 'dev_media'
+            : 'media'}
+          onUpload={({ info }) => {
+            if (info && typeof info === 'object') {
+              const newMedia = {
+                path: (info as { public_id: string }).public_id,
+                type: (info as { resource_type: 'image' | 'video' }).resource_type,
+              };
+
+              setMedia(new Set([
+                ...Array.from(media),
+                newMedia,
+              ]));
+            }
+          }}
+        >
+          {({ open }) => {
+            const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              open();
             };
 
-            setMedia(new Set([
-              ...Array.from(media),
-              newMedia,
-            ]));
-          }
-        }}
-      >
-        {({ open }) => {
-          const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
-            open();
-          };
-
-          return (
-            <button type="button" onClick={handleOnClick}>
-              Upload an Image
-            </button>
-          );
-        }}
-      </CldUploadWidget>
+            return (
+              <button type="button" onClick={handleOnClick}>
+                Upload an Image
+              </button>
+            );
+          }}
+        </CldUploadWidget>
+      </CloudinaryWrapper>
       <Button type="submit">
         Create post
       </Button>

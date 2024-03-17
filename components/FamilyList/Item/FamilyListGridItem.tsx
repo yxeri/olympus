@@ -1,3 +1,4 @@
+import CloudinaryWrapper from '@/components/CloudinaryWrapper/CloudinaryWrapper';
 import {
   Status,
   statusCollection,
@@ -57,26 +58,28 @@ const FamilyListGridItem: React.FC<FamilyListItemProps> = ({ family }) => {
         $status={status}
       >
         <StyledPhoto>
-          <CldImage
-            config={{
-              cloud: {
-                cloudName: window.cloudinaryCloudName,
-              },
-            }}
-            version={imgVersion}
-            loading="lazy"
-            alt={`${name} ${family}`}
-            format="webp"
-            src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
-              ? 'dev/'
-              : ''}people/${name.replaceAll(
-              /[^\w\d]/g,
-              '_',
-            )}`}
-            height={186}
-            width={186}
-            transformations={['profile']}
-          />
+          <CloudinaryWrapper>
+            <CldImage
+              config={{
+                cloud: {
+                  cloudName: window.cloudinaryCloudName,
+                },
+              }}
+              version={imgVersion}
+              loading="lazy"
+              alt={`${name} ${family}`}
+              format="webp"
+              src={`olympus/${process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
+                ? 'dev/'
+                : ''}people/${name.replaceAll(
+                /[^\w\d]/g,
+                '_',
+              )}`}
+              height={186}
+              width={186}
+              transformations={['profile']}
+            />
+          </CloudinaryWrapper>
         </StyledPhoto>
 
         <StyledDiv style={{

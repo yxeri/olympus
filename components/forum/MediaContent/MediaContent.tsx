@@ -1,5 +1,6 @@
 import ChevronLeftIcon from '@/assets/chevron-left.svg';
 import ChevronRightIcon from '@/assets/chevron-right.svg';
+import CloudinaryWrapper from '@/components/CloudinaryWrapper/CloudinaryWrapper';
 import { Thread } from '@/types/data';
 import {
   CldImage,
@@ -72,39 +73,43 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
           <div
             className="video"
           >
-            <CldVideoPlayer
-              hideContextMenu
-              /* @ts-ignore */
-              cloud_name={window.cloudinaryCloudName}
-              height={600}
-              width={600}
-              src={selectedMedia.path}
-            />
+            <CloudinaryWrapper>
+              <CldVideoPlayer
+                hideContextMenu
+                /* @ts-ignore */
+                cloud_name={window.cloudinaryCloudName}
+                height={600}
+                width={600}
+                src={selectedMedia.path}
+              />
+            </CloudinaryWrapper>
           </div>
         )
         : (
-          <CldImage
-            config={{
-              cloud: {
-                cloudName: window.cloudinaryCloudName,
-              },
-            }}
-            onClick={() => onMediaClick(0)}
-            style={{
-              maxWidth: '100%',
-              objectFit: 'contain',
-              height: '100%',
-              maxHeight: '100%',
-              marginBottom: '.2rem',
-              marginTop: '.8rem',
-            }}
-            loading="lazy"
-            alt={selectedMedia.path}
-            format="webp"
-            src={selectedMedia.path}
-            width={1000}
-            height={1000}
-          />
+          <CloudinaryWrapper>
+            <CldImage
+              config={{
+                cloud: {
+                  cloudName: window.cloudinaryCloudName,
+                },
+              }}
+              onClick={() => onMediaClick(0)}
+              style={{
+                maxWidth: '100%',
+                objectFit: 'contain',
+                height: '100%',
+                maxHeight: '100%',
+                marginBottom: '.2rem',
+                marginTop: '.8rem',
+              }}
+              loading="lazy"
+              alt={selectedMedia.path}
+              format="webp"
+              src={selectedMedia.path}
+              width={1000}
+              height={1000}
+            />
+          </CloudinaryWrapper>
         )}
       <IndexButton onClick={() => onMediaClick(mediaIndex + 1)}>
         <ChevronRightIcon width="1rem"/>
@@ -141,46 +146,50 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
                   marginTop: '.8rem',
                 }}
               >
-                <CldVideoPlayer
-                  hideContextMenu
-                  /* @ts-ignore */
-                  cloud_name={window.cloudinaryCloudName}
-                  id={path}
-                  floatingWhenNotVisible="right"
-                  height={600}
-                  width={600}
-                  src={path}
-                />
+                <CloudinaryWrapper>
+                  <CldVideoPlayer
+                    hideContextMenu
+                    /* @ts-ignore */
+                    cloud_name={window.cloudinaryCloudName}
+                    id={path}
+                    floatingWhenNotVisible="right"
+                    height={600}
+                    width={600}
+                    src={path}
+                  />
+                </CloudinaryWrapper>
               </div>
             );
           }
 
           return (
-            <CldImage
-              config={{
-                cloud: {
-                  cloudName: window.cloudinaryCloudName,
-                },
-              }}
-              onClick={() => onMediaClick(0)}
-              key={path}
-              id={path}
-              style={{
-                maxWidth: '100%',
-                objectFit: 'contain',
-                height: 'fit-content',
-                marginBottom: '.2rem',
-                marginTop: '.8rem',
-                cursor: 'pointer',
-              }}
-              loading="lazy"
-              alt={path}
-              format="webp"
-              src={path}
-              width={600}
-              height={600}
-              transformations={['thread-single']}
-            />
+            <CloudinaryWrapper>
+              <CldImage
+                config={{
+                  cloud: {
+                    cloudName: window.cloudinaryCloudName,
+                  },
+                }}
+                onClick={() => onMediaClick(0)}
+                key={path}
+                id={path}
+                style={{
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  height: 'fit-content',
+                  marginBottom: '.2rem',
+                  marginTop: '.8rem',
+                  cursor: 'pointer',
+                }}
+                loading="lazy"
+                alt={path}
+                format="webp"
+                src={path}
+                width={600}
+                height={600}
+                transformations={['thread-single']}
+              />
+            </CloudinaryWrapper>
           );
         })}
       <div style={{
@@ -209,45 +218,49 @@ const MediaContent = ({ media = [] }: { media: Thread['media'] }) => {
                     className="video"
                     style={{ pointerEvents: 'none' }}
                   >
-                    <CldVideoPlayer
-                      hideContextMenu
-                      /* @ts-ignore */
-                      cloud_name={window.cloudinaryCloudName}
-                      id={path}
-                      floatingWhenNotVisible="right"
-                      height={200}
-                      width={200}
-                      src={path}
-                    />
+                    <CloudinaryWrapper>
+                      <CldVideoPlayer
+                        hideContextMenu
+                        /* @ts-ignore */
+                        cloud_name={window.cloudinaryCloudName}
+                        id={path}
+                        floatingWhenNotVisible="right"
+                        height={200}
+                        width={200}
+                        src={path}
+                      />
+                    </CloudinaryWrapper>
                   </div>
                 </div>
               );
             }
 
             return (
-              <CldImage
-                config={{
-                  cloud: {
-                    cloudName: window.cloudinaryCloudName,
-                  },
-                }}
-                onClick={() => onMediaClick(index + 1)}
-                key={path}
-                id={path}
-                style={{
-                  maxWidth: '100%',
-                  objectFit: 'contain',
-                  height: 'fit-content',
-                  cursor: 'pointer',
-                }}
-                loading="lazy"
-                alt={path}
-                format="webp"
-                src={path}
-                width={200}
-                height={200}
-                transformations={['thumb-thread']}
-              />
+              <CloudinaryWrapper>
+                <CldImage
+                  config={{
+                    cloud: {
+                      cloudName: window.cloudinaryCloudName,
+                    },
+                  }}
+                  onClick={() => onMediaClick(index + 1)}
+                  key={path}
+                  id={path}
+                  style={{
+                    maxWidth: '100%',
+                    objectFit: 'contain',
+                    height: 'fit-content',
+                    cursor: 'pointer',
+                  }}
+                  loading="lazy"
+                  alt={path}
+                  format="webp"
+                  src={path}
+                  width={200}
+                  height={200}
+                  transformations={['thumb-thread']}
+                />
+              </CloudinaryWrapper>
             );
           })}
       </div>
