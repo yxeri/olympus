@@ -126,9 +126,7 @@ App.getInitialProps = async (context: AppContext): Promise<AppProps & AppInitial
 
   try {
     const response = await fetch(
-      process.env.NEXT_PUBLIC_ENVIRONMENT === 'dev'
-        ? `http://localhost:3000/api/env`
-        : '/api/env',
+      '/api/env',
       { method: 'GET' },
     );
 
