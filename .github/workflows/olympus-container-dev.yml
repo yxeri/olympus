@@ -43,8 +43,15 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=temp"
-            "NEXT_PUBLIC_ENVIRONMENT=${{ vars.NEXT_PUBLIC_ENVIRONMENT }}"
+            "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=${{ vars.CLOUDINARY_CLOUD_NAME }}"
+            "NEXT_PUBLIC_ENVIRONMENT=${{ vars.ENVIRONMENT }}"
+            "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ vars.SUPABASE_ANON_KEY }}"
+            "NEXT_PUBLIC_CLOUDINARY_API_KEY=${{ vars.CLOUDINARY_API_KEY }}"
+            "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ vars.SUPABASE_ANON_KEY }}"
+            "NEXT_PUBLIC_INSTANCE_NAME=${{ vars.INSTANCE_NAME }}"
+            "NEXT_PUBLIC_CALENDAR_START=${{ vars.CALENDAR_START }}"
+            "NEXT_PUBLIC_CALENDAR_END=${{ vars.CALENDAR_END }}"
+            "NEXT_PUBLIC_SUPABASE_URL=${{ vars.SUPABASE_URL }}"
 
   start-container:
     needs: [ build-and-publish ]
@@ -77,11 +84,3 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          CLOUDINARY_API_KEY: ${{ vars.CLOUDINARY_API_KEY }}
-          CLOUDINARY_CLOUD_NAME: ${{ vars.CLOUDINARY_CLOUD_NAME }}
-          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          INSTANCE_NAME: ${{ vars.INSTANCE_NAME }}
-          CALENDAR_START: ${{ vars.CALENDAR_START }}
-          CALENDAR_END: ${{ vars.CALENDAR_END }}
-

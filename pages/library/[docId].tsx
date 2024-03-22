@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import Editor from '../../components/library/Editor/Editor';
+
+const Editor = await import('../../components/library/Editor/Editor').then((mod) => mod.default);
 
 export default function Index() {
   const router = useRouter();
@@ -10,7 +11,7 @@ export default function Index() {
 
   return (
     <div className="editor-container">
-      <Editor documentId={router?.query.docId as string} />
+      <Editor documentId={router?.query.docId as string}/>
     </div>
   );
 }

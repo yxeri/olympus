@@ -109,11 +109,6 @@ const PersonListItem: React.FC<PersonListItemProps> = ({ person }) => {
       <StyledPhoto>
         <CloudinaryWrapper>
           <CldImage
-            config={{
-              cloud: {
-                cloudName: window.cloudinaryCloudName,
-              },
-            }}
             version={imgVersion}
             loading="lazy"
             alt={`${name} ${family}`}

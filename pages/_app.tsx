@@ -5,10 +5,7 @@ import Footer from 'components/Footer/Footer';
 import Navigation from 'components/Navigation/Navigation';
 import type { AppProps as NextAppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useState } from 'react';
 import {
   Slide,
   ToastContainer,
@@ -22,16 +19,6 @@ import SessionHandler from '../components/SessionHandler/SessionHandler';
 import { useAliases } from '../hooks/aliases';
 import useCalendars from '../hooks/calendars/useCalendars';
 import { usePeople } from '../hooks/people';
-
-const serverEnv = await fetch(
-  process.env.INSTANCE_NAME && process.env.NEXT_PUBLIC_ENVIRONMENT !== 'dev'
-    ? `https://${process.env.INSTANCE_NAME}/api/env`
-    : 'http://localhost:3000/api/env',
-  {
-    method: 'GET',
-  },
-)
-  .then((response) => response.json());
 
 const hideFooterPaths = [
   '/calendar',
@@ -72,21 +59,13 @@ export default function App({
   pageProps,
 }: NextAppProps<{ initialSession: Session }>) {
   const [supabaseClient] = useState(() => createBrowserClient(
-    serverEnv.supabaseUrl!,
-    serverEnv.supabaseAnonKey!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   ));
   const { pathname } = useRouter();
   useCalendars();
   usePeople();
   useAliases();
-
-  useEffect(
-    () => {
-      window.cloudinaryCloudName = serverEnv.cloudinaryCloudName;
-      window.cloudinaryApiKey = serverEnv.cloudinaryApiKey;
-    },
-    [serverEnv.cloudinaryCloudName],
-  );
 
   return (
     <SWRConfig value={{ provider: localStorageProvider }}>
@@ -95,7 +74,7 @@ export default function App({
         initialSession={pageProps.initialSession}
       >
         <RecoilRoot>
-          <SessionHandler supabaseClient={supabaseClient} instanceName={serverEnv.instanceName}/>
+          <SessionHandler supabaseClient={supabaseClient} instanceName={process.env.NEXT_PUBLIC_INSTANCE_NAME}/>
           <Navigation slim={slimHeaderPaths.includes(pathname)}/>
           <ToastContainer
             transition={Slide}

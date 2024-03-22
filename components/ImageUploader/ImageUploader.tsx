@@ -42,12 +42,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         )}
       <CloudinaryWrapper>
         <CldUploadWidget
-          onOpen={({ update }) => {
-            update({
-              cloudName: window.cloudinaryCloudName,
-              apiKey: window.cloudinaryApiKey,
-            });
-          }}
           options={{
             maxFiles,
             publicId: maxFiles === 1

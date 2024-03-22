@@ -2,15 +2,7 @@ import { selectedCalendarsAtom } from '@/atoms/calendar';
 
 import { colors } from '@/styles/global';
 import { FullEvent } from '@/types/data';
-import dayjs from 'dayjs';
-import svLocale from 'dayjs/locale/sv';
-import dayjsUtc from 'dayjs/plugin/utc';
-import dayjsWeekday from 'dayjs/plugin/weekday';
 import React, { useState } from 'react';
-import {
-  Calendar as BigCalendar,
-  dayjsLocalizer,
-} from 'react-big-calendar';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.scss';
 import 'react-big-calendar/lib/sass/styles.scss';
 import { useRecoilValue } from 'recoil';
@@ -18,6 +10,15 @@ import { RRule } from 'rrule';
 import styled from 'styled-components';
 import useCalendars from '../../hooks/calendars/useCalendars';
 import Toolbar from './Toolbar';
+
+const {
+  Calendar: BigCalendar,
+  dayjsLocalizer,
+} = await import('react-big-calendar');
+const dayjs = await import('dayjs').then((mod) => mod.default);
+const svLocale = await import('dayjs/locale/sv').then((mod) => mod.default);
+const dayjsUtc = await import('dayjs/plugin/utc').then((mod) => mod.default);
+const dayjsWeekday = await import('dayjs/plugin/weekday').then((mod) => mod.default);
 
 const StyledDiv = styled.div`
     .rbc-time-view, .rbc-month-view, .rbc-time-view, .rbc-agenda-view {

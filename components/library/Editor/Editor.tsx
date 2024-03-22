@@ -1,16 +1,20 @@
-import { Link } from '@tiptap/extension-link';
-import { Image } from '@tiptap/extension-image';
-import { Color } from '@tiptap/extension-color';
-import { Table } from '@tiptap/extension-table';
-import { TableCell } from '@tiptap/extension-table-cell';
-import { TableHeader } from '@tiptap/extension-table-header';
-import { TableRow } from '@tiptap/extension-table-row';
-import { TextStyle } from '@tiptap/extension-text-style';
-import {
+const { Link } = await import('@tiptap/extension-link');
+const { Image } = await import('@tiptap/extension-image');
+const { Color } = await import('@tiptap/extension-color');
+const { Table } = await import('@tiptap/extension-table');
+const { TableCell } = await import('@tiptap/extension-table-cell');
+const { TableHeader } = await import('@tiptap/extension-table-header');
+const { TableRow } = await import('@tiptap/extension-table-row');
+const { TextStyle } = await import('@tiptap/extension-text-style');
+const {
   EditorContent,
   useEditor,
-} from '@tiptap/react';
-import { StarterKit } from '@tiptap/starter-kit';
+} = await import('@tiptap/react');
+import {
+  borders,
+  colors,
+  sizes,
+} from '@/styles/global';
 import {
   useRef,
   useState,
@@ -19,51 +23,48 @@ import styled from 'styled-components';
 import useDocument from '../../../hooks/documents/useDocument';
 import useDocuments from '../../../hooks/documents/useDocuments';
 import useAuthPerson from '../../../hooks/people/useAuthPerson';
-import {
-  borders,
-  colors,
-  sizes,
-} from '@/styles/global';
 import Button from '../../Button/Button';
 import Container from '../../Container/Container';
 
+const { StarterKit } = await import('@tiptap/starter-kit');
+
 const StyledDiv = styled.div`
-  background-color: ${colors.secondaryBackground};
-  box-shadow: 0 0 5px hsla(0, 0%, 0%, .3);
-  height: calc(100svh - 4.6rem);
-  display: grid;
-  overflow: auto;
-  
-  .content {
-    justify-self: center;
-    background-color: ${colors.brightColor};
-    max-width: 180mm;
-    padding: 0 2mm;
-    width: 100%;
-    box-sizing: border-box;
-    
-    table {
-      background-color: ${colors.primaryColor};
-      
-      td, col {
-        background-color: ${colors.brightColor};
-      }
-    }
-  }
-  
-  @media print {    
+    background-color: ${colors.secondaryBackground};
+    box-shadow: 0 0 5px hsla(0, 0%, 0%, .3);
+    height: calc(100svh - 4.6rem);
+    display: grid;
+    overflow: auto;
+
     .content {
-      max-width: 100%;
-      padding: 0;
+        justify-self: center;
+        background-color: ${colors.brightColor};
+        max-width: 180mm;
+        padding: 0 2mm;
+        width: 100%;
+        box-sizing: border-box;
+
+        table {
+            background-color: ${colors.primaryColor};
+
+            td, col {
+                background-color: ${colors.brightColor};
+            }
+        }
     }
-  }
+
+    @media print {
+        .content {
+            max-width: 100%;
+            padding: 0;
+        }
+    }
 `;
 
 const ControlContainer = styled.div`
-  display: flex;
-  grid-gap: .2rem;
-  width: 100%;
-  flex-wrap: wrap;
+    display: flex;
+    grid-gap: .2rem;
+    width: 100%;
+    flex-wrap: wrap;
 `;
 
 const Editor = ({ documentId }: { documentId?: string }) => {

@@ -1,7 +1,7 @@
-import { JSONContent } from '@tiptap/react';
+import type { JSONContent } from '@tiptap/react';
 import { ObjectId } from 'mongodb';
-import { Event } from 'react-big-calendar';
-import { Options } from 'rrule';
+import type { Event } from 'react-big-calendar';
+import type { Options } from 'rrule';
 
 export const SocietyObject = {
   Bacchus: '',

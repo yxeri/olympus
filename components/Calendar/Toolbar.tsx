@@ -2,7 +2,7 @@ import { selectedCalendarsAtom } from '@/atoms/calendar';
 import { colors } from '@/styles/global';
 import { Checkbox } from '@radix-ui/react-checkbox';
 import React from 'react';
-import { ToolbarProps } from 'react-big-calendar';
+import type { ToolbarProps } from 'react-big-calendar';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import ArrowLeftIcon from '../../assets/arrow-left.svg';
