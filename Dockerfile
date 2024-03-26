@@ -6,7 +6,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
 
 RUN corepack enable
-RUN corepack use pnpm@8.15.4
+RUN corepack use pnpm@8.15.5
 
 COPY . /app
 WORKDIR /app
