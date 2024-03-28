@@ -8,7 +8,6 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    environment: preview
     env:
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}
@@ -43,15 +42,15 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=${{ vars.CLOUDINARY_CLOUD_NAME }}"
-            "NEXT_PUBLIC_ENVIRONMENT=${{ vars.ENVIRONMENT }}"
-            "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ vars.SUPABASE_ANON_KEY }}"
-            "NEXT_PUBLIC_CLOUDINARY_API_KEY=${{ vars.CLOUDINARY_API_KEY }}"
-            "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ vars.SUPABASE_ANON_KEY }}"
-            "NEXT_PUBLIC_INSTANCE_NAME=${{ secrets.INSTANCE_NAME }}"
-            "NEXT_PUBLIC_CALENDAR_START=${{ vars.CALENDAR_START }}"
-            "NEXT_PUBLIC_CALENDAR_END=${{ vars.CALENDAR_END }}"
-            "NEXT_PUBLIC_SUPABASE_URL=${{ vars.SUPABASE_URL }}"
+            "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=${{ vars.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME }}"
+            "NEXT_PUBLIC_ENVIRONMENT=${{ vars.NEXT_PUBLIC_ENVIRONMENT }}"
+            "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}"
+            "NEXT_PUBLIC_CLOUDINARY_API_KEY=${{ vars.NEXT_PUBLIC_CLOUDINARY_API_KEY }}"
+            "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}"
+            "NEXT_PUBLIC_INSTANCE_NAME=${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}"
+            "NEXT_PUBLIC_CALENDAR_START=${{ vars.NEXT_PUBLIC_CALENDAR_START }}"
+            "NEXT_PUBLIC_CALENDAR_END=${{ vars.NEXT_PUBLIC_CALENDAR_END }}"
+            "NEXT_PUBLIC_SUPABASE_URL=${{ vars.NEXT_PUBLIC_SUPABASE_URL }}"
 
   start-container:
     needs: [ build-and-publish ]
@@ -76,10 +75,13 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker compose
-        run: |
-          docker compose -f docker-compose.yml -p olympus-dev up -d
+        uses: hoverkraft-tech/compose-action@v1.5.1
+        with:
+          compose-file: docker-compose.yml
+          up-flags: -d
+          compose-flags: -p olympus-dev
         env:
-          VIRTUAL_HOST: ${{ secrets.INSTANCE_NAME }}
+          VIRTUAL_HOST: ${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
