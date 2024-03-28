@@ -78,7 +78,7 @@ jobs:
         run: |
           docker compose -f docker-compose.yml -p olympus-dev up -d --build
         env:
-          VIRTUAL_HOST: ${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}
+          NEXT_PUBLIC_INSTANCE_NAME: ${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
