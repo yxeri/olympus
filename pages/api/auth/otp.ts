@@ -57,8 +57,8 @@ export default async function handler(
       'utf-8',
     ) + decipher.final('utf-8');
     const supabaseClient = createClient(
-      process.env.SUPABASE_URL ?? '',
-      process.env.SUPABASE_ANON_KEY ?? '',
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
       {
         auth: {
           persistSession: false,
