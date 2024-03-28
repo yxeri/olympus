@@ -76,11 +76,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker compose
-        uses: hoverkraft-tech/compose-action@v1.5.1
-        with:
-          compose-file: docker-compose.yml
-          up-flags: -d
-          compose-flags: -p olympus-dev
+        run: |
+          docker compose -f docker-compose.yml -p olympus-dev up -d
         env:
           VIRTUAL_HOST: ${{ vars.NEXT_PUBLIC_INSTANCE_NAME }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
