@@ -11,7 +11,7 @@ import {
   useSetRecoilState,
 } from 'recoil';
 
-type SessionHandlerProps = { supabaseClient: SupabaseClient, instanceName?: string };
+type SessionHandlerProps = { supabaseClient: SupabaseClient };
 
 const passwordRecovery = async ({
   supabaseClient,
@@ -61,7 +61,6 @@ const passwordRecovery = async ({
 
 const SessionHandler: React.FC<SessionHandlerProps> = ({
   supabaseClient,
-  instanceName,
 }) => {
   const setSession = useSetRecoilState(sessionAtom);
   const router = useRouter();
@@ -70,7 +69,7 @@ const SessionHandler: React.FC<SessionHandlerProps> = ({
     () => {
       supabaseClient.auth.getSession()
         .then(({ data }) => {
-          const userData = data.session?.user.user_metadata[instanceName ?? ''];
+          const userData = data.session?.user.user_metadata[process.env.NEXT_PUBLIC_INSTANCE_NAME ?? ''];
 
           if (!data.session) {
             return null;

@@ -1,4 +1,4 @@
-FROM node:21.7.1 AS base
+FROM node:21.7.1-slim AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -14,11 +14,6 @@ WORKDIR /app
 FROM base AS prod-deps
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
-
-FROM base AS builder
-
-COPY --from=prod-deps /app/node_modules ./node_modules
-COPY . .
 
 FROM base AS build
 
@@ -40,8 +35,6 @@ ENV NEXT_PUBLIC_CALENDAR_START=$NEXT_PUBLIC_CALENDAR_START
 ENV NEXT_PUBLIC_CALENDAR_END=$NEXT_PUBLIC_CALENDAR_END
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 
-RUN echo $NEXT_PUBLIC_SUPABASE_ANON_KEY $NEXT_PUBLIC_INSTANCE_NAME $NEXT_PUBLIC_SUPABASE_URL
-
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
@@ -50,11 +43,11 @@ FROM base AS runner
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=build /app/public ./public
-
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
+COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=build /app/public ./public
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 

@@ -58,6 +58,11 @@ export default function App({
   Component,
   pageProps,
 }: NextAppProps<{ initialSession: Session }>) {
+  console.log(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.length,
+  );
   const [supabaseClient] = useState(() => createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -74,7 +79,7 @@ export default function App({
         initialSession={pageProps.initialSession}
       >
         <RecoilRoot>
-          <SessionHandler supabaseClient={supabaseClient} instanceName={process.env.NEXT_PUBLIC_INSTANCE_NAME}/>
+          <SessionHandler supabaseClient={supabaseClient}/>
           <Navigation slim={slimHeaderPaths.includes(pathname)}/>
           <ToastContainer
             transition={Slide}
